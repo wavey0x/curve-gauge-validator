@@ -17,9 +17,9 @@ function analyzeProposalGaugeAdditions(uint256 proposalId)
     returns (ProposalGaugeAnalysis memory);
 ```
 
-`validateGauge` needs only the candidate gauge address. The core tries every
-configured `(module, validationId)` route and accepts the gauge only when
-exactly one route returns a factory bound to that route:
+`validateGauge` needs only the candidate gauge address. The core passes every
+active validation ID to the current gauge-policy module and accepts the gauge
+only when exactly one ID returns a factory bound to that exact ID:
 
 ```text
 zero matches      -> false
@@ -34,18 +34,21 @@ that the proposal would create.
 
 ## Production contracts
 
-- `GaugeValidator`: stable core, routes, factory bindings, exactly-one-match
-  resolution, active proposal-analyzer pointer, and public entrypoints.
+- `GaugeValidator`: stable core, active validation IDs, exact factory bindings,
+  exactly-one-match resolution, replaceable policy pointers, and public
+  entrypoints.
 - `GaugeValidationModuleV1`: the combined `DIRECT_LP`,
   `DIRECT_OR_POOL_LP`, `VAULT`, and `FACTORY_IS_VALID_GAUGE` current-state
   policies.
 - `ProposalAnalysisModuleV1`: strict extraction of recognized direct and
   ownership-Agent-wrapped gauge additions, with current-state boolean results.
 
-Curve governance can add and remove gauge routes, rebind or revoke factories,
-and replace or disable the active proposal analyzer. Modules are trusted policy
-components. There is no proxy, `delegatecall`, core validation enum, public
-detailed resolver, or caller-supplied factory hint.
+Curve governance can idempotently enable or disable validation IDs, rebind or
+disable factories, and replace or disable either policy module. Factory
+bindings persist while an ID is inactive and become effective again if the ID
+is re-enabled. Modules are trusted policy components. There is no proxy,
+`delegatecall`, core validation enum, public detailed resolver, or
+caller-supplied factory hint.
 
 ## Scope
 
@@ -54,12 +57,13 @@ factories and authenticated by reciprocal current onchain relationships.
 Ancient gauges deployed directly by EOAs are out of scope and may return
 false.
 
-LlamaLend v2 markets do not require gauges to operate. The supported v2 path is
+LlamaLend v2 markets do not require gauges to operate. The observed v2 path is
 a conventional factory-deployed gauge over a lender vault, authenticated by
-`factory.is_valid_gauge(gauge)`. Manually deployed liquidity-mining callbacks
-are out of scope. Any conclusion depending on proposal-created state belongs in
-pinned fork simulation followed by `validateGauge` against post-execution
-state.
+`factory.is_valid_gauge(gauge)`. That generic factory attestation proves gauge
+provenance, not that the LP token belongs to a particular lending market.
+Manually deployed liquidity-mining callbacks are out of scope. Any conclusion
+depending on proposal-created state belongs in pinned fork simulation followed
+by `validateGauge` against post-execution state.
 
 ## Reproducible verification
 
@@ -104,6 +108,8 @@ forge script script/DeployGaugeValidator.s.sol:DeployGaugeValidator \
   -vvvv
 ```
 
-The `GaugeValidator` constructor installs the initial routes and bindings and
-assigns Curve governance as owner. No script autonomously deploys, signs, or
+The `GaugeValidator` constructor installs the gauge-policy module, proposal
+analyzer, active validation IDs, and exact factory bindings, then assigns Curve
+governance as owner. Duplicate constructor IDs are harmless and duplicate
+factory entries use the final entry. No script autonomously deploys, signs, or
 changes protocol state.

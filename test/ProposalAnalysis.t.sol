@@ -36,14 +36,14 @@ contract ProposalAnalysisTest is Test {
         factoryA = new MockTarget();
         gauge = new MockGauge();
 
-        GaugeValidator.Route[] memory routes = new GaugeValidator.Route[](1);
-        routes[0] = GaugeValidator.Route(address(moduleA), METHOD_A);
+        bytes32[] memory validationIds = new bytes32[](1);
+        validationIds[0] = METHOD_A;
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(address(factoryA), address(moduleA), METHOD_A);
+        bindings[0] = GaugeValidator.FactoryBinding(address(factoryA), METHOD_A);
 
         analyzer = new ProposalAnalysisModuleV1(ICurveDAO(address(dao)), address(agent), address(gaugeController));
-        validator = new GaugeValidator(address(this), address(analyzer), routes, bindings);
+        validator = new GaugeValidator(address(this), address(moduleA), address(analyzer), validationIds, bindings);
         moduleA.setFactory(address(gauge), METHOD_A, address(factoryA));
     }
 
@@ -129,7 +129,7 @@ contract ProposalAnalysisTest is Test {
         assertEq(result.recognizedGaugeAdditions.length, 0);
     }
 
-    function test_InvalidCurrentGaugeIsReportedWithoutRouteMetadata() public {
+    function test_InvalidCurrentGaugeIsReportedWithoutPolicyMetadata() public {
         moduleA.setFactory(address(gauge), METHOD_A, address(0));
 
         IProposalAnalysisModule.ProposalGaugeAnalysis memory result = validator.analyzeProposalGaugeAdditions(
@@ -143,11 +143,10 @@ contract ProposalAnalysisTest is Test {
     }
 
     function test_AmbiguousCurrentGaugeIsReportedInvalid() public {
-        MockValidationModule moduleB = new MockValidationModule();
         MockTarget factoryB = new MockTarget();
-        validator.addRoute(address(moduleB), METHOD_B);
-        validator.setFactoryRoute(address(factoryB), address(moduleB), METHOD_B);
-        moduleB.setFactory(address(gauge), METHOD_B, address(factoryB));
+        validator.addValidationId(METHOD_B);
+        validator.setFactoryValidationId(address(factoryB), METHOD_B);
+        moduleA.setFactory(address(gauge), METHOD_B, address(factoryB));
 
         IProposalAnalysisModule.ProposalGaugeAnalysis memory result = validator.analyzeProposalGaugeAdditions(
             _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0))))

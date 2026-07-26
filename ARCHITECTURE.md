@@ -28,8 +28,9 @@ Unsupported, unavailable, ambiguous, and malformed checks fail closed.
 
 - Keep ordinary validation a one-address boolean query.
 - Validate present onchain relationships, not predicted future state.
-- Require exactly one configured validation route to match.
+- Require exactly one active validation ID to match.
 - Keep protocol policy replaceable without upgrading the core.
+- Make configuration idempotent and preserve dormant factory bindings.
 - Group related validation methods instead of deploying an adapter per method.
 - Make proposal analysis first class while naming its limited semantics
   honestly.
@@ -60,8 +61,8 @@ function validateGauge(address gauge) external view returns (bool);
 
 The result means:
 
-> At this block and under the current route configuration, exactly one active
-> policy route authenticated this gauge through its bound factory.
+> At this block and under the current configuration, exactly one active
+> validation ID authenticated this gauge through its exactly bound factory.
 
 ### Proposal gauge-addition analysis
 
@@ -102,7 +103,7 @@ struct ProposalGaugeAnalysis {
   state.
 
 `COMPLETE` does not mean unrelated proposal actions were reviewed.
-An individual gauge-route failure remains a non-match for that gauge; it does
+An individual gauge-policy failure remains a non-match for that gauge; it does
 not make an otherwise completed proposal analysis unavailable.
 
 `allRecognizedGaugeAdditionsCurrentlyValid` is false when the recognized array
@@ -121,8 +122,8 @@ flowchart TB
     PROTOCOL["Curve gauge / factory / protocol contracts"]
     DAO["Curve DAO"]
 
-    GOV -->|"configures routes, bindings,<br/>and active analyzer"| CORE
-    CORE -->|"bounded current-state route calls"| POLICY
+    GOV -->|"configures policy modules,<br/>IDs, and bindings"| CORE
+    CORE -->|"bounded current-state ID calls"| POLICY
     POLICY -->|"bounded read-only calls"| PROTOCOL
     CORE -->|"bounded analysis call"| ANALYZER
     ANALYZER -->|"read callscript"| DAO
@@ -137,8 +138,9 @@ authorization.
 
 The stable, non-upgradeable core owns:
 
-- active `(module, validationId)` routes;
-- exact factory-to-route bindings;
+- one replaceable or disableable gauge-policy module pointer;
+- active validation IDs;
+- exact factory-to-ID bindings;
 - zero/one/multiple match resolution;
 - owner-controlled configuration;
 - the active proposal-analysis module pointer;
@@ -160,8 +162,7 @@ validation methods:
 
 Combining these small read-only methods avoids unnecessary adapter contracts.
 The module has no constructor configuration or protocol-specific immutables.
-A future route may point to another module when a method genuinely requires a
-different implementation or lifecycle.
+Governance may replace the complete gauge-policy module or set it to zero.
 
 ### `ProposalAnalysisModuleV1`
 
@@ -193,8 +194,8 @@ The core still enforces the orchestration invariants it owns:
 
 - only the owner changes configuration;
 - configured modules and factories require deployed code;
-- factories bind to exact route keys;
-- every active route is scanned;
+- factories bind to exact validation IDs;
+- every active validation ID is scanned;
 - ambiguity fails closed; and
 - calls are gas bounded.
 
@@ -202,94 +203,96 @@ External protocol contracts read by a policy module are not trusted merely
 because the module is trusted. The module must bound those reads, require
 canonical return values, and fail closed on dependency errors.
 
-## Route model
+## Validation-ID model
 
-A route is:
-
-```solidity
-struct Route {
-    address module;
-    bytes32 validationId;
-}
-```
-
-Its key is:
-
-```solidity
-keccak256(abi.encode(module, validationId))
-```
-
-Each configured factory maps to one exact route key:
+The core owns one current gauge-policy module and an active set of opaque
+validation IDs. Each configured factory maps to one exact ID:
 
 ```text
-factory -> keccak256(module, validationId)
+factory -> validationId
 ```
 
 `validationId` is an opaque, module-local method identifier. It is not a core
-enum. The core does not select a method from the gauge; it scans every active
-route and passes that route's configured ID to its module:
+enum. The core does not select a method from the gauge; it passes every active
+ID to the current module:
 
 ```solidity
 module.factoryForGauge(gauge, validationId)
 ```
 
-A returned factory counts only if it is bound to that exact route.
+A returned factory counts only if it is bound to that exact ID.
+
+Factory bindings may reference inactive IDs. Such bindings are dormant:
+removing an ID disables all of its matches without deleting configuration, and
+re-enabling the ID restores them. Replacing the gauge-policy module preserves
+the active ID set and all factory bindings.
 
 ## Gauge-validation call flow
 
 For `validateGauge(gauge)`:
 
 1. Reject the zero address and addresses without deployed code.
-2. Iterate over every active route.
-3. Make a bounded call to
+2. Return false if gauge policy is disabled.
+3. Iterate over every active validation ID.
+4. Make a bounded call to
    `module.factoryForGauge(gauge, validationId)`.
-4. Treat a revert, malformed return, zero factory, or exhausted gas allowance
+5. Treat a revert, malformed return, zero factory, or exhausted gas allowance
    as no match.
-5. Count the result only if the returned factory is bound to that exact route.
-6. Continue the complete scan after the first match.
-7. Return true only if the final match count is exactly one.
+6. Count the result only if the returned factory is bound to that exact ID.
+7. Continue the complete scan after the first match.
+8. Return true only if the final match count is exactly one.
 
 ```text
-zero matching routes -> false
-one matching route   -> true
-multiple matches     -> false
+zero matching IDs -> false
+one matching ID   -> true
+multiple matches  -> false
 ```
 
-Complete scanning makes the result independent of route order and prevents an
-overlapping route from silently overriding another.
+Complete scanning makes the result independent of ID order and prevents an
+overlapping policy from silently overriding another.
 
-The active route cap is 16.
+The active validation-ID cap is 16.
 
 ## Governance lifecycle
 
 Curve governance can:
 
 ```solidity
-addRoute(address module, bytes32 validationId);
-removeRoute(address module, bytes32 validationId);
-setFactoryRoute(address factory, address module, bytes32 validationId);
+addValidationId(bytes32 validationId);
+removeValidationId(bytes32 validationId);
+setFactoryValidationId(address factory, bytes32 validationId);
+setGaugeValidationModule(address module);
 setProposalAnalysisModule(address module);
 transferOwnership(address newOwner);
 ```
 
-Passing zero for both route fields revokes a factory:
+Passing zero disables a factory:
 
 ```solidity
-setFactoryRoute(factory, address(0), bytes32(0));
+setFactoryValidationId(factory, bytes32(0));
 ```
 
-A gauge-policy module is added by adding routes that reference it. To remove
-one, governance first rebinds or revokes every factory using its routes, then
-removes those routes. A route cannot be removed while a factory references it.
+Configuration operations are idempotent. Adding an active ID, removing an
+inactive ID, restoring the current module, repeating a factory binding, or
+transferring ownership to the current owner is a no-op. Constructor IDs are
+also idempotent. Duplicate constructor factory entries are applied in order,
+so the final entry wins.
 
-`setProposalAnalysisModule(address(0))` disables proposal analysis. A nonzero
-module requires deployed code.
+Removing an ID never deletes a factory binding. The binding remains dormant
+until the ID is re-enabled or the factory is rebound. Factories may be bound to
+inactive IDs intentionally.
+
+`setGaugeValidationModule(address(0))` disables gauge validation and
+`setProposalAnalysisModule(address(0))` disables proposal analysis. A new
+nonzero module requires deployed code. Configuration reverts only when the
+requested state cannot be established, such as a zero owner, zero active ID,
+missing module/factory code, or exceeding the ID cap.
 
 ## Current-state validation methods
 
 Each method returns a candidate factory only after its reciprocal check
 succeeds. The core separately requires that factory to be bound to the calling
-route.
+validation ID.
 
 ### Direct LP
 
@@ -344,9 +347,10 @@ require factory.is_valid_gauge(gauge) == true
 return factory
 ```
 
-The validation ID names the proof rather than any one gauge family.
-`bridger()` and LlamaLend-specific market reads are unnecessary because neither
-strengthens the factory's explicit gauge attestation.
+The validation ID names the proof rather than any one gauge family. The proof
+claims factory provenance only. LlamaLend-specific reciprocal market reads
+would establish a stronger market-membership policy, but they are intentionally
+outside this generic ID.
 
 ### LlamaLend v2 boundary
 
@@ -354,7 +358,7 @@ LlamaLend v2 markets do not require a gauge to operate. A positive borrow cap
 and lender liquidity activate the lending path; a gauge only adds CRV
 incentives.
 
-The supported v2 gauge path is a conventional factory-deployed gauge over a
+The observed v2 gauge path is a conventional factory-deployed gauge over a
 lender-vault token. It is authenticated exactly like every other
 factory-attested gauge:
 
@@ -362,6 +366,11 @@ factory-attested gauge:
 gauge.factory() -> configured LlamaLend v2 gauge factory
 factory.is_valid_gauge(gauge) -> true
 ```
+
+The generic gauge factory permits a first deployment for an arbitrary token.
+The validator therefore does not assert that every gauge from this factory is
+a canonical LlamaLend market; it asserts only that the configured factory
+created and attests the gauge.
 
 Manually deployed borrower-side liquidity-mining callbacks are outside the
 initial validator scope. If Curve later adopts them as a production gauge
@@ -417,7 +426,7 @@ For every recognized gauge addition, the analyzer calls:
 validator.validateGauge(gauge)
 ```
 
-It does not return internal route attribution. The action report contains only
+It does not return internal policy attribution. The action report contains only
 the proposal arguments and the current boolean result.
 
 ```mermaid
@@ -437,7 +446,7 @@ sequenceDiagram
 
     loop Each recognized addition
         Analyzer->>Core: validateGauge(gauge)
-        Core->>Policy: scan every active route
+        Core->>Policy: scan every active validation ID
         Policy->>Protocol: reciprocal current-state reads
         Protocol-->>Policy: current relationships
         Policy-->>Core: candidate factory or no match
@@ -478,11 +487,11 @@ For the proposal analyzer:
 - the core does not manually scan ABI words or recompute analyzer policy; and
 - ABI compatibility is verified before governance activates a replacement.
 
-For gauge routes:
+For gauge validation:
 
 - the existing small fixed-size call boundary remains gas bounded;
 - it accepts only one canonical returned address;
-- a route failure is treated as no match; and
+- an ID call failure is treated as no match; and
 - the core still enforces exact factory binding and ambiguity because those are
   core-owned orchestration rules.
 
@@ -510,7 +519,7 @@ A future gauge should validate when:
 
 1. it is deployed through a supported Curve factory;
 2. the applicable validation method is active;
-3. the factory is bound to that exact route; and
+3. the factory is bound to that exact validation ID; and
 4. its reciprocal relationship is readable at the queried block.
 
 A new factory requires governance configuration. Unknown factories are not
@@ -560,9 +569,12 @@ At Ethereum block `25,619,622`
 
 The gauge was deployed before the proposal. Proposal execution may atomically
 bundle market activation and gauge registration, but a gauge is not a market
-runtime dependency. This live path justifies adding the gauge factory to the
-generic attestation route rather than adding LlamaLend-specific validation
-logic.
+runtime dependency. The factory permits a first gauge deployment for an
+arbitrary token and does not itself prove LlamaLend market membership.
+Accordingly, this policy proves generic factory provenance; the observed gauge
+happens to wrap a canonical v2 lender vault. This live path justifies binding
+the factory to the generic attestation ID rather than labeling the proof as
+LlamaLend-specific validation.
 
 The deployment creates three contracts in three transactions. The core is fully
 configured and owned by Curve governance from construction. If either module
@@ -572,9 +584,9 @@ not warranted solely to make these creations atomic.
 
 ## Failure and gas model
 
-- The core forwards a fixed gas allowance to each gauge route.
-- The core reserves enough gas to attempt every remaining route.
-- A route revert or dependency failure contributes no match.
+- The core forwards a fixed gas allowance to each validation-ID call.
+- The core reserves enough gas to attempt every remaining ID.
+- A module or dependency failure contributes no match.
 - The proposal-analysis call is gas bounded.
 - A disabled or reverting analyzer produces `UNAVAILABLE`.
 - Policy modules bound every read from untrusted protocol dependencies.
@@ -588,7 +600,7 @@ independent authorization system against Curve governance.
 Curve governance controls:
 
 - active policy modules;
-- validation routes;
+- active validation IDs;
 - factory bindings; and
 - the decisions that consume the result.
 
@@ -600,21 +612,27 @@ configuration events.
 
 Release gates should emphasize the supported factory-first model:
 
-- route lifecycle and exact binding;
+- idempotent configuration operations;
+- duplicate constructor bindings with last-entry-wins behavior;
+- dormant bindings and ID removal/re-enabling;
+- gauge-policy replacement and disabling;
+- exact factory-to-ID binding;
 - zero, one, and multiple matches;
+- every module and dependency failure returning false;
+- analyzer unavailable, rejected, and complete outcomes;
 - deployed code and exact bindings for every configured factory;
-- representative factory-deployed gauges for every validation method and every
-  configured factory with an available live gauge at the pinned block;
+- representative factory-deployed gauges from every supported factory family;
 - spoofed self-reported factories and reciprocal failures;
 - the LlamaLend v2 vault gauge proposed in ownership vote `1461`;
 - strict direct and Agent-wrapped `add_gauge` parsing;
 - malformed recognized-action rejection;
 - analyzer replacement, removal, revert, and gas exhaustion;
-- three-contract deployment and configuration readback; and
+- three-transaction deployment and exact configuration readback; and
 - pinned-fork proposal execution whenever analysis depends on proposed state.
 
 Historical manifests may remain useful research and regression artifacts, but
-they are not normative policy:
+they are not normative policy. Exhaustive historical gauge or proposal
+coverage is not required:
 
 - the system does not promise correct classification of every historical
   GaugeController gauge;
@@ -627,14 +645,15 @@ addresses, methods, and units.
 
 ## Implementation map
 
-- `src/GaugeValidator.sol`: stable core, route lifecycle, boolean resolution,
-  active analyzer pointer, and public entrypoints.
+- `src/GaugeValidator.sol`: stable core, validation-ID lifecycle, exact
+  factory bindings, boolean resolution, policy pointers, and public
+  entrypoints.
 - `src/GaugeValidationModuleV1.sol`: four initial current-state gauge policies.
 - `src/ProposalAnalysisModuleV1.sol`: strict recognized-action extraction and
   current-state gauge analysis.
 - `src/interfaces/IGaugeValidationModule.sol`: gauge-policy boundary.
 - `src/interfaces/IProposalAnalysisModule.sol`: proposal-analysis boundary.
-- `src/MainnetGaugeConfiguration.sol`: initial Ethereum routes and bindings.
+- `src/MainnetGaugeConfiguration.sol`: initial Ethereum IDs and bindings.
 - `script/DeployGaugeValidator.s.sol`: three-contract deployment with a fully
   configured, governance-owned core.
 - `script/InspectGaugeValidator.s.sol`: configuration readback.
@@ -646,7 +665,7 @@ addresses, methods, and units.
 
 ```text
 GaugeValidator
-    owns stable routing and exactly-one-match semantics
+    owns stable configuration and exactly-one-match semantics
 
 GaugeValidationModuleV1
     owns current protocol identity policy
@@ -660,3 +679,10 @@ Pinned-fork simulation
 
 Add another contract or abstraction only when a real trust boundary or
 independent policy lifecycle requires it.
+
+The operational rule is:
+
+```text
+validation failures return false or an explicit analysis status
+configuration reverts only when governance's requested state cannot be established
+```

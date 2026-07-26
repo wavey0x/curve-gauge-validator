@@ -5,10 +5,10 @@ validator defined by `ARCHITECTURE.md`.
 
 ## Production shape
 
-- `src/GaugeValidator.sol` is the stable core. It owns gauge routes, exact
-  factory bindings, exactly-one-match resolution, and the pointer to one active
-  proposal-analysis module. It interprets neither validation IDs nor proposal
-  syntax.
+- `src/GaugeValidator.sol` is the stable core. It owns active validation IDs,
+  exact factory-to-ID bindings, exactly-one-match resolution, and replaceable
+  pointers to one gauge-policy module and one proposal-analysis module. It
+  interprets neither validation IDs nor proposal syntax.
 - `src/GaugeValidationModuleV1.sol` groups the four initial current-state
   gauge-validation methods.
 - `src/ProposalAnalysisModuleV1.sol` owns strict recognized gauge-addition
@@ -18,10 +18,10 @@ validator defined by `ARCHITECTURE.md`.
 - `script/DeployGaugeValidator.s.sol` creates both immutable modules and then
   the fully configured core, with Curve governance as owner from construction.
 
-The owner adds a gauge module by adding routes that reference it. Removal
-requires rebinding or revoking every factory first, then removing its routes.
-The owner may replace the active proposal analyzer or set it to zero to disable
-proposal analysis.
+The owner may replace or disable either policy module. Validation-ID changes,
+factory bindings, module replacement, and ownership self-assignments are
+idempotent. Removing an ID leaves factory bindings dormant; re-enabling that ID
+reactivates them. Duplicate constructor factory entries use the final entry.
 
 ## Required invariants
 
@@ -29,11 +29,14 @@ proposal analysis.
 - Zero exact matches are invalid.
 - One exact match is valid.
 - Multiple exact matches are invalid.
-- A factory is accepted only through the exact route to which it is bound.
+- A factory is accepted only through the exact validation ID to which it is
+  bound.
 - The core continues after the first match and never treats a successful
   prefix as final.
 - Gauge-module failures, malformed returns, low gas, and return-data bombs
   cannot produce true.
+- Every untrusted protocol dependency failure returns no match rather than
+  reverting validation.
 - The core has no validation-method enum and never interprets `validationId`.
 - Governance-selected modules are trusted policy components.
 - The proposal analyzer recognizes only canonical direct or ownership-Agent-
@@ -45,6 +48,8 @@ proposal analysis.
 - A disabled or reverting proposal analyzer returns `UNAVAILABLE`.
 - LlamaLend v2 vault gauges use the configured, governance-owned gauge
   factory's `is_valid_gauge` attestation.
+- That generic factory attestation proves gauge provenance, not LlamaLend
+  market membership.
 - Manually deployed LlamaLend liquidity-mining callbacks are out of scope.
 - GaugeController membership and self-reported factories are insufficient.
 - EOA-deployed legacy gauges without configured factory provenance are out of
@@ -86,11 +91,11 @@ forge lint
 RPC_URL=http://wavey:8545 forge test -vv
 ```
 
-Use pinned forks for representative mainnet behavior and mocks for route
+Use pinned forks for representative mainnet behavior and mocks for validation-ID
 bookkeeping, adversarial protocol dependencies, malformed callscripts, and
 method-level negative cases.
 
 Before deployment, simulate all three creation transactions on the pinned fork
-and read back every immutable, route, and binding. Deployment, ownership,
-module replacement, and every later route mutation remain Curve governance
-actions.
+and read back every immutable, policy pointer, validation ID, and binding.
+Deployment, ownership, module replacement, and every later configuration
+mutation remain Curve governance actions.

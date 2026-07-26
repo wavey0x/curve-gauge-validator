@@ -5,11 +5,13 @@ import {IGaugeValidationModule} from "./interfaces/IGaugeValidationModule.sol";
 import {IProposalAnalysisModule} from "./interfaces/IProposalAnalysisModule.sol";
 
 /// @notice Validates Curve gauge candidates through owner-configured policy
-///         routes and exposes one replaceable proposal analyzer.
-/// @dev Validation IDs and module policy are intentionally opaque to the core.
+///         IDs and exposes replaceable gauge and proposal policy modules.
+/// @dev Validation IDs are intentionally opaque to the core. Factory bindings
+///      persist while an ID is disabled so governance can re-enable policy
+///      without reconstructing configuration.
 contract GaugeValidator {
-    /// @notice Maximum number of simultaneously active gauge-policy routes.
-    uint256 public constant MAX_ROUTES = 16;
+    /// @notice Maximum number of simultaneously active validation IDs.
+    uint256 public constant MAX_VALIDATION_IDS = 16;
 
     /// @notice Gas forwarded to each gauge-policy call.
     uint256 public constant MODULE_CALL_GAS = 200_000;
@@ -17,35 +19,30 @@ contract GaugeValidator {
     /// @notice Gas forwarded to the active proposal analyzer.
     uint256 public constant PROPOSAL_ANALYSIS_CALL_GAS = 20_000_000;
 
-    uint256 private constant ROUTE_GAS_RESERVE = MODULE_CALL_GAS + 20_000;
+    uint256 private constant VALIDATION_ID_GAS_RESERVE = MODULE_CALL_GAS + 20_000;
     uint256 private constant FINAL_RESULT_GAS_RESERVE = 25_000;
 
     address public owner;
+    address public gaugeValidationModule;
     address public proposalAnalysisModule;
-
-    struct Route {
-        address module;
-        bytes32 validationId;
-    }
 
     struct FactoryBinding {
         address factory;
-        address module;
         bytes32 validationId;
     }
 
-    Route[] private _routes;
-    mapping(bytes32 routeKey => uint256 indexPlusOne) private _routeIndexPlusOne;
+    bytes32[] private _validationIds;
+    mapping(bytes32 validationId => uint256 indexPlusOne) private _validationIdIndexPlusOne;
 
-    /// @notice Number of configured factories bound to each route.
-    mapping(bytes32 routeKey => uint256 factoryCount) public routeFactoryCount;
+    /// @notice Exact validation ID configured for each factory, or zero when disabled.
+    mapping(address factory => bytes32 validationId) public validationIdForFactory;
 
-    /// @notice Exact route key configured for each factory, or zero if absent.
-    mapping(address factory => bytes32 routeKey) public routeForFactory;
-
-    event RouteAdded(bytes32 indexed routeKey, address indexed module, bytes32 indexed validationId);
-    event RouteRemoved(bytes32 indexed routeKey, address indexed module, bytes32 indexed validationId);
-    event FactoryRouteSet(address indexed factory, bytes32 indexed previousRouteKey, bytes32 indexed newRouteKey);
+    event ValidationIdAdded(bytes32 indexed validationId);
+    event ValidationIdRemoved(bytes32 indexed validationId);
+    event FactoryValidationIdSet(
+        address indexed factory, bytes32 indexed previousValidationId, bytes32 indexed newValidationId
+    );
+    event GaugeValidationModuleSet(address indexed previousModule, address indexed newModule);
     event ProposalAnalysisModuleSet(address indexed previousModule, address indexed newModule);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
@@ -53,12 +50,7 @@ contract GaugeValidator {
     error ZeroAddress();
     error MissingCode(address target);
     error ZeroValidationId();
-    error DuplicateRoute(bytes32 routeKey);
-    error UnknownRoute(bytes32 routeKey);
-    error RouteLimitReached();
-    error RouteStillInUse(bytes32 routeKey, uint256 factoryCount);
-    error InvalidRevocation();
-    error DuplicateFactoryBinding(address factory);
+    error ValidationIdLimitReached();
 
     modifier onlyOwner() {
         _checkOwner();
@@ -71,29 +63,32 @@ contract GaugeValidator {
 
     constructor(
         address owner_,
+        address gaugeValidationModule_,
         address proposalAnalysisModule_,
-        Route[] memory initialRoutes,
+        bytes32[] memory initialValidationIds,
         FactoryBinding[] memory initialBindings
     ) {
         if (owner_ == address(0)) revert ZeroAddress();
+        if (gaugeValidationModule_ != address(0)) _requireCode(gaugeValidationModule_);
         if (proposalAnalysisModule_ != address(0)) _requireCode(proposalAnalysisModule_);
 
         owner = owner_;
+        gaugeValidationModule = gaugeValidationModule_;
         proposalAnalysisModule = proposalAnalysisModule_;
 
         emit OwnershipTransferred(address(0), owner_);
+        emit GaugeValidationModuleSet(address(0), gaugeValidationModule_);
         emit ProposalAnalysisModuleSet(address(0), proposalAnalysisModule_);
 
-        for (uint256 i; i < initialRoutes.length; ++i) {
-            _addRoute(initialRoutes[i].module, initialRoutes[i].validationId);
+        for (uint256 i; i < initialValidationIds.length; ++i) {
+            _addValidationId(initialValidationIds[i]);
         }
 
+        // Bindings are deliberately applied in order. Repeated factories use
+        // the final entry, matching sequential governance configuration.
         for (uint256 i; i < initialBindings.length; ++i) {
             FactoryBinding memory binding = initialBindings[i];
-            if (routeForFactory[binding.factory] != bytes32(0)) {
-                revert DuplicateFactoryBinding(binding.factory);
-            }
-            _setFactoryRoute(binding.factory, binding.module, binding.validationId);
+            _setFactoryValidationId(binding.factory, binding.validationId);
         }
     }
 
@@ -101,45 +96,54 @@ contract GaugeValidator {
     // Owner configuration
     // ---------------------------------------------------------------------
 
-    function addRoute(address module, bytes32 validationId) external onlyOwner {
-        _addRoute(module, validationId);
+    /// @notice Enables a validation ID. Enabling an active ID is a no-op.
+    function addValidationId(bytes32 validationId) external onlyOwner {
+        _addValidationId(validationId);
     }
 
-    function removeRoute(address module, bytes32 validationId) external onlyOwner {
-        bytes32 key = _routeKey(module, validationId);
-        uint256 indexPlusOne = _routeIndexPlusOne[key];
-        if (indexPlusOne == 0) revert UnknownRoute(key);
-
-        uint256 factoryCount = routeFactoryCount[key];
-        if (factoryCount != 0) revert RouteStillInUse(key, factoryCount);
+    /// @notice Disables a validation ID without deleting factory bindings.
+    ///         Disabling an inactive ID is a no-op.
+    function removeValidationId(bytes32 validationId) external onlyOwner {
+        uint256 indexPlusOne = _validationIdIndexPlusOne[validationId];
+        if (indexPlusOne == 0) return;
 
         uint256 index = indexPlusOne - 1;
-        uint256 lastIndex = _routes.length - 1;
+        uint256 lastIndex = _validationIds.length - 1;
         if (index != lastIndex) {
-            Route memory moved = _routes[lastIndex];
-            _routes[index] = moved;
-            _routeIndexPlusOne[_routeKey(moved.module, moved.validationId)] = index + 1;
+            bytes32 moved = _validationIds[lastIndex];
+            _validationIds[index] = moved;
+            _validationIdIndexPlusOne[moved] = index + 1;
         }
 
-        _routes.pop();
-        delete _routeIndexPlusOne[key];
+        _validationIds.pop();
+        delete _validationIdIndexPlusOne[validationId];
 
-        emit RouteRemoved(key, module, validationId);
+        emit ValidationIdRemoved(validationId);
     }
 
-    /// @notice Binds a factory to an exact route. Passing zero for both route
-    ///         fields revokes the factory's existing binding.
-    function setFactoryRoute(address factory, address module, bytes32 validationId) external onlyOwner {
-        _setFactoryRoute(factory, module, validationId);
+    /// @notice Binds a factory to one exact validation ID. The ID may be
+    ///         inactive. Passing zero disables the factory binding.
+    function setFactoryValidationId(address factory, bytes32 validationId) external onlyOwner {
+        _setFactoryValidationId(factory, validationId);
+    }
+
+    /// @notice Replaces the gauge-policy module. Passing zero disables gauge validation.
+    function setGaugeValidationModule(address newModule) external onlyOwner {
+        address previousModule = gaugeValidationModule;
+        if (previousModule == newModule) return;
+        if (newModule != address(0)) _requireCode(newModule);
+
+        gaugeValidationModule = newModule;
+        emit GaugeValidationModuleSet(previousModule, newModule);
     }
 
     /// @notice Replaces the proposal analyzer. Passing zero disables analysis.
     function setProposalAnalysisModule(address newModule) external onlyOwner {
+        address previousModule = proposalAnalysisModule;
+        if (previousModule == newModule) return;
         if (newModule != address(0)) _requireCode(newModule);
 
-        address previousModule = proposalAnalysisModule;
         proposalAnalysisModule = newModule;
-
         emit ProposalAnalysisModuleSet(previousModule, newModule);
     }
 
@@ -147,8 +151,9 @@ contract GaugeValidator {
         if (newOwner == address(0)) revert ZeroAddress();
 
         address previousOwner = owner;
-        owner = newOwner;
+        if (previousOwner == newOwner) return;
 
+        owner = newOwner;
         emit OwnershipTransferred(previousOwner, newOwner);
     }
 
@@ -156,28 +161,32 @@ contract GaugeValidator {
     // Configuration views
     // ---------------------------------------------------------------------
 
-    function routeCount() external view returns (uint256) {
-        return _routes.length;
+    function validationIdCount() external view returns (uint256) {
+        return _validationIds.length;
     }
 
-    function routeAt(uint256 index) external view returns (address module, bytes32 validationId) {
-        Route storage route = _routes[index];
-        return (route.module, route.validationId);
+    function validationIdAt(uint256 index) external view returns (bytes32) {
+        return _validationIds[index];
+    }
+
+    function isValidationIdActive(bytes32 validationId) external view returns (bool) {
+        return _validationIdIndexPlusOne[validationId] != 0;
     }
 
     // ---------------------------------------------------------------------
     // Validation and proposal analysis
     // ---------------------------------------------------------------------
 
-    /// @notice Returns true only when exactly one configured route
-    ///         authenticates the gauge through its bound factory.
+    /// @notice Returns true only when exactly one active validation ID
+    ///         authenticates the gauge through its exactly bound factory.
     function validateGauge(address gauge) external view returns (bool) {
-        return _gaugeMatchCount(gauge) == 1;
+        address module = gaugeValidationModule;
+        if (module == address(0)) return false;
+        return _gaugeMatchCount(module, gauge) == 1;
     }
 
     /// @notice Reports recognized gauge additions and their current validity.
-    /// @dev The active analyzer is trusted policy. Disabled or reverting
-    ///      analysis returns a canonical UNAVAILABLE result.
+    /// @dev Disabled or failing analysis returns a canonical UNAVAILABLE result.
     function analyzeProposalGaugeAdditions(uint256 proposalId)
         external
         view
@@ -198,22 +207,21 @@ contract GaugeValidator {
     }
 
     /// @dev Returns 0, 1, or 2 for no, unique, or ambiguous matches.
-    ///      type(uint256).max represents insufficient gas and therefore fails
-    ///      closed at the boolean entrypoint.
-    function _gaugeMatchCount(address gauge) private view returns (uint256 matchCount) {
+    ///      type(uint256).max represents insufficient gas and fails closed.
+    function _gaugeMatchCount(address module, address gauge) private view returns (uint256 matchCount) {
         if (gauge == address(0) || gauge.code.length == 0) return 0;
 
-        uint256 length = _routes.length;
+        uint256 length = _validationIds.length;
         for (uint256 i; i < length; ++i) {
             uint256 remaining = length - i;
-            if (gasleft() < remaining * ROUTE_GAS_RESERVE + FINAL_RESULT_GAS_RESERVE) {
+            if (gasleft() < remaining * VALIDATION_ID_GAS_RESERVE + FINAL_RESULT_GAS_RESERVE) {
                 return type(uint256).max;
             }
 
-            Route storage route = _routes[i];
-            (bool success, address factory) = _callModule(route.module, gauge, route.validationId);
+            bytes32 validationId = _validationIds[i];
+            (bool success, address factory) = _callModule(module, gauge, validationId);
             if (!success || factory == address(0)) continue;
-            if (routeForFactory[factory] != _routeKey(route.module, route.validationId)) continue;
+            if (validationIdForFactory[factory] != validationId) continue;
 
             if (matchCount < 2) ++matchCount;
         }
@@ -228,49 +236,26 @@ contract GaugeValidator {
     // Internal configuration and bounded module calls
     // ---------------------------------------------------------------------
 
-    function _addRoute(address module, bytes32 validationId) private {
-        if (module == address(0)) revert ZeroAddress();
+    function _addValidationId(bytes32 validationId) private {
         if (validationId == bytes32(0)) revert ZeroValidationId();
-        _requireCode(module);
-        if (_routes.length == MAX_ROUTES) revert RouteLimitReached();
+        if (_validationIdIndexPlusOne[validationId] != 0) return;
+        if (_validationIds.length == MAX_VALIDATION_IDS) revert ValidationIdLimitReached();
 
-        bytes32 key = _routeKey(module, validationId);
-        if (_routeIndexPlusOne[key] != 0) revert DuplicateRoute(key);
+        _validationIds.push(validationId);
+        _validationIdIndexPlusOne[validationId] = _validationIds.length;
 
-        _routes.push(Route({module: module, validationId: validationId}));
-        _routeIndexPlusOne[key] = _routes.length;
-
-        emit RouteAdded(key, module, validationId);
+        emit ValidationIdAdded(validationId);
     }
 
-    function _setFactoryRoute(address factory, address module, bytes32 validationId) private {
+    function _setFactoryValidationId(address factory, bytes32 validationId) private {
         if (factory == address(0)) revert ZeroAddress();
 
-        bool revoking = module == address(0) && validationId == bytes32(0);
-        if (!revoking && (module == address(0) || validationId == bytes32(0))) {
-            revert InvalidRevocation();
-        }
+        bytes32 previousValidationId = validationIdForFactory[factory];
+        if (previousValidationId == validationId) return;
+        if (validationId != bytes32(0)) _requireCode(factory);
 
-        bytes32 newKey;
-        if (!revoking) {
-            _requireCode(factory);
-            newKey = _routeKey(module, validationId);
-            if (_routeIndexPlusOne[newKey] == 0) revert UnknownRoute(newKey);
-        }
-
-        bytes32 previousKey = routeForFactory[factory];
-        if (previousKey == newKey) return;
-
-        if (previousKey != bytes32(0)) {
-            unchecked {
-                --routeFactoryCount[previousKey];
-            }
-        }
-
-        routeForFactory[factory] = newKey;
-        if (newKey != bytes32(0)) ++routeFactoryCount[newKey];
-
-        emit FactoryRouteSet(factory, previousKey, newKey);
+        validationIdForFactory[factory] = validationId;
+        emit FactoryValidationIdSet(factory, previousValidationId, validationId);
     }
 
     function _callModule(address module, address gauge, bytes32 validationId)
@@ -303,14 +288,5 @@ contract GaugeValidator {
 
     function _requireCode(address target) private view {
         if (target.code.length == 0) revert MissingCode(target);
-    }
-
-    function _routeKey(address module, bytes32 validationId) private pure returns (bytes32 key) {
-        assembly ("memory-safe") {
-            let pointer := mload(0x40)
-            mstore(pointer, and(module, 0xffffffffffffffffffffffffffffffffffffffff))
-            mstore(add(pointer, 0x20), validationId)
-            key := keccak256(pointer, 0x40)
-        }
     }
 }

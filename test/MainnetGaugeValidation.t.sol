@@ -55,9 +55,10 @@ contract MainnetGaugeValidationTest is Test {
         );
         validator = new GaugeValidator(
             MainnetGaugeConfiguration.OWNER,
+            address(module),
             address(analyzer),
-            MainnetGaugeConfiguration.routes(address(module)),
-            MainnetGaugeConfiguration.bindings(address(module))
+            MainnetGaugeConfiguration.validationIds(),
+            MainnetGaugeConfiguration.bindings()
         );
     }
 
@@ -67,24 +68,30 @@ contract MainnetGaugeValidationTest is Test {
         assertEq(block.timestamp, FORK_TIMESTAMP);
     }
 
-    function test_InitialRoutesAndAllFactoryBindings() public view {
+    function test_InitialValidationIdsAndAllFactoryBindings() public view {
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
+        assertEq(validator.gaugeValidationModule(), address(module));
         assertEq(validator.proposalAnalysisModule(), address(analyzer));
-        assertEq(validator.routeCount(), 4);
+        assertEq(validator.validationIdCount(), 4);
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(module));
+        bytes32[] memory validationIds = MainnetGaugeConfiguration.validationIds();
+        for (uint256 i; i < validationIds.length; ++i) {
+            assertEq(validator.validationIdAt(i), validationIds[i]);
+            assertTrue(validator.isValidationIdActive(validationIds[i]));
+        }
+
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
         assertEq(bindings.length, 12);
 
         for (uint256 i; i < bindings.length; ++i) {
-            bytes32 expectedKey = keccak256(abi.encode(bindings[i].module, bindings[i].validationId));
             assertGt(bindings[i].factory.code.length, 0);
-            assertEq(validator.routeForFactory(bindings[i].factory), expectedKey);
+            assertEq(validator.validationIdForFactory(bindings[i].factory), bindings[i].validationId);
         }
 
-        assertEq(_factoryCount(module.DIRECT_LP()), 2);
-        assertEq(_factoryCount(module.DIRECT_OR_POOL_LP()), 5);
-        assertEq(_factoryCount(module.VAULT()), 1);
-        assertEq(_factoryCount(module.FACTORY_IS_VALID_GAUGE()), 4);
+        assertEq(_factoryCount(bindings, module.DIRECT_LP()), 2);
+        assertEq(_factoryCount(bindings, module.DIRECT_OR_POOL_LP()), 5);
+        assertEq(_factoryCount(bindings, module.VAULT()), 1);
+        assertEq(_factoryCount(bindings, module.FACTORY_IS_VALID_GAUGE()), 4);
     }
 
     function test_RepresentativeLiveFactoryGauges() public view {
@@ -172,7 +179,7 @@ contract MainnetGaugeValidationTest is Test {
         assertTrue(factory.is_valid_gauge(LEND_V2_VAULT_GAUGE));
         assertEq(factory.owner(), MainnetGaugeConfiguration.OWNER);
         assertEq(ILendVaultV2(gauge.lp_token()).factory(), LEND_FACTORY);
-        assertEq(validator.routeForFactory(LEND_FACTORY), bytes32(0));
+        assertEq(validator.validationIdForFactory(LEND_FACTORY), bytes32(0));
     }
 
     function test_ValidationGasHeadroomForEveryLiveMethod() public view {
@@ -186,7 +193,7 @@ contract MainnetGaugeValidationTest is Test {
     function _assertGauge(address gauge, address factory, bytes32 validationId) private view {
         assertTrue(validator.validateGauge(gauge));
         assertEq(module.factoryForGauge(gauge, validationId), factory);
-        assertEq(validator.routeForFactory(factory), keccak256(abi.encode(address(module), validationId)));
+        assertEq(validator.validationIdForFactory(factory), validationId);
     }
 
     function _assertValidationGas(address gauge, uint256 maximum) private view {
@@ -197,7 +204,13 @@ contract MainnetGaugeValidationTest is Test {
         assertLt(gasUsed, maximum);
     }
 
-    function _factoryCount(bytes32 validationId) private view returns (uint256) {
-        return validator.routeFactoryCount(keccak256(abi.encode(address(module), validationId)));
+    function _factoryCount(GaugeValidator.FactoryBinding[] memory bindings, bytes32 validationId)
+        private
+        pure
+        returns (uint256 count)
+    {
+        for (uint256 i; i < bindings.length; ++i) {
+            if (bindings[i].validationId == validationId) ++count;
+        }
     }
 }

@@ -4,7 +4,7 @@ pragma solidity 0.8.28;
 import {Test} from "forge-std/Test.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {IProposalAnalysisModule} from "../src/interfaces/IProposalAnalysisModule.sol";
-import {MockProposalAnalysisModule} from "./helpers/Mocks.sol";
+import {MockProposalAnalysisModule, MockValidationModule} from "./helpers/Mocks.sol";
 
 contract ProposalModuleBoundaryTest is Test {
     MockProposalAnalysisModule private analyzerA;
@@ -15,9 +15,10 @@ contract ProposalModuleBoundaryTest is Test {
         analyzerA = new MockProposalAnalysisModule();
         analyzerB = new MockProposalAnalysisModule();
 
-        GaugeValidator.Route[] memory routes = new GaugeValidator.Route[](0);
+        MockValidationModule gaugeModule = new MockValidationModule();
+        bytes32[] memory validationIds = new bytes32[](0);
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-        validator = new GaugeValidator(address(this), address(analyzerA), routes, bindings);
+        validator = new GaugeValidator(address(this), address(gaugeModule), address(analyzerA), validationIds, bindings);
     }
 
     function test_ReplacementChangesProposalPolicy() public {

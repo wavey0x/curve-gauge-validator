@@ -4,6 +4,7 @@ pragma solidity 0.8.28;
 import {Test} from "forge-std/Test.sol";
 import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {
+    ConfigurableDependency,
     MockCurveFactory,
     MockPoolToken,
     MockProtocolGauge,
@@ -135,6 +136,61 @@ contract GaugeValidationModuleV1Test is Test {
 
         MockProtocolGauge bombGauge = new MockProtocolGauge(address(new ReturnDataBombDependency()), address(lpToken));
         assertEq(_resolve(address(bombGauge), module.DIRECT_LP()), address(0));
+    }
+
+    function test_EveryFactoryDependencyFailureReturnsZeroForEveryMethod() public {
+        MockTarget token = new MockTarget();
+
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            MockProtocolGauge gauge = new MockProtocolGauge(address(dependency), address(token));
+
+            _assertAllMethodsZero(address(gauge));
+        }
+    }
+
+    function test_EveryGaugeGetterFailureReturnsZero() public {
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+
+            _assertAllMethodsZero(address(dependency));
+        }
+    }
+
+    function test_EveryLpTokenGetterFailureReturnsZero() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockTarget token = new MockTarget();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(token));
+        bytes memory callData = abi.encodeWithSignature("lp_token()");
+
+        vm.mockCallRevert(address(gauge), callData, bytes("failure"));
+        _assertAllMethodsZero(address(gauge));
+        vm.clearMockedCalls();
+
+        vm.mockCall(address(gauge), callData, hex"01");
+        _assertAllMethodsZero(address(gauge));
+        vm.clearMockedCalls();
+
+        vm.mockCall(address(gauge), callData, abi.encode(uint256(1) << 160));
+        _assertAllMethodsZero(address(gauge));
+    }
+
+    function test_EveryPoolMinterDependencyFailureReturnsZero() public {
+        MockCurveFactory factory = new MockCurveFactory();
+
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(dependency));
+
+            assertEq(_resolve(address(gauge), module.DIRECT_OR_POOL_LP()), address(0));
+        }
+    }
+
+    function _assertAllMethodsZero(address gauge) private view {
+        assertEq(_resolve(gauge, module.DIRECT_LP()), address(0));
+        assertEq(_resolve(gauge, module.DIRECT_OR_POOL_LP()), address(0));
+        assertEq(_resolve(gauge, module.VAULT()), address(0));
+        assertEq(_resolve(gauge, module.FACTORY_IS_VALID_GAUGE()), address(0));
     }
 
     function _resolve(address gauge, bytes32 validationId) private view returns (address) {

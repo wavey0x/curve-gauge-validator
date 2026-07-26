@@ -19,8 +19,8 @@ Keep:
 
 - `validateGauge(address) -> bool`;
 - complete scanning with zero/one/multiple-match semantics;
-- opaque `(module, validationId)` routes;
-- exact factory-to-route bindings;
+- opaque active validation IDs;
+- exact factory-to-ID bindings;
 - one combined, replaceable gauge-policy module;
 - one replaceable proposal-analysis module;
 - current-state analysis of recognized `GaugeController.add_gauge` actions;
@@ -78,9 +78,10 @@ All dependency calls remain gas bounded and require canonical return encoding.
 
 ## LlamaLend v2
 
-The supported v2 gauge is a conventional factory-deployed staking gauge over a
-lender-vault token. It does not require callback, AMM, LendFactory market-index,
-Minter, or CRV validation.
+The observed v2 gauge is a conventional factory-deployed staking gauge over a
+lender-vault token. The configured generic factory attestation proves gauge
+provenance, not LlamaLend market membership. It does not require callback, AMM,
+LendFactory market-index, Minter, or CRV validation.
 
 Configure factory
 `0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6` under
@@ -110,12 +111,19 @@ adopts them as a production family with a durable provenance mechanism.
   exposing that attestation.
 - Replace the LendFactory callback binding with the LlamaLend v2 vault-gauge
   factory binding.
-- Reduce the initial route count from five to four while retaining twelve
-  factory bindings.
-- Keep `GaugeValidator` and `ProposalAnalysisModuleV1` interfaces unchanged.
+- Configure four active validation IDs while retaining twelve factory
+  bindings.
+- Replace per-ID module dispatch with one replaceable or disableable gauge-policy
+  module pointer.
+- Make validation-ID, factory-binding, and policy-pointer operations
+  idempotent.
+- Keep bindings dormant when an ID is removed and reactivate them when the ID
+  is restored.
+- Apply duplicate constructor bindings in order with last-entry-wins
+  semantics.
 - Deploy the gauge module with no arguments.
-- Read back four routes, twelve bindings, ownership, and analyzer dependencies
-  after deployment.
+- Read back both policy pointers, four validation IDs, twelve bindings,
+  ownership, and analyzer dependencies after deployment.
 
 ## Independent tooling
 
@@ -132,8 +140,13 @@ Required release gates:
 
 - reciprocal positive and negative cases for every method;
 - canonical boolean and address-return checks;
-- zero, one, and multiple route matches;
-- exact factory binding and route lifecycle;
+- idempotent configuration operations;
+- duplicate constructor bindings with last-entry-wins behavior;
+- dormant bindings and ID removal/re-enabling;
+- gauge-policy replacement and disabling;
+- exact factory-to-ID binding;
+- zero, one, and multiple matches;
+- every module and dependency failure returning false;
 - deployed code and exact bindings for all twelve configured factories;
 - representative live gauges for every method and every configured factory
   with an available live gauge at the pinned block;
@@ -142,7 +155,8 @@ Required release gates:
 - strict direct and Agent-wrapped proposal parsing;
 - malformed callscript rejection without partial results;
 - analyzer replacement, disabling, reverts, and gas exhaustion;
-- deployment and inspection on the pinned fork; and
+- analyzer unavailable, rejected, and complete outcomes;
+- three-transaction deployment and exact inspection on the pinned fork; and
 - explicit rejection of an EOA-deployed legacy gauge.
 
 Historical manifests remain observational evidence, not exhaustive correctness
@@ -179,5 +193,7 @@ protocol state.
 - Proposal `1461` reports one recognized, currently valid gauge addition.
 - Manual LlamaLend callbacks remain out of scope.
 - Exactly-one-match and fail-closed behavior remain unchanged.
+- Configuration reverts only when the requested state cannot actually be
+  established.
 - Contracts, scripts, tests, fixtures, README, AGENTS, and architecture
   documentation describe the same system.

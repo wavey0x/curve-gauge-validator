@@ -23,15 +23,20 @@ contract DeploymentTest is Test {
 
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
         assertNotEq(validator.owner(), address(deployment));
+        assertEq(validator.gaugeValidationModule(), address(module));
         assertEq(validator.proposalAnalysisModule(), address(proposalModule));
-        assertEq(validator.routeCount(), 4);
+        assertEq(validator.validationIdCount(), 4);
         assertEq(address(proposalModule.DAO()), MainnetGaugeConfiguration.DAO);
         assertEq(proposalModule.AGENT(), MainnetGaugeConfiguration.OWNER);
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(module));
+        bytes32[] memory validationIds = MainnetGaugeConfiguration.validationIds();
+        for (uint256 i; i < validationIds.length; ++i) {
+            assertEq(validator.validationIdAt(i), validationIds[i]);
+        }
+
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
         for (uint256 i; i < bindings.length; ++i) {
-            bytes32 expectedKey = keccak256(abi.encode(address(module), bindings[i].validationId));
-            assertEq(validator.routeForFactory(bindings[i].factory), expectedKey);
+            assertEq(validator.validationIdForFactory(bindings[i].factory), bindings[i].validationId);
         }
 
         // Test-local environment used only by the read-only inspection script.

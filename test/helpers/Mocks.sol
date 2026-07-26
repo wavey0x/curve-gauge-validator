@@ -42,6 +42,8 @@ contract MockValidationModule is IGaugeValidationModule {
     }
 
     mapping(bytes32 validationId => mapping(address gauge => address factory)) public factories;
+    mapping(bytes32 validationId => Mode mode) public validationIdModes;
+    mapping(bytes32 validationId => bool configured) public hasValidationIdMode;
     Mode public mode;
 
     function setFactory(address gauge, bytes32 validationId, address factory) external {
@@ -52,8 +54,13 @@ contract MockValidationModule is IGaugeValidationModule {
         mode = mode_;
     }
 
+    function setValidationIdMode(bytes32 validationId, Mode mode_) external {
+        validationIdModes[validationId] = mode_;
+        hasValidationIdMode[validationId] = true;
+    }
+
     function factoryForGauge(address gauge, bytes32 validationId) external view returns (address factory) {
-        Mode currentMode = mode;
+        Mode currentMode = hasValidationIdMode[validationId] ? validationIdModes[validationId] : mode;
         if (currentMode == Mode.REVERT) revert();
         if (currentMode == Mode.BURN_GAS) {
             assembly {
@@ -226,6 +233,57 @@ contract RevertingDependency {
 contract ReturnDataBombDependency {
     fallback() external {
         assembly ("memory-safe") {
+            return(0x00, 0x100000)
+        }
+    }
+}
+
+contract ConfigurableDependency {
+    enum Mode {
+        REVERT,
+        BURN_GAS,
+        SHORT_RETURN,
+        LONG_RETURN,
+        NONCANONICAL_WORD,
+        RETURN_DATA_BOMB
+    }
+
+    Mode public immutable MODE;
+
+    constructor(Mode mode_) {
+        MODE = mode_;
+    }
+
+    fallback() external {
+        Mode currentMode = MODE;
+        if (currentMode == Mode.REVERT) revert();
+        if (currentMode == Mode.BURN_GAS) {
+            assembly {
+                for {} 1 {} {}
+            }
+        }
+        if (currentMode == Mode.SHORT_RETURN) {
+            assembly ("memory-safe") {
+                mstore(0x00, 1)
+                return(0x00, 0x1f)
+            }
+        }
+        if (currentMode == Mode.LONG_RETURN) {
+            assembly ("memory-safe") {
+                mstore(0x00, 1)
+                mstore(0x20, 0)
+                return(0x00, 0x40)
+            }
+        }
+        if (currentMode == Mode.NONCANONICAL_WORD) {
+            assembly ("memory-safe") {
+                mstore(0x00, or(1, shl(160, 1)))
+                return(0x00, 0x20)
+            }
+        }
+
+        assembly ("memory-safe") {
+            mstore(0x00, 1)
             return(0x00, 0x100000)
         }
     }

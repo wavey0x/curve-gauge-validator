@@ -33,9 +33,10 @@ contract DeployGaugeValidator is Script {
         );
         validator = new GaugeValidator(
             MainnetGaugeConfiguration.OWNER,
+            address(gaugeModule),
             address(proposalModule),
-            MainnetGaugeConfiguration.routes(address(gaugeModule)),
-            MainnetGaugeConfiguration.bindings(address(gaugeModule))
+            MainnetGaugeConfiguration.validationIds(),
+            MainnetGaugeConfiguration.bindings()
         );
         vm.stopBroadcast();
 
@@ -49,16 +50,21 @@ contract DeployGaugeValidator is Script {
     ) private view {
         if (
             validator.owner() != MainnetGaugeConfiguration.OWNER
-                || validator.proposalAnalysisModule() != address(proposalModule) || validator.routeCount() != 4
+                || validator.gaugeValidationModule() != address(gaugeModule)
+                || validator.proposalAnalysisModule() != address(proposalModule) || validator.validationIdCount() != 4
                 || address(proposalModule.DAO()) != MainnetGaugeConfiguration.DAO
                 || proposalModule.AGENT() != MainnetGaugeConfiguration.OWNER
                 || proposalModule.GAUGE_CONTROLLER() != MainnetGaugeConfiguration.GAUGE_CONTROLLER
         ) revert DeploymentInvariantFailed();
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(gaugeModule));
+        bytes32[] memory validationIds = MainnetGaugeConfiguration.validationIds();
+        for (uint256 i; i < validationIds.length; ++i) {
+            if (validator.validationIdAt(i) != validationIds[i]) revert DeploymentInvariantFailed();
+        }
+
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
         for (uint256 i; i < bindings.length; ++i) {
-            bytes32 expectedKey = keccak256(abi.encode(bindings[i].module, bindings[i].validationId));
-            if (validator.routeForFactory(bindings[i].factory) != expectedKey) {
+            if (validator.validationIdForFactory(bindings[i].factory) != bindings[i].validationId) {
                 revert DeploymentInvariantFailed();
             }
         }
