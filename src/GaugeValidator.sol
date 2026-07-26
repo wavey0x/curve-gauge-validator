@@ -1,16 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
+import {ICurve} from "./interfaces/ICurve.sol";
+
 /// @notice Pessimistically answers whether a gauge was deployed by a trusted factory.
 contract GaugeValidator {
     uint256 public constant DEPENDENCY_CALL_GAS = 30_000;
-
-    bytes4 private constant FACTORY_SELECTOR = bytes4(keccak256("factory()"));
-    bytes4 private constant LP_TOKEN_SELECTOR = bytes4(keccak256("lp_token()"));
-    bytes4 private constant GET_GAUGE_SELECTOR = bytes4(keccak256("get_gauge(address)"));
-    bytes4 private constant MINTER_SELECTOR = bytes4(keccak256("minter()"));
-    bytes4 private constant GAUGE_FOR_VAULT_SELECTOR = bytes4(keccak256("gauge_for_vault(address)"));
-    bytes4 private constant IS_VALID_GAUGE_SELECTOR = bytes4(keccak256("is_valid_gauge(address)"));
 
     enum Proof {
         NONE,
@@ -75,7 +70,7 @@ contract GaugeValidator {
     function validateGauge(address gauge) external view returns (bool) {
         if (gauge == address(0) || gauge.code.length == 0) return false;
 
-        (bool success, address factory) = _readAddress(gauge, FACTORY_SELECTOR);
+        (bool success, address factory) = _readAddress(gauge, ICurve.factory.selector);
         if (!success || factory == address(0)) return false;
 
         Proof proof = proofForFactory[factory];
@@ -89,42 +84,42 @@ contract GaugeValidator {
     }
 
     function _directLp(address gauge, address factory) private view returns (bool) {
-        (bool success, address lpToken) = _readAddress(gauge, LP_TOKEN_SELECTOR);
+        (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
         if (!success || lpToken == address(0)) return false;
 
         address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, GET_GAUGE_SELECTOR, lpToken);
+        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
         return success && reverseGauge == gauge;
     }
 
     function _directOrPoolLp(address gauge, address factory) private view returns (bool) {
-        (bool success, address lpToken) = _readAddress(gauge, LP_TOKEN_SELECTOR);
+        (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
         if (!success || lpToken == address(0)) return false;
 
         address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, GET_GAUGE_SELECTOR, lpToken);
+        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
         if (!success) return false;
         if (reverseGauge != address(0)) return reverseGauge == gauge;
 
         address pool;
-        (success, pool) = _readAddress(lpToken, MINTER_SELECTOR);
+        (success, pool) = _readAddress(lpToken, ICurve.minter.selector);
         if (!success || pool == address(0)) return false;
 
-        (success, reverseGauge) = _readAddress(factory, GET_GAUGE_SELECTOR, pool);
+        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, pool);
         return success && reverseGauge == gauge;
     }
 
     function _vault(address gauge, address factory) private view returns (bool) {
-        (bool success, address vault) = _readAddress(gauge, LP_TOKEN_SELECTOR);
+        (bool success, address vault) = _readAddress(gauge, ICurve.lp_token.selector);
         if (!success || vault == address(0)) return false;
 
         address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, GAUGE_FOR_VAULT_SELECTOR, vault);
+        (success, reverseGauge) = _readAddress(factory, ICurve.gauge_for_vault.selector, vault);
         return success && reverseGauge == gauge;
     }
 
     function _factoryAttestation(address gauge, address factory) private view returns (bool) {
-        (bool success, bool valid) = _readBool(factory, IS_VALID_GAUGE_SELECTOR, gauge);
+        (bool success, bool valid) = _readBool(factory, ICurve.is_valid_gauge.selector, gauge);
         return success && valid;
     }
 

@@ -2,14 +2,13 @@
 pragma solidity 0.8.28;
 
 import {GaugeValidator} from "./GaugeValidator.sol";
+import {ICurve} from "./interfaces/ICurve.sol";
 import {ICurveDAO} from "./interfaces/ICurveDAO.sol";
 
 /// @notice Extracts canonical gauge additions from one Curve ownership proposal
 ///         and evaluates them with an immutable GaugeValidator.
 contract ProposalGaugeValidator {
     bytes4 private constant CALLSCRIPT_ID = 0x00000001;
-    bytes4 private constant ADD_GAUGE_SELECTOR = 0x18dfe921;
-    bytes4 private constant AGENT_EXECUTE_SELECTOR = 0xb61d27f6;
 
     uint256 private constant CALLSCRIPT_HEADER_LENGTH = 4;
     uint256 private constant CALL_HEADER_LENGTH = 24;
@@ -145,11 +144,11 @@ contract ProposalGaugeValidator {
     {
         bytes4 selector = length >= 4 ? _bytes4At(data, offset) : bytes4(0);
 
-        if (target == GAUGE_CONTROLLER && selector == ADD_GAUGE_SELECTOR) {
+        if (target == GAUGE_CONTROLLER && selector == ICurve.add_gauge.selector) {
             return _parseAddGauge(data, offset, length);
         }
 
-        if (selector == AGENT_EXECUTE_SELECTOR) {
+        if (selector == ICurve.execute.selector) {
             ParsedCall memory executeCall = _parseAgentExecute(data, offset, length);
             if (target == AGENT) return executeCall;
 
@@ -159,7 +158,7 @@ contract ProposalGaugeValidator {
             return _unrelatedCall();
         }
 
-        if (selector == ADD_GAUGE_SELECTOR) return parsed;
+        if (selector == ICurve.add_gauge.selector) return parsed;
         return _unrelatedCall();
     }
 
@@ -189,9 +188,9 @@ contract ProposalGaugeValidator {
         }
 
         bytes4 innerSelector = payloadLength >= 4 ? _bytes4At(data, payloadOffset) : bytes4(0);
-        if (innerSelector == AGENT_EXECUTE_SELECTOR) return parsed;
+        if (innerSelector == ICurve.execute.selector) return parsed;
 
-        if (innerSelector == ADD_GAUGE_SELECTOR) {
+        if (innerSelector == ICurve.add_gauge.selector) {
             if (innerTarget != GAUGE_CONTROLLER || value != 0) return parsed;
             return _parseAddGauge(data, payloadOffset, payloadLength);
         }
@@ -225,7 +224,7 @@ contract ProposalGaugeValidator {
         uint256 payloadLength = _wordAt(data, offset + 100);
         if (payloadLength < 4 || payloadLength > length - EXECUTE_PAYLOAD_START) return false;
 
-        return _bytes4At(data, offset + EXECUTE_PAYLOAD_START) == ADD_GAUGE_SELECTOR;
+        return _bytes4At(data, offset + EXECUTE_PAYLOAD_START) == ICurve.add_gauge.selector;
     }
 
     function _validateGauge(address gauge) private view returns (bool valid) {
