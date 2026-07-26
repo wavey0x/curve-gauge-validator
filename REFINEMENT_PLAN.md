@@ -15,7 +15,11 @@ Completed:
 - all dependency failures return `false`;
 - owner-only trust updates;
 - representative pinned-mainnet tests; and
-- one-transaction deployment with exact readback.
+- a separate immutable proposal validator;
+- compact ordered `{gauge, valid}` proposal results;
+- strict direct and Agent-wrapped `add_gauge` parsing;
+- explicit unavailable, rejected, and complete outcomes; and
+- two-transaction deployment with exact readback.
 
 Removed:
 
@@ -23,6 +27,5 @@ Removed:
 - route scanning and multi-match logic;
 - dormant bindings;
 - replaceable policy modules;
-- proposal analysis;
 - exhaustive historical manifests; and
-- multi-contract deployment.
+- mutable or replaceable proposal-policy modules.

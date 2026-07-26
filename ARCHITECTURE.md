@@ -10,8 +10,8 @@ The validator answers one pessimistic question:
 function validateGauge(address gauge) external view returns (bool);
 ```
 
-It has one deployed contract, one boolean validation entrypoint, and one
-factory-trust mapping.
+`GaugeValidator` has one boolean validation entrypoint and one factory-trust
+mapping. Proposal validation is a separate immutable consumer.
 
 ## Rule
 
@@ -42,7 +42,7 @@ Reading `gauge.factory()` alone is insufficient because any contract can
 self-report a trusted address. The reciprocal check is what proves factory
 provenance.
 
-## Contract
+## Gauge contract
 
 `GaugeValidator` contains:
 
@@ -52,8 +52,8 @@ provenance.
 - governance ownership; and
 - `validateGauge(address) returns (bool)`.
 
-There is no policy module, proposal analyzer, route scan, validation-ID
-lifecycle, ambiguity state, or caller-supplied factory hint.
+There is no policy module, route scan, validation-ID lifecycle, ambiguity
+state, or caller-supplied factory hint.
 
 The proof enum is:
 
@@ -108,6 +108,79 @@ All dependency calls are capped at 30,000 gas. Address responses must be
 exactly 32 bytes with zero upper bits. Boolean responses must be exactly 32
 bytes and equal to zero or one.
 
+## Proposal contract
+
+`ProposalGaugeValidator` is a separate, immutable consumer of
+`GaugeValidator`. It stores only:
+
+- the Curve ownership DAO;
+- the ownership Agent;
+- GaugeController; and
+- the gauge validator.
+
+It exposes:
+
+```solidity
+function analyzeProposal(uint256 proposalId)
+    external
+    view
+    returns (ProposalAnalysis memory);
+
+function validateProposal(uint256 proposalId)
+    external
+    view
+    returns (bool);
+```
+
+The compact result is:
+
+```solidity
+enum AnalysisStatus {
+    UNAVAILABLE,
+    CALLSCRIPT_REJECTED,
+    COMPLETE
+}
+
+struct GaugeResult {
+    address gauge;
+    bool valid;
+}
+
+struct ProposalAnalysis {
+    AnalysisStatus status;
+    bool allValid;
+    GaugeResult[] gauges;
+}
+```
+
+The analyzer recognizes only:
+
+1. a direct canonical `GaugeController.add_gauge` call; or
+2. a canonical ownership-Agent `execute` call whose inner target is
+   GaugeController, value is zero, and payload is exactly `add_gauge`.
+
+Unrelated calls are ignored. Malformed callscripts, gauge-shaped calls through
+the wrong target, noncanonical ABI words, recursive wrappers, and more than 64
+recognized gauges reject the entire analysis.
+
+Every recognized gauge is evaluated through the immutable gauge validator
+with a 300,000-gas cap and an exact canonical boolean return. A failed query
+makes that gauge invalid without changing a successfully parsed proposal to
+`UNAVAILABLE`.
+
+`allValid` is true only when parsing completed, at least one gauge was
+recognized, and every recognized gauge is valid. `validateProposal` applies
+that exact rule.
+
+Gauge booleans reflect the current block. The proposal validator does not
+simulate state changes that earlier calls in the proposal would create.
+
+The deployed contract at
+`0xbEF66C2c0Cd93C00C545938Ff3f5b50b2D91ccc6` inspired the compact
+`{gauge, valid}` result and false-on-empty aggregate. This implementation does
+not copy its active-proposal scanning, permissive minimum-length parsing, or
+unbounded dependency calls.
+
 ## Mainnet trust set
 
 | Factory family | Factory | Proof |
@@ -146,20 +219,28 @@ different question and deliberately out of scope.
 
 ## Deployment and verification
 
-Deployment is one transaction:
+Deployment is two transactions:
 
 ```text
 new GaugeValidator(governance, trustedFactories)
+new ProposalGaugeValidator(dao, agent, gaugeController, gaugeValidator)
 ```
 
-The deployment script reads back the owner and every configured factory proof.
+The proposal contract is immutable and has no owner or policy configuration.
+The deployment script reads back every immutable dependency, the gauge owner,
+and every configured factory proof.
+
 Tests cover:
 
 - all four proof layouts;
 - untrusted and spoofing cases;
 - reverting, malformed, gas-burning, and oversized return data;
 - owner-only trust changes;
+- direct and Agent-wrapped proposal additions;
+- unavailable, rejected, complete, empty, mixed-validity, and aggregate
+  proposal results;
 - representative live gauges for every configured factory family; and
-- exact deployment readback on a pinned mainnet fork.
+- two representative mainnet proposals; and
+- exact two-contract deployment readback on a pinned mainnet fork.
 
 Exhaustive historical gauge or proposal coverage is not required.

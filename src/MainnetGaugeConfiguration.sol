@@ -4,7 +4,9 @@ pragma solidity 0.8.28;
 import {GaugeValidator} from "./GaugeValidator.sol";
 
 library MainnetGaugeConfiguration {
+    address internal constant DAO = 0xE478de485ad2fe566d49342Cbd03E49ed7DB3356;
     address internal constant OWNER = 0x40907540d8a6C65c637785e8f8B742ae6b0b9968;
+    address internal constant GAUGE_CONTROLLER = 0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB;
     address internal constant LEND_V2_GAUGE_FACTORY = 0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6;
 
     function bindings() internal pure returns (GaugeValidator.FactoryBinding[] memory values) {

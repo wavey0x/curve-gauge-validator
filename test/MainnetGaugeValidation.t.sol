@@ -4,6 +4,8 @@ pragma solidity 0.8.28;
 import {Test} from "forge-std/Test.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
+import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
+import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
 
 interface IFactoryAttestedGauge {
     function factory() external view returns (address);
@@ -31,14 +33,24 @@ contract MainnetGaugeValidationTest is Test {
     address private constant LEND_FACTORY = 0x8f6B56EC5ddF1F2691a1059f1D3cd97Ac9EaB0bd;
     address private constant LEND_V2_GAUGE_FACTORY = 0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6;
     address private constant LEND_V2_VAULT_GAUGE = 0xbe0451815b546F705ef3f398B8179aE3AADDA14e;
+    uint256 private constant AGENT_WRAPPED_PROPOSAL = 1406;
+    uint256 private constant LEND_V2_ACTIVATION_PROPOSAL = 1461;
+    address private constant PROPOSAL_1406_GAUGE = 0xA41eb3062FD68B6Fa9f11439C86503913806761D;
     address private constant LEGACY_EOA_DEPLOYED_GAUGE = 0x055be5DDB7A925BfEF3417FC157f53CA77cA7222;
 
     GaugeValidator private validator;
+    ProposalGaugeValidator private proposalValidator;
 
     function setUp() public {
         vm.createSelectFork(vm.envOr("RPC_URL", string("http://wavey:8545")), FORK_BLOCK);
 
         validator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings());
+        proposalValidator = new ProposalGaugeValidator(
+            ICurveDAO(MainnetGaugeConfiguration.DAO),
+            MainnetGaugeConfiguration.OWNER,
+            MainnetGaugeConfiguration.GAUGE_CONTROLLER,
+            validator
+        );
     }
 
     function test_PinnedForkMetadata() public view {
@@ -121,6 +133,28 @@ contract MainnetGaugeValidationTest is Test {
     function test_LegacyEoaDeployedGaugeIsExplicitlyOutOfScope() public view {
         assertGt(LEGACY_EOA_DEPLOYED_GAUGE.code.length, 0);
         assertFalse(validator.validateGauge(LEGACY_EOA_DEPLOYED_GAUGE));
+    }
+
+    function test_Proposal1406ParsesAuthenticatedAgentWrapper() public view {
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposal(AGENT_WRAPPED_PROPOSAL);
+
+        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
+        assertTrue(result.allValid);
+        assertEq(result.gauges.length, 1);
+        assertEq(result.gauges[0].gauge, PROPOSAL_1406_GAUGE);
+        assertTrue(result.gauges[0].valid);
+    }
+
+    function test_Proposal1461RecognizesLendV2VaultGauge() public view {
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposal(LEND_V2_ACTIVATION_PROPOSAL);
+
+        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
+        assertTrue(result.allValid);
+        assertEq(result.gauges.length, 1);
+        assertEq(result.gauges[0].gauge, LEND_V2_VAULT_GAUGE);
+        assertTrue(result.gauges[0].valid);
     }
 
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {

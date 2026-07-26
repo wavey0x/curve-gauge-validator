@@ -3,6 +3,28 @@ pragma solidity 0.8.28;
 
 contract MockTarget {}
 
+contract MockDAO {
+    struct Vote {
+        bytes script;
+    }
+
+    Vote[] private _votes;
+
+    function pushVote(bytes memory script) external returns (uint256 voteId) {
+        voteId = _votes.length;
+        _votes.push(Vote({script: script}));
+    }
+
+    function getVote(uint256 voteId)
+        external
+        view
+        returns (bool, bool, uint64, uint64, uint64, uint64, uint256, uint256, uint256, bytes memory script)
+    {
+        script = _votes[voteId].script;
+        return (false, false, 0, 0, 0, 0, 0, 0, 0, script);
+    }
+}
+
 contract MockProtocolGauge {
     address public factory;
     // Protocol-compatible Vyper getter.
