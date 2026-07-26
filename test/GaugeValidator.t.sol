@@ -3,361 +3,207 @@ pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
-import {MockGauge, MockTarget, MockValidationModule} from "./helpers/Mocks.sol";
+import {
+    ConfigurableDependency,
+    MockCurveFactory,
+    MockPoolToken,
+    MockProtocolGauge,
+    MockTarget,
+    NoncanonicalBoolFactory,
+    NoncanonicalFactoryGauge
+} from "./helpers/Mocks.sol";
 
 contract GaugeValidatorTest is Test {
-    bytes32 private constant METHOD_A = "METHOD_A";
-    bytes32 private constant METHOD_B = "METHOD_B";
+    address private constant USER = address(0xB0B);
 
-    MockTarget private proposalAnalyzerA;
-    MockTarget private proposalAnalyzerB;
-    MockValidationModule private moduleA;
-    MockValidationModule private moduleB;
-    MockGauge private gauge;
-    MockTarget private factoryA;
-    MockTarget private factoryB;
-    GaugeValidator private validator;
-
-    address private owner = address(this);
-    address private user = address(0xB0B);
-
-    event ValidationIdAdded(bytes32 indexed validationId);
-    event ValidationIdRemoved(bytes32 indexed validationId);
-    event FactoryValidationIdSet(
-        address indexed factory, bytes32 indexed previousValidationId, bytes32 indexed newValidationId
-    );
-    event GaugeValidationModuleSet(address indexed previousModule, address indexed newModule);
-    event ProposalAnalysisModuleSet(address indexed previousModule, address indexed newModule);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
-
-    function setUp() public {
-        proposalAnalyzerA = new MockTarget();
-        proposalAnalyzerB = new MockTarget();
-        moduleA = new MockValidationModule();
-        moduleB = new MockValidationModule();
-        gauge = new MockGauge();
-        factoryA = new MockTarget();
-        factoryB = new MockTarget();
-
-        bytes32[] memory validationIds = new bytes32[](1);
-        validationIds[0] = METHOD_A;
-
-        GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(address(factoryA), METHOD_A);
-
-        validator = _deploy(address(moduleA), address(proposalAnalyzerA), validationIds, bindings);
-        moduleA.setFactory(address(gauge), METHOD_A, address(factoryA));
-    }
-
-    function test_ConstructorInstallsModulesIdsAndBindings() public view {
-        assertEq(validator.owner(), owner);
-        assertEq(validator.gaugeValidationModule(), address(moduleA));
-        assertEq(validator.proposalAnalysisModule(), address(proposalAnalyzerA));
-        assertEq(validator.validationIdCount(), 1);
-        assertEq(validator.validationIdAt(0), METHOD_A);
-        assertTrue(validator.isValidationIdActive(METHOD_A));
-        assertEq(validator.validationIdForFactory(address(factoryA)), METHOD_A);
-    }
-
-    function test_ConstructorConfigurationIsIdempotentAndLastBindingWins() public {
-        bytes32[] memory validationIds = new bytes32[](3);
-        validationIds[0] = METHOD_A;
-        validationIds[1] = METHOD_A;
-        validationIds[2] = METHOD_B;
-
-        GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](3);
-        bindings[0] = GaugeValidator.FactoryBinding(address(factoryA), METHOD_A);
-        bindings[1] = GaugeValidator.FactoryBinding(address(factoryA), METHOD_B);
-        bindings[2] = GaugeValidator.FactoryBinding(address(factoryA), METHOD_B);
-
-        GaugeValidator configured = _deploy(address(moduleA), address(proposalAnalyzerA), validationIds, bindings);
-        moduleA.setFactory(address(gauge), METHOD_A, address(factoryA));
-        moduleA.setFactory(address(gauge), METHOD_B, address(factoryA));
-
-        assertEq(configured.validationIdCount(), 2);
-        assertEq(configured.validationIdForFactory(address(factoryA)), METHOD_B);
-        assertTrue(configured.validateGauge(address(gauge)));
-    }
-
-    function test_ConfigurationOperationsAreIdempotent() public {
-        validator.addValidationId(METHOD_A);
-        validator.removeValidationId(METHOD_B);
-        validator.setFactoryValidationId(address(factoryA), METHOD_A);
-        validator.setGaugeValidationModule(address(moduleA));
-        validator.setProposalAnalysisModule(address(proposalAnalyzerA));
-        validator.transferOwnership(owner);
-
-        assertEq(validator.validationIdCount(), 1);
-        assertEq(validator.validationIdForFactory(address(factoryA)), METHOD_A);
-        assertEq(validator.gaugeValidationModule(), address(moduleA));
-        assertEq(validator.proposalAnalysisModule(), address(proposalAnalyzerA));
-        assertEq(validator.owner(), owner);
-        assertTrue(validator.validateGauge(address(gauge)));
-    }
-
-    function test_IdRemovalMaintainsSwapAndPopIndexes() public {
-        bytes32 methodC = "METHOD_C";
-        validator.addValidationId(METHOD_B);
-        validator.addValidationId(methodC);
-
-        validator.removeValidationId(METHOD_B);
-        assertFalse(validator.isValidationIdActive(METHOD_B));
-        assertTrue(validator.isValidationIdActive(methodC));
-
-        validator.removeValidationId(methodC);
-        validator.addValidationId(METHOD_B);
-        assertTrue(validator.isValidationIdActive(METHOD_B));
-        assertEq(validator.validationIdCount(), 2);
-    }
-
-    function test_DormantBindingActivatesDisablesAndReactivatesWithId() public {
-        validator.setFactoryValidationId(address(factoryB), METHOD_B);
-        moduleA.setFactory(address(gauge), METHOD_B, address(factoryB));
-
-        assertEq(validator.validationIdForFactory(address(factoryB)), METHOD_B);
-        assertFalse(validator.isValidationIdActive(METHOD_B));
-        assertTrue(validator.validateGauge(address(gauge)));
-
-        validator.removeValidationId(METHOD_A);
-        assertFalse(validator.validateGauge(address(gauge)));
-
-        vm.expectEmit(true, false, false, true);
-        emit ValidationIdAdded(METHOD_B);
-        validator.addValidationId(METHOD_B);
-        assertTrue(validator.validateGauge(address(gauge)));
-
-        vm.expectEmit(true, false, false, true);
-        emit ValidationIdRemoved(METHOD_B);
-        validator.removeValidationId(METHOD_B);
-        assertEq(validator.validationIdForFactory(address(factoryB)), METHOD_B);
-        assertFalse(validator.validateGauge(address(gauge)));
-
-        validator.addValidationId(METHOD_B);
-        assertTrue(validator.validateGauge(address(gauge)));
-    }
-
-    function test_GaugePolicyCanBeReplacedDisabledAndRestored() public {
-        moduleB.setFactory(address(gauge), METHOD_A, address(factoryA));
-
-        vm.expectEmit(true, true, false, true);
-        emit GaugeValidationModuleSet(address(moduleA), address(moduleB));
-        validator.setGaugeValidationModule(address(moduleB));
-        assertTrue(validator.validateGauge(address(gauge)));
-
-        vm.expectEmit(true, true, false, true);
-        emit GaugeValidationModuleSet(address(moduleB), address(0));
-        validator.setGaugeValidationModule(address(0));
-        assertFalse(validator.validateGauge(address(gauge)));
-
-        validator.setGaugeValidationModule(address(moduleA));
-        assertTrue(validator.validateGauge(address(gauge)));
-    }
-
-    function test_ExactFactoryToIdBindingIsRequired() public {
-        validator.addValidationId(METHOD_B);
-        validator.setFactoryValidationId(address(factoryA), METHOD_B);
+    function test_DirectLpRequiresReciprocalFactoryLookup() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockTarget lpToken = new MockTarget();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(lpToken));
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
 
         assertFalse(validator.validateGauge(address(gauge)));
 
-        moduleA.setFactory(address(gauge), METHOD_B, address(factoryA));
+        factory.setGauge(address(lpToken), address(gauge));
+        assertTrue(validator.validateGauge(address(gauge)));
+
+        factory.setGauge(address(lpToken), address(0x1234));
+        assertFalse(validator.validateGauge(address(gauge)));
+    }
+
+    function test_DirectOrPoolLpAcceptsBothFactoryLayouts() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockTarget pool = new MockTarget();
+        MockPoolToken lpToken = new MockPoolToken(address(pool));
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(lpToken));
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
+
+        factory.setGauge(address(lpToken), address(gauge));
+        assertTrue(validator.validateGauge(address(gauge)));
+
+        factory.setGauge(address(lpToken), address(0));
+        factory.setGauge(address(pool), address(gauge));
+        assertTrue(validator.validateGauge(address(gauge)));
+
+        factory.setGauge(address(lpToken), address(0x1234));
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        factory.setGauge(address(lpToken), address(0));
+        vm.mockCallRevert(
+            address(factory), abi.encodeWithSignature("get_gauge(address)", address(lpToken)), bytes("failure")
+        );
+        assertFalse(validator.validateGauge(address(gauge)));
+        vm.clearMockedCalls();
+
+        factory.setGauge(address(pool), address(0x1234));
+        assertFalse(validator.validateGauge(address(gauge)));
+    }
+
+    function test_VaultRequiresReciprocalFactoryLookup() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockTarget vault = new MockTarget();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(vault));
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.VAULT);
+
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        factory.setVaultGauge(address(vault), address(gauge));
         assertTrue(validator.validateGauge(address(gauge)));
     }
 
-    function test_ZeroOneAndMultipleMatches() public {
+    function test_FactoryAttestationRequiresCanonicalTrue() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(0));
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+
+        assertFalse(validator.validateGauge(address(gauge)));
+        factory.setValidGauge(address(gauge), true);
         assertTrue(validator.validateGauge(address(gauge)));
 
-        moduleA.setFactory(address(gauge), METHOD_A, address(0));
+        NoncanonicalBoolFactory malformedFactory = new NoncanonicalBoolFactory();
+        gauge.setFactory(address(malformedFactory));
+        validator.setFactoryTrust(address(malformedFactory), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
         assertFalse(validator.validateGauge(address(gauge)));
-
-        moduleA.setFactory(address(gauge), METHOD_A, address(factoryA));
-        validator.addValidationId(METHOD_B);
-        validator.setFactoryValidationId(address(factoryB), METHOD_B);
-        moduleA.setFactory(address(gauge), METHOD_B, address(factoryB));
-        assertFalse(validator.validateGauge(address(gauge)));
-
-        validator.removeValidationId(METHOD_B);
-        assertTrue(validator.validateGauge(address(gauge)));
     }
 
-    function test_ValidateGaugeRejectsZeroAndCodeLessAddresses() public view {
+    function test_UntrustedFactoryAndSelfReportReturnFalse() public {
+        MockCurveFactory trustedFactory = new MockCurveFactory();
+        MockCurveFactory untrustedFactory = new MockCurveFactory();
+        MockTarget token = new MockTarget();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(untrustedFactory), address(token));
+        GaugeValidator validator = _deploy(address(trustedFactory), GaugeValidator.Proof.DIRECT_LP);
+
+        untrustedFactory.setGauge(address(token), address(gauge));
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        gauge.setFactory(address(trustedFactory));
+        assertFalse(validator.validateGauge(address(gauge)));
+    }
+
+    function test_ZeroCodeLessAndMalformedGaugeReturnFalse() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+
         assertFalse(validator.validateGauge(address(0)));
         assertFalse(validator.validateGauge(address(0x1234)));
-    }
 
-    function test_EveryModuleFailureAndMalformedReturnFailsClosed() public {
-        for (uint256 mode = 1; mode <= uint256(MockValidationModule.Mode.RETURN_DATA_BOMB); ++mode) {
-            moduleA.setMode(MockValidationModule.Mode(mode));
-            assertFalse(validator.validateGauge(address(gauge)));
+        NoncanonicalFactoryGauge malformed = new NoncanonicalFactoryGauge(address(0));
+        assertFalse(validator.validateGauge(address(malformed)));
+
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            assertFalse(validator.validateGauge(address(dependency)));
         }
     }
 
-    function test_FailedIdDoesNotPreventLaterIdFromMatching() public {
-        validator.addValidationId(METHOD_B);
-        validator.setFactoryValidationId(address(factoryB), METHOD_B);
-        moduleA.setValidationIdMode(METHOD_A, MockValidationModule.Mode.RETURN_DATA_BOMB);
-        moduleA.setFactory(address(gauge), METHOD_B, address(factoryB));
+    function test_EveryFactoryDependencyFailureReturnsFalseForEveryProof() public {
+        MockTarget token = new MockTarget();
 
-        assertTrue(validator.validateGauge(address(gauge)));
-    }
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            MockProtocolGauge gauge = new MockProtocolGauge(address(dependency), address(token));
 
-    function test_InsufficientGasCannotValidateAfterOnlyIdPrefix() public {
-        validator.addValidationId(METHOD_B);
-        validator.setFactoryValidationId(address(factoryB), METHOD_B);
-
-        (bool success, bytes memory result) =
-            address(validator).staticcall{gas: 300_000}(abi.encodeCall(GaugeValidator.validateGauge, (address(gauge))));
-
-        assertTrue(success);
-        assertFalse(abi.decode(result, (bool)));
-    }
-
-    function test_MaximumIdSetOfGasBurningCallsFailsClosedWithinBound() public {
-        bytes32[] memory validationIds = new bytes32[](validator.MAX_VALIDATION_IDS());
-        for (uint256 i; i < validationIds.length; ++i) {
-            validationIds[i] = bytes32(i + 1);
+            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.DIRECT_LP);
+            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
+            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.VAULT);
+            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
         }
+    }
+
+    function test_EveryLpAndMinterFailureReturnsFalse() public {
+        MockCurveFactory factory = new MockCurveFactory();
+
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            MockProtocolGauge candidateGauge = new MockProtocolGauge(address(factory), address(dependency));
+
+            _assertFalseWithProof(address(candidateGauge), address(factory), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
+            _assertFalseWithProof(address(candidateGauge), address(factory), GaugeValidator.Proof.VAULT);
+        }
+
+        MockTarget token = new MockTarget();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(token));
+        bytes memory callData = abi.encodeWithSignature("lp_token()");
+
+        GaugeValidator direct = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        vm.mockCallRevert(address(gauge), callData, bytes("failure"));
+        assertFalse(direct.validateGauge(address(gauge)));
+        vm.clearMockedCalls();
+
+        vm.mockCall(address(gauge), callData, hex"01");
+        assertFalse(direct.validateGauge(address(gauge)));
+        vm.clearMockedCalls();
+
+        vm.mockCall(address(gauge), callData, abi.encode(uint256(1) << 160));
+        assertFalse(direct.validateGauge(address(gauge)));
+    }
+
+    function test_OwnerCanSetRemoveTrustAndTransferOwnership() public {
+        MockCurveFactory factory = new MockCurveFactory();
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-        GaugeValidator maxValidator = _deploy(address(moduleB), address(proposalAnalyzerA), validationIds, bindings);
-        moduleB.setMode(MockValidationModule.Mode.BURN_GAS);
+        GaugeValidator validator = new GaugeValidator(address(this), bindings);
 
-        (bool success, bytes memory result) = address(maxValidator).staticcall{gas: 5_000_000}(
-            abi.encodeCall(GaugeValidator.validateGauge, (address(gauge)))
-        );
+        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        assertEq(uint256(validator.proofForFactory(address(factory))), uint256(GaugeValidator.Proof.DIRECT_LP));
 
-        assertTrue(success);
-        assertFalse(abi.decode(result, (bool)));
-    }
+        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.NONE);
+        assertEq(uint256(validator.proofForFactory(address(factory))), uint256(GaugeValidator.Proof.NONE));
 
-    function test_IdLimitChecksOnlyNewIds() public {
-        for (uint256 i = 1; i < validator.MAX_VALIDATION_IDS(); ++i) {
-            validator.addValidationId(bytes32(i));
-        }
-        assertEq(validator.validationIdCount(), validator.MAX_VALIDATION_IDS());
+        validator.transferOwnership(USER);
+        assertEq(validator.owner(), USER);
 
-        validator.addValidationId(METHOD_A);
-
-        vm.expectRevert(GaugeValidator.ValidationIdLimitReached.selector);
-        validator.addValidationId(bytes32(uint256(999)));
-    }
-
-    function test_FactoryBindingCanBeReplacedAndDisabled() public {
-        validator.addValidationId(METHOD_B);
-
-        vm.expectEmit(true, true, true, true);
-        emit FactoryValidationIdSet(address(factoryA), METHOD_A, METHOD_B);
-        validator.setFactoryValidationId(address(factoryA), METHOD_B);
-        assertEq(validator.validationIdForFactory(address(factoryA)), METHOD_B);
-
-        vm.expectEmit(true, true, true, true);
-        emit FactoryValidationIdSet(address(factoryA), METHOD_B, bytes32(0));
-        validator.setFactoryValidationId(address(factoryA), bytes32(0));
-        assertEq(validator.validationIdForFactory(address(factoryA)), bytes32(0));
-        assertFalse(validator.validateGauge(address(gauge)));
-    }
-
-    function test_InvalidConfigurationReverts() public {
-        vm.expectRevert(GaugeValidator.ZeroValidationId.selector);
-        validator.addValidationId(bytes32(0));
-
-        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
-        validator.setFactoryValidationId(address(0), METHOD_A);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        validator.setFactoryValidationId(address(0x1234), METHOD_A);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        validator.setGaugeValidationModule(address(0x1234));
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        validator.setProposalAnalysisModule(address(0x1234));
-    }
-
-    function test_ConstructorRejectsUnestablishableConfiguration() public {
-        bytes32[] memory validationIds = new bytes32[](1);
-        validationIds[0] = METHOD_A;
-        GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-
-        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
-        new GaugeValidator(address(0), address(moduleA), address(proposalAnalyzerA), validationIds, bindings);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        new GaugeValidator(owner, address(0x1234), address(proposalAnalyzerA), validationIds, bindings);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        new GaugeValidator(owner, address(moduleA), address(0x1234), validationIds, bindings);
-
-        bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(address(0x1234), METHOD_A);
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        new GaugeValidator(owner, address(moduleA), address(proposalAnalyzerA), validationIds, bindings);
-    }
-
-    function test_NonOwnerCannotMutateConfiguration() public {
-        vm.startPrank(user);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.addValidationId(METHOD_B);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.removeValidationId(METHOD_A);
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.setFactoryValidationId(address(factoryA), bytes32(0));
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.setGaugeValidationModule(address(moduleB));
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.setProposalAnalysisModule(address(proposalAnalyzerB));
-
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, user));
-        validator.transferOwnership(user);
-
-        vm.stopPrank();
-    }
-
-    function test_OwnerCanTransferButCannotRenounceOwnership() public {
-        vm.expectEmit(true, true, false, true);
-        emit OwnershipTransferred(owner, user);
-        validator.transferOwnership(user);
-        assertEq(validator.owner(), user);
-
-        vm.prank(user);
+        vm.prank(USER);
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
         validator.transferOwnership(address(0));
     }
 
-    function test_ProposalAnalyzerCanBeReplacedDisabledAndRestored() public {
-        vm.expectEmit(true, true, false, true);
-        emit ProposalAnalysisModuleSet(address(proposalAnalyzerA), address(proposalAnalyzerB));
-        validator.setProposalAnalysisModule(address(proposalAnalyzerB));
-        assertEq(validator.proposalAnalysisModule(), address(proposalAnalyzerB));
+    function test_InvalidOrUnauthorizedConfigurationReverts() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
 
-        vm.expectEmit(true, true, false, true);
-        emit ProposalAnalysisModuleSet(address(proposalAnalyzerB), address(0));
-        validator.setProposalAnalysisModule(address(0));
-        assertEq(validator.proposalAnalysisModule(), address(0));
+        vm.prank(USER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.NONE);
 
-        validator.setProposalAnalysisModule(address(proposalAnalyzerA));
-        assertEq(validator.proposalAnalysisModule(), address(proposalAnalyzerA));
-    }
+        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
+        validator.setFactoryTrust(address(0), GaugeValidator.Proof.DIRECT_LP);
 
-    function test_ConstructorMayStartWithBothPoliciesDisabled() public {
-        bytes32[] memory validationIds = new bytes32[](0);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
+        validator.setFactoryTrust(address(0x1234), GaugeValidator.Proof.DIRECT_LP);
+
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-        GaugeValidator disabled = _deploy(address(0), address(0), validationIds, bindings);
-
-        assertEq(disabled.gaugeValidationModule(), address(0));
-        assertEq(disabled.proposalAnalysisModule(), address(0));
-        assertFalse(disabled.validateGauge(address(gauge)));
+        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
+        new GaugeValidator(address(0), bindings);
     }
 
-    function _deploy(
-        address gaugeModule,
-        address proposalModule,
-        bytes32[] memory validationIds,
-        GaugeValidator.FactoryBinding[] memory bindings
-    ) private returns (GaugeValidator) {
-        return new GaugeValidator(owner, gaugeModule, proposalModule, validationIds, bindings);
+    function _assertFalseWithProof(address gauge, address factory, GaugeValidator.Proof proof) private {
+        GaugeValidator validator = _deploy(factory, proof);
+        assertFalse(validator.validateGauge(gauge));
+    }
+
+    function _deploy(address factory, GaugeValidator.Proof proof) private returns (GaugeValidator) {
+        GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
+        bindings[0] = GaugeValidator.FactoryBinding(factory, proof);
+        return new GaugeValidator(address(this), bindings);
     }
 }
