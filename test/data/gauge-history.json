@@ -1,0 +1,5007 @@
+{
+  "0x004b865973CAbce8691CD0b9f5910246203a9eb4": {
+    "approved_block": 22716343,
+    "lp_token": "0x0a991BbB28460d93892F57D48FFbEfE6C5a61c46",
+    "name": "Curve.fi yUSDafBOLD Gauge Deposit"
+  },
+  "0x0060E266c2AF65bfc4fd51b04c93d952DF805630": {
+    "approved_block": 17386860,
+    "lp_token": "0x71c91B173984d3955f7756914bBF9a7332538595",
+    "name": "Curve.fi sdFXSlp-f Gauge Deposit"
+  },
+  "0x009aCD89535DAbC270C93F9b39D3232105Fef453": {
+    "approved_block": 14107104,
+    "lp_token": "0x90244F43D548a4f8dFecfAD91a193465B1fad6F7",
+    "name": "Curve.fi FXSETH-f Gauge Deposit"
+  },
+  "0x00F7d467ef51E44f11f52a0c0Bef2E56C271b264": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0148aC2d0FfABb7634ffac5e7B770A34773E92Ed": {
+    "approved_block": 23219897,
+    "lp_token": "0x2eFC11c7Bb2E0FBdBa8A05a3712398860E6A8E53",
+    "name": "Curve.fi USDFIfrxUS Gauge Deposit"
+  },
+  "0x016831ace15582D81b50927D2755a4487aCf8082": {
+    "approved_block": 19911318,
+    "lp_token": "0xea7A3cc19B96691FBf3bbf2e4458D74b20f05147",
+    "name": "Curve.fi dgnETHETH+ Gauge Deposit"
+  },
+  "0x016c0930757671358eDA5704ac0c156CeC70ec30": {
+    "approved_block": 22648410,
+    "lp_token": "0x2034b76BB7318d5fda07Ec183c0308c5E06C9C8C",
+    "name": "Curve.fi SQUILL Gauge Deposit"
+  },
+  "0x01A968C8C1909B264Ce59357c4098Dc674f8af09": {
+    "approved_block": 21314862,
+    "lp_token": "0xD65ed4BcE447195187f37cE7D82f56AdF1826F8F",
+    "name": "Curve.fi ynETHx/ETH Gauge Deposit"
+  },
+  "0x02246583870b36Be0fEf2819E1d3A771d6C07546": {
+    "approved_block": 14107103,
+    "lp_token": "0x137469B55D1f15651BA46A89D0588e97dD0B6562",
+    "name": "Curve.fi BADGERWBTC-f Gauge Deposit"
+  },
+  "0x0228fA0bB44Acb35582D429bC93C6c1BBB1Ae81E": {
+    "approved_block": 24341756,
+    "lp_token": "0xf75f2b5fc5F375e1aD3130dD0eEC7219Fe821204",
+    "name": "Curve.fi RWA/OUSD Gauge Deposit"
+  },
+  "0x02C26E2013D7476E69aD3B453F025A43116B448D": {
+    "approved_block": 18628479,
+    "lp_token": "0x067079c14B85169e6a29703769dadDef90816f4C",
+    "name": "Curve.fi mkPRISMA-f Gauge Deposit"
+  },
+  "0x02a7D0eD923C882d3FE605F61467a1CA2d176f7B": {
+    "approved_block": 22677707,
+    "lp_token": "0xb6E4821c6fCABe32f5F452dfD3Ef20Ce2A3a48E2",
+    "name": "Curve.fi fxSavecrv Gauge Deposit"
+  },
+  "0x02b8e750E68cb648dB2c2ac4BBb47A10A5c12588": {
+    "approved_block": 20306703,
+    "lp_token": null,
+    "name": null
+  },
+  "0x030786336Bc7833D4325404A25FE451e4fde9807": {
+    "approved_block": 18965892,
+    "lp_token": null,
+    "name": null
+  },
+  "0x03670554D8F09b363EE1d5aa668DA27Bd5c50296": {
+    "approved_block": 20479012,
+    "lp_token": "0xf5D7c5484C02C03cF131b76C67C3EB969828bD3D",
+    "name": "Curve.fi AUSDFRAX Gauge Deposit"
+  },
+  "0x03fFC218C7A9306D21193565CbDc4378952faA8c": {
+    "approved_block": 14742933,
+    "lp_token": "0x48fF31bBbD8Ab553Ebe7cBD84e1eA3dBa8f54957",
+    "name": "Curve.fi sdAGAG-f Gauge Deposit"
+  },
+  "0x04E80Db3f84873e4132B221831af1045D27f140F": {
+    "approved_block": 19329089,
+    "lp_token": "0x02950460E2b9529D0E00284A5fA2d7bDF3fA4d72",
+    "name": "Curve.fi USDeUSDC Gauge Deposit"
+  },
+  "0x05255C5BD33672b9FEA4129C13274D1E6193312d": {
+    "approved_block": 14115454,
+    "lp_token": "0x29059568bB40344487d62f7450E78b8E6C74e0e5",
+    "name": "Curve.fi YFIETH-f Gauge Deposit"
+  },
+  "0x05294F9a5Dcd9610c8bBC78b5274FDBD79cAA552": {
+    "approved_block": 19386045,
+    "lp_token": "0x69Cf42F15F9325986154b61A013da6E8feC82CCF",
+    "name": "Curve.fi fxUSDGrai Gauge Deposit"
+  },
+  "0x053df3e4D0CeD9a3Bf0494F97E83CE1f13BdC0E2": {
+    "approved_block": 19766509,
+    "lp_token": "0xDB74dfDD3BB46bE8Ce6C33dC9D82777BCFc3dEd5",
+    "name": "Curve.fi weeth-ng Gauge Deposit"
+  },
+  "0x055be5DDB7A925BfEF3417FC157f53CA77cA7222": {
+    "approved_block": 11968038,
+    "lp_token": "0x7Eb40E450b9655f4B3cC4259BCC731c63ff55ae6",
+    "name": "Curve.fi usdp3CRV Gauge Deposit"
+  },
+  "0x059E0db6BF882f5fe680dc5409C7adeB99753736": {
+    "approved_block": 18989903,
+    "lp_token": null,
+    "name": null
+  },
+  "0x05ca5c01629a8E5845f12ea3A03fF7331932233A": {
+    "approved_block": 13172363,
+    "lp_token": "0x3F1B0278A9ee595635B61817630cC19DE792f506",
+    "name": "Curve.fi ibAUD+sAUD-f Gauge Deposit"
+  },
+  "0x05cd911eE9B60C28FCEE4ea03Cc5670637D955B1": {
+    "approved_block": 18902078,
+    "lp_token": null,
+    "name": null
+  },
+  "0x05da2f0E0c93127815923fc7717baD37b07DBf59": {
+    "approved_block": 20042337,
+    "lp_token": "0x06A2e1521aFDe7f7Dc30d351DCF04408042F536E",
+    "name": "Curve.fi USD3ETH+ Gauge Deposit"
+  },
+  "0x060e386eCfBacf42Aa72171Af9EFe17b3993fC4F": {
+    "approved_block": 12692627,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0621982CdA4fD4041964e91AF4080583C5F099e1": {
+    "approved_block": 20086120,
+    "lp_token": "0x21CF1c5Dc48C603b89907FE6a7AE83EA5e3709aF",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x06B30D5F2341C2FB3F6B48b109685997022Bd272": {
+    "approved_block": 17111059,
+    "lp_token": "0xb85010193FD15aF8390dbD62790Da70F46c1126B",
+    "name": "Curve.fi COILFRAX-f Gauge Deposit"
+  },
+  "0x06f691180F643B35E3644a2296a4097E1f577d0d": {
+    "approved_block": 16179811,
+    "lp_token": "0x5271045F7B73c17825A7A7aee6917eE46b0B7520",
+    "name": "Curve.fi OHMFRAXBP-f Gauge Deposit"
+  },
+  "0x070EBC9F46d0a6A523D31eb4aE7901C56AD97ae2": {
+    "approved_block": 19625854,
+    "lp_token": null,
+    "name": null
+  },
+  "0x077999E08cbb3990b05d23F6ED7890D34b337771": {
+    "approved_block": 23600117,
+    "lp_token": null,
+    "name": null
+  },
+  "0x079A7D9030557e1F0378b5364661f5370D36c2fE": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x07a01471fA544D9C6531B631E6A96A79a9AD05E9": {
+    "approved_block": 22674353,
+    "lp_token": "0xEFc6516323FbD28e80B85A497B65A86243a54B3E",
+    "name": "Curve.fi BOLDUSDC Gauge Deposit"
+  },
+  "0x08380a4999Be1a958E2abbA07968d703C7A3027C": {
+    "approved_block": 13992796,
+    "lp_token": "0x8282BD15dcA2EA2bDf24163E8f2781B30C43A2ef",
+    "name": "Curve.fi crvSPELLETH Gauge Deposit"
+  },
+  "0x088A9770bc30627791F42b551D474E8Fd44808a2": {
+    "approved_block": 19254933,
+    "lp_token": "0x9e10f9Fb6F0D32B350CEe2618662243d4f24C64a",
+    "name": "Curve.fi mkUSDPay Gauge Deposit"
+  },
+  "0x08C6cB01F69510f5096330566bf873384Ab465Cb": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0933426f6B63327B9a20E6aCde0B45B1B64fDc88": {
+    "approved_block": 19962450,
+    "lp_token": "0x13120b7599DdF33782c748A847cc1d3c96387Ecd",
+    "name": "Curve.fi upYFI Gauge Deposit"
+  },
+  "0x099a319254Fb8A7e996cd27E62DE0DB6769F6103": {
+    "approved_block": 22738686,
+    "lp_token": "0xDb41F6d9e40298ba00E3AC9D4851F2C80DFdA326",
+    "name": "Curve.fi USD3sUSDS Gauge Deposit"
+  },
+  "0x09EFF44d6f0fE0FEb6A35065696d227E273079a5": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x09F62a6777032329C0d49F1FD4fBe9b3468CDa56": {
+    "approved_block": 22085125,
+    "lp_token": "0xEe351f12EAE8C2B8B9d1B9BFd3c5dd565234578d",
+    "name": "Curve.fi wethrsup Gauge Deposit"
+  },
+  "0x0A13654e7846Fbbd6fBc9F409AA453739bBADb74": {
+    "approved_block": 16260151,
+    "lp_token": "0x2863a328A0B7fC6040f11614FA0728587DB8e353",
+    "name": "Curve.fi multibtc3CRV-f Gauge Deposit"
+  },
+  "0x0B0C8a6B70E7d8f5C3Cf0B68416247f24F5d6ccf": {
+    "approved_block": 24371436,
+    "lp_token": "0x8fc753F96752b35F64D1bAE514e6CF8DB0b9322e",
+    "name": "Curve.fi srRyfrxUSD Gauge Deposit"
+  },
+  "0x0B5f23b68c07bBDeDBb18D822d20b4F0E5B7594f": {
+    "approved_block": 18915612,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0Bfb387B87e8Bf173a10A7DCf786B0b7875F6771": {
+    "approved_block": 19196664,
+    "lp_token": "0x278cfB6f06B1EFc09d34fC7127d6060C61d629Db",
+    "name": "Curve.fi weeTH/rswE Gauge Deposit"
+  },
+  "0x0C1359bc78ab7F71b607500053cb73b21d60e191": {
+    "approved_block": 24700693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0C26be8617D41c3e3D7Faf045EDF2aBBD596A427": {
+    "approved_block": 16584417,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0C5fa0C51C63CE937C588225C202b04c30F3CEeE": {
+    "approved_block": 20939857,
+    "lp_token": "0x964573B560DA1cE5b10dd09a4723c5ccBE9f9688",
+    "name": "Curve.fi USD3sUSDe Gauge Deposit"
+  },
+  "0x0E2662672adC42Bb73d39196f9f557C11B4FCcf9": {
+    "approved_block": 23597788,
+    "lp_token": "0x771c91e699B4B23420de3F81dE2aA38C4041632b",
+    "name": "Curve.fi USDUUSDC Gauge Deposit"
+  },
+  "0x0E83dF148F69965BfE752250835854b0dBeeaf01": {
+    "approved_block": 18917386,
+    "lp_token": "0xe035e27A8eD6842b478933820f90093D205F7098",
+    "name": "Curve.fi FXB261231 Gauge Deposit"
+  },
+  "0x0EC820309f07c334A12F46f1d14A4F5cD55bcB1E": {
+    "approved_block": 22167372,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0b80DBD34B862eA1121Fe1A5a26738edDFcB62cd": {
+    "approved_block": 23134521,
+    "lp_token": "0x2Cc565dDe7C078A8E477763a34C40e52b13e6396",
+    "name": "Curve.fi YUSDfrxUSD Gauge Deposit"
+  },
+  "0x0b8750500484629c213437d70001e862685CE2D0": {
+    "approved_block": 21551977,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0c1b39806655a816054D45fDfdE8658E2F620BC6": {
+    "approved_block": 21131899,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0c58c509305a8a7fE9a6a60CEaAC6185B96ECBb7": {
+    "approved_block": 17621715,
+    "lp_token": "0x6a9014FB802dCC5efE3b97Fd40aAa632585636D0",
+    "name": "Curve.fi cvxfxs-fxs-f Gauge Deposit"
+  },
+  "0x0d2d1e35D1852A90BCeDf0B119eFb4885595F374": {
+    "approved_block": 21701823,
+    "lp_token": "0xc95D0BA00Cdf61440E6F86cc55cCD477D7287A32",
+    "name": "Curve.fi sUSDa/USDa Gauge Deposit"
+  },
+  "0x0df268355a2d8c985dCE76EA0B2f8009BB98D757": {
+    "approved_block": 18127622,
+    "lp_token": "0x65f228ED6a6001eD6485535e0Dc33E525734f54c",
+    "name": "Curve.fi mkusdETH-f Gauge Deposit"
+  },
+  "0x0e0FD7517E9B0E206E5EE8C7dF7348f6f32C3CaF": {
+    "approved_block": 22252110,
+    "lp_token": "0xdcc3eC9aF62DFcb63033243E90481eB18Baeb897",
+    "name": "Curve.fi OUSD/USDT Gauge Deposit"
+  },
+  "0x0e2f214b8f5D0ccA011A8298bb907fb62f535160": {
+    "approved_block": 16260150,
+    "lp_token": null,
+    "name": null
+  },
+  "0x0e5bdb5afe132D1c6A6C67f6D8eB6133dD607e36": {
+    "approved_block": 18092975,
+    "lp_token": "0x3de254A0f838a844F727fee81040e0FA7884B935",
+    "name": "Curve.fi mkcrvUSD-f Gauge Deposit"
+  },
+  "0x0eC3d1f5d737593ff4aEDB8E22EB33a1886ddB9a": {
+    "approved_block": 16518914,
+    "lp_token": "0xF95AAa7EBB1620e46221B73588502960Ef63dBa0",
+    "name": "Curve.fi TBTCSBTC23CRV-f Gauge Deposit"
+  },
+  "0x0f83875a00a52898dA26eEF0bca2b8a21541CfAb": {
+    "approved_block": 17181402,
+    "lp_token": "0xF05CFb8b4382c69f3B451C5FB55210B232E0edFA",
+    "name": "Curve.fi agEUR-VEUR-f Gauge Deposit"
+  },
+  "0x0fb7a012EE5529af6dfA0566318F3EC37Db14f00": {
+    "approved_block": 21432833,
+    "lp_token": "0xf0d2058f8F51DFb0E8f716c93f34C7AA70dC9c38",
+    "name": "Curve.fi DOLA/sUSDz Gauge Deposit"
+  },
+  "0x100Ce95A26E644ee941db8e8e493B99AEB2a9afb": {
+    "approved_block": 18155104,
+    "lp_token": "0x857110B5f8eFD66CC3762abb935315630AC770B5",
+    "name": "Curve.fi crvUSDPY-f Gauge Deposit"
+  },
+  "0x107E4c1302403095e5A4Bc5e815982aa732e95BD": {
+    "approved_block": 18917185,
+    "lp_token": "0x2Cf99A343e4ECF49623E82f2Ec6A9b62e16Ff3fe",
+    "name": "Curve.fi FRAXFPI Gauge Deposit"
+  },
+  "0x10A29439C8eB742114a1E3d6e89E3302039706f0": {
+    "approved_block": 17737909,
+    "lp_token": "0x6f3388c40A7d063b5E17Cc4213B7674b5DE44C32",
+    "name": "Curve.fi pETHfrxETH-f Gauge Deposit"
+  },
+  "0x110E7B1Eb27761Cda33603aceAe0A950A7edC091": {
+    "approved_block": 24343008,
+    "lp_token": "0x917213760aF19E938E1C5cf4c6c3a963f6F32152",
+    "name": "Curve.fi frx/savUSD Gauge Deposit"
+  },
+  "0x11137B10C210b579405c21A07489e28F3c040AB1": {
+    "approved_block": 11512882,
+    "lp_token": "0x2fE94ea3d5d4a175184081439753DE15AeF9d614",
+    "name": "Curve.fi oBTC/sbtcCRV Gauge Deposit"
+  },
+  "0x1152A441Aa7b40dcc4A15740741beBe13B71c77c": {
+    "approved_block": 18651539,
+    "lp_token": "0x66F96d5Cf726961A8145c735BeB1d53205a95AeE",
+    "name": "Curve.fi sdai-usdm Gauge Deposit"
+  },
+  "0x1169ba7f4204F26Ff5aF55A7aAFbdAaDFDf9FAA2": {
+    "approved_block": 23385787,
+    "lp_token": "0x765Cbd88947fcBc5df1F763d02E384B0a2DD285E",
+    "name": "Curve.fi MUSD-sUSDe Gauge Deposit"
+  },
+  "0x119710bca41aA10d6701f8e2D17ED2e2b8B99955": {
+    "approved_block": 22510415,
+    "lp_token": null,
+    "name": null
+  },
+  "0x11C2a9fac65809c527bcb04FB7EC52080F053dc0": {
+    "approved_block": 21567972,
+    "lp_token": "0xc9cCB6E3Cc9D1766965278Bd1e7cc4e58549D1F8",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x11C6af1F81bF903198D2cEac98Cf06B81B904464": {
+    "approved_block": 18882666,
+    "lp_token": "0x6DD32bb2fCeA3Db7608E17286b5d00f1B19a2eD8",
+    "name": "Curve.fi USDVcrvUSD Gauge Deposit"
+  },
+  "0x1211B5cB09Ba1aDa8F11de757d5a13C5CA407162": {
+    "approved_block": 24345047,
+    "lp_token": "0x5E9CE43c5b1e2872755977e0A57EaC44C0c0f951",
+    "name": "Curve.fi sdfrxUSD Gauge Deposit"
+  },
+  "0x12405Bdd74ae0cB97723a7365bC75bB9C19aacF5": {
+    "approved_block": 20114783,
+    "lp_token": "0x021cF6B7ebb8c8EFcF21396Eb4c94658976172c7",
+    "name": "Curve.fi dgnETHETH+ Gauge Deposit"
+  },
+  "0x124853CAC208d40dDD84CF120E500FA2BDCc5D75": {
+    "approved_block": 22567040,
+    "lp_token": "0xF244324FBB57f09F0606FF088bC894b051d632Eb",
+    "name": "Curve.fi s/lvlUSD Gauge Deposit"
+  },
+  "0x126a64Cb87ed4864a966b4f103431f95c15f436b": {
+    "approved_block": 22716344,
+    "lp_token": "0xB3fc0D6cD41427fFa4a6059ecA2090Fb76350B89",
+    "name": "Curve.fi frxAFbold Gauge Deposit"
+  },
+  "0x12C3F630ec8f8A07C539b5F933e8E62F9b627396": {
+    "approved_block": 21124135,
+    "lp_token": null,
+    "name": null
+  },
+  "0x12c3Cfd7A60c4d85f9bdbD8d799CD2f7824fD4b7": {
+    "approved_block": 24341763,
+    "lp_token": "0xe2C27FD0e83DA0348d58402dFB9C7D8B3773fd76",
+    "name": "Curve.fi OUSDfxUSD Gauge Deposit"
+  },
+  "0x12dCD9E8D1577b5E4F066d8e7D404404Ef045342": {
+    "approved_block": 13357944,
+    "lp_token": "0xC4C319E2D4d66CcA4464C0c2B32c9Bd23ebe784e",
+    "name": "Curve.fi alETH+ETH-f Gauge Deposit"
+  },
+  "0x138cC21D15b7A06F929Fc6CFC88d2b830796F4f1": {
+    "approved_block": 18155102,
+    "lp_token": "0x69ACcb968B19a53790f43e57558F5E443A91aF22",
+    "name": "Curve.fi yETH-f Gauge Deposit"
+  },
+  "0x13E58C7b1147385D735a06D14F0456E54C2dEBC8": {
+    "approved_block": 18576080,
+    "lp_token": "0x3b21C2868B6028CfB38Ff86127eF22E68d16d53B",
+    "name": "Curve.fi cvxprismlp-f Gauge Deposit"
+  },
+  "0x13e06a5c22Dea4F854118Ee6bce03b25A8dcA0e9": {
+    "approved_block": 24879779,
+    "lp_token": "0xF4d0CF32908b2C7f1021339c43Df0F77f06896d7",
+    "name": "Curve.fi USDCUSDat Gauge Deposit"
+  },
+  "0x1423F745C0eFBB7f9DB9CFaD3403F90D16b10857": {
+    "approved_block": 22888713,
+    "lp_token": "0x2E2d6C119bdF226C420cB40E3B9fC9689cF5986e",
+    "name": "Curve.fi iUSDUSDC Gauge Deposit"
+  },
+  "0x143f801bC6Aa4c3395379C9E28221BBaF45a69C8": {
+    "approved_block": 22821065,
+    "lp_token": "0x65b05F6b0472b1f36a2F6d90A14cD21900851609",
+    "name": "Curve.fi USD3sUSDS Gauge Deposit"
+  },
+  "0x14D744a05b0aD905eBd4aB7727B6039855084fcb": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x14fBe18CAB1F9Cc8b1B6bD5416Be225A43fbd995": {
+    "approved_block": 24966444,
+    "lp_token": "0xe3E325e7A4702b48853556943F3270f425953Dde",
+    "name": "Curve.fi evaETHfrx Gauge Deposit"
+  },
+  "0x156527deF9a2AB4F54C849575f23dC4BB439d9d9": {
+    "approved_block": 22332395,
+    "lp_token": "0x72310DAAed61321b02B08A547150c07522c6a976",
+    "name": "Curve.fi USDC/USDf Gauge Deposit"
+  },
+  "0x15D9533551E3CeaA58EA4615bebFFF709eACf803": {
+    "approved_block": 17701159,
+    "lp_token": null,
+    "name": null
+  },
+  "0x15DE8CfCf04D21837c7D40eb99d49D30F7c21266": {
+    "approved_block": 23661670,
+    "lp_token": "0x6400F94B6773f8A712B481Da521e0Bb4CA3B6b18",
+    "name": "Curve.fi crvUSDuUSD Gauge Deposit"
+  },
+  "0x15F52286C0FF1d7A7dDbC9E300dd66628D46D4e6": {
+    "approved_block": 15317292,
+    "lp_token": null,
+    "name": null
+  },
+  "0x15bB164F9827De760174d3d3dAD6816eF50dE13c": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x15d380dE3ccf0B42aa65b10b3aaB73199799bEB3": {
+    "approved_block": 17101108,
+    "lp_token": "0x6412759C0bc8BeC1665F9b85B12CaF4b6C0Cc384",
+    "name": "Curve.fi fUSDC-fDAI-f Gauge Deposit"
+  },
+  "0x166CAAd9db4d5aC4cEaE752C7C2e1adC0A6AD16e": {
+    "approved_block": 23681890,
+    "lp_token": "0x32E616F4f17d43f9A5cd9Be0e294727187064cb3",
+    "name": "Curve.fi DUSDUSDC Gauge Deposit"
+  },
+  "0x16A3a047fC1D388d5846a73ACDb475b11228c299": {
+    "approved_block": 19446919,
+    "lp_token": "0x004C167d27ADa24305b76D80762997Fa6EB8d9B2",
+    "name": "Curve.fi CVGETH Gauge Deposit"
+  },
+  "0x16C2beE6f55dAB7F494dBa643fF52ef2D47FBA36": {
+    "approved_block": 13497589,
+    "lp_token": "0xBaaa1F5DbA42C3389bDbc2c9D2dE134F5cD0Dc89",
+    "name": "Curve.fi D3-f Gauge Deposit"
+  },
+  "0x170100AeD2A922a570E5D105C29cc7158f3de359": {
+    "approved_block": 21181860,
+    "lp_token": null,
+    "name": null
+  },
+  "0x172a5AF37f69C69CC59E748D090a70615830A5Dd": {
+    "approved_block": 15083884,
+    "lp_token": null,
+    "name": null
+  },
+  "0x174baa6b56ffe479b604CC20f22D09AD74F1Ca49": {
+    "approved_block": 11921803,
+    "lp_token": "0x86A91b50af95fF1D9D53CA1E4963ef06D8b31369",
+    "name": "Curve.fi usdp3CRV Gauge Deposit"
+  },
+  "0x1750a3a3d80A3F5333BBe9c4695B0fAd41061ab1": {
+    "approved_block": 13172380,
+    "lp_token": "0x8461A004b50d321CB22B7d034969cE6803911899",
+    "name": "Curve.fi ibKRW+sKRW-f Gauge Deposit"
+  },
+  "0x1779AEB087C5BdBe48749ab03575f5f25D1DEeaF": {
+    "approved_block": 14639217,
+    "lp_token": "0x54c8Ecf46A81496eEB0608BD3353388b5D7a2a33",
+    "name": "Curve.fi ibAUDUSDC-f Gauge Deposit"
+  },
+  "0x18006c6A7955Bf6Db72DE34089B975f733601660": {
+    "approved_block": 14495925,
+    "lp_token": null,
+    "name": null
+  },
+  "0x182B723a58739a9c974cFDB385ceaDb237453c28": {
+    "approved_block": 11643276,
+    "lp_token": "0x06325440D014e39736583c165C2963BA99fAf14E",
+    "name": "Curve.fi steCRV Gauge Deposit"
+  },
+  "0x18478F737d40ed7DEFe5a9d6F1560d84E283B74e": {
+    "approved_block": 10920702,
+    "lp_token": "0x3921574E4146fC09701a1B24CFb0f9906e8FEe92",
+    "name": null
+  },
+  "0x185069aF0060438bBB1D0B57E2cB1F385edE0e79": {
+    "approved_block": 21726013,
+    "lp_token": null,
+    "name": null
+  },
+  "0x1879075f1c055564CB968905aC404A5A01a1699A": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x188a85362CC5e245A377294aa270C7758A203918": {
+    "approved_block": 18327344,
+    "lp_token": "0xB9eC78Bd89d3Ef17537f130CC72750FD4DE85f82",
+    "name": "Curve.fi crvstUSDT-f Gauge Deposit"
+  },
+  "0x18C45C10A0f41Bc3ed8d6324C687335179A40b28": {
+    "approved_block": 16384196,
+    "lp_token": null,
+    "name": null
+  },
+  "0x19FcbEe2956d3436520Fb12D2b9024b22a10Beba": {
+    "approved_block": 21131898,
+    "lp_token": null,
+    "name": null
+  },
+  "0x19f9266f349158b54a6D95dCe79297DF670f7F14": {
+    "approved_block": 21432508,
+    "lp_token": "0x460638e6F7605B866736e38045C0DE8294d7D87f",
+    "name": "Curve.fi alUSDsDOLA Gauge Deposit"
+  },
+  "0x1AEAA1b998307217D62E9eeFb6407B10598eF3b8": {
+    "approved_block": 14490276,
+    "lp_token": null,
+    "name": null
+  },
+  "0x1B0E9F245f08dbFc80bc4119746c190B867dd837": {
+    "approved_block": 19221528,
+    "lp_token": "0x2482DFb5A65D901d137742AB1095f26374509352",
+    "name": "Curve.fi pUSD3crv Gauge Deposit"
+  },
+  "0x1B3E14157ED33F60668f2103bCd5Db39a1573E5B": {
+    "approved_block": 13901849,
+    "lp_token": "0x8484673cA7BfF40F82B041916881aeA15ee84834",
+    "name": "Curve.fi crvXAUTUSD Gauge Deposit"
+  },
+  "0x1BD797787Eb1bcf91445fA14671F19f5A722E1f5": {
+    "approved_block": 19446918,
+    "lp_token": "0x16b54e3aC8e3ba088333985035b869847e36E770",
+    "name": "Curve.fi eUSDfxUSD Gauge Deposit"
+  },
+  "0x1Ba86c33509013c937344f6e231DA2E63ea45197": {
+    "approved_block": 14639217,
+    "lp_token": "0x22CF19EB64226e0E1A79c69b345b31466fD273A7",
+    "name": "Curve.fi ibGBPUSDC-f Gauge Deposit"
+  },
+  "0x1C94126F29A9d6F9Ef3CCB1D5D58EbcaCC519F85": {
+    "approved_block": 21897637,
+    "lp_token": "0x5B03CcCAb7BA3010fA5CAd23746cbf0794938e96",
+    "name": "Curve.fi crvUSDe Gauge Deposit"
+  },
+  "0x1CAC1a0Ed47E2e0A313c712b2dcF85994021a365": {
+    "approved_block": 18829735,
+    "lp_token": "0x13947303F63b363876868D070F14dc865C36463b",
+    "name": "Curve.fi weETH-WETH Gauge Deposit"
+  },
+  "0x1Cfabd1937e75E40Fa06B650CB0C8CD233D65C20": {
+    "approved_block": 19497504,
+    "lp_token": "0x5AE28c9197a4a6570216fC7e53E7e0221D7A0FEF",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x1Db233c2D10e6076d347f5FC87d575b4F8b88Ca7": {
+    "approved_block": 17655479,
+    "lp_token": "0xC73151DcA19ffF7A16aE421a9fb35455832d66d3",
+    "name": "Curve.fi DUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x1E212e054d74ed136256fc5a5DDdB4867c6E003F": {
+    "approved_block": 13709944,
+    "lp_token": "0xb9446c4Ef5EBE66268dA6700D26f96273DE3d571",
+    "name": "Curve.fi 3EURpool-f Gauge Deposit"
+  },
+  "0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4": {
+    "approved_block": 21196661,
+    "lp_token": "0x8a4f252812dFF2A8636E4F7EB249d8FC2E3bd77f",
+    "name": "Curve.fi BTCGHOETH Gauge Deposit"
+  },
+  "0x1Ee8f8B504E99a0fCD3A32D38aa9968750A708aD": {
+    "approved_block": 19131209,
+    "lp_token": "0x1830c553dC76d3447B69b7B0dC19CF9e3c739C78",
+    "name": "Curve.fi TriSDT+ Gauge Deposit"
+  },
+  "0x1F27Dd820d302a4A790d73c5e50fD646AF8aDD07": {
+    "approved_block": 21889721,
+    "lp_token": "0x16181fd3F7326Ac804A724553ff5fd4450DD3170",
+    "name": "Curve.fi FRAXUSDV Gauge Deposit"
+  },
+  "0x1Fb84Fa6D252762e8367eA607A6586E09dceBe3D": {
+    "approved_block": 19615528,
+    "lp_token": "0x55Faa4a58f6510f78c1466C71C63200D62a197D2",
+    "name": "Curve.fi frxafETH Gauge Deposit"
+  },
+  "0x1a38A26f1EB658f0CAef3A5A722e56d44511279B": {
+    "approved_block": 21274882,
+    "lp_token": "0x3D0d331390D14DF42c16FC20700F7e6Ad4849c50",
+    "name": "Curve.fi ETHASF Gauge Deposit"
+  },
+  "0x1a915D963EE65943387dd35F54F0296BE4f925e5": {
+    "approved_block": 22384011,
+    "lp_token": "0xc33aa628b10655B36Eaa7ee880D6Bc4789dD2289",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x1c77fB5486545810679D53E325d5bCf6C6A45081": {
+    "approved_block": 14354796,
+    "lp_token": null,
+    "name": null
+  },
+  "0x1cB6134A152C8c61016c4691a31137f23B66f770": {
+    "approved_block": 16634339,
+    "lp_token": "0xc6CBbdE700D1972468e727981cfe838d718B66D1",
+    "name": "Curve.fi USVFRAXBP-f Gauge Deposit"
+  },
+  "0x1cEBdB0856dd985fAe9b8fEa2262469360B8a3a6": {
+    "approved_block": 13722898,
+    "lp_token": "0xEd4064f376cB8d68F770FB1Ff088a3d0F3FF5c4d",
+    "name": "Curve.fi crvCRVETH Gauge Deposit"
+  },
+  "0x1eF8B6Ea6434e722C916314caF8Bf16C81cAF2f9": {
+    "approved_block": 22223124,
+    "lp_token": "0x6d18E1a7faeB1F0467A77C0d293872ab685426dc",
+    "name": "Curve.fi OUSD/USDC Gauge Deposit"
+  },
+  "0x20759F567BB3EcDB55c817c9a1d13076aB215EdC": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x20dD8Dc37429DcCCfd9710adD6AB8aA326bE0963": {
+    "approved_block": 22441834,
+    "lp_token": "0x00836Fe54625BE242BcFA286207795405ca4fD10",
+    "name": "Curve.fi sUSDSUSDT Gauge Deposit"
+  },
+  "0x20e783242415A589B7E533a46A24FDA240590a18": {
+    "approved_block": 18223361,
+    "lp_token": "0xfed2B54453F75634bcdaEA5e5b11a3f99b9C28Fa",
+    "name": "Curve.fi USDC+LP-f Gauge Deposit"
+  },
+  "0x218E4678318ab5527e41135713193E5EAd73337f": {
+    "approved_block": 17534766,
+    "lp_token": "0x400d4C984779A747462e88373c3fE369EF9F5b50",
+    "name": "Curve.fi ZUSDFBP3CRV-f Gauge Deposit"
+  },
+  "0x222D910ef37C06774E1eDB9DC9459664f73776f0": {
+    "approved_block": 19497506,
+    "lp_token": "0x8cf1DE26729cfB7137AF1A6B2a665e099EC319b5",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x22804B0F6bE741a9Fa1BbaEcDD6c8D4116E96944": {
+    "approved_block": 22927319,
+    "lp_token": "0x13e12BB0E6A2f1A3d6901a59a9d585e89A6243e1",
+    "name": "Curve.fi crvfrxUSD Gauge Deposit"
+  },
+  "0x23194e30E54d713C6954ebCD2d5bdCD0171eE2C4": {
+    "approved_block": 18965894,
+    "lp_token": null,
+    "name": null
+  },
+  "0x248E3660c5838a3BAbC645aB0f1e0b199BEB5dBa": {
+    "approved_block": 17991722,
+    "lp_token": "0x75aEa8E2b1546854214030AC38368609506Aa15A",
+    "name": "Curve.fi crCrvUSDF-f Gauge Deposit"
+  },
+  "0x25707E5FE03dEEdc9Bc7cDD118f9d952C496FeBe": {
+    "approved_block": 19043737,
+    "lp_token": "0x9FeE65D5A627e73212989c8BbEdC5Fa5Cae3821F",
+    "name": "Curve.fi BobrCRV Gauge Deposit"
+  },
+  "0x25E822B65a58Ce1A53DbC327d4fA489351FB1Df0": {
+    "approved_block": 19506308,
+    "lp_token": null,
+    "name": null
+  },
+  "0x25f0cE4E2F8dbA112D9b115710AC297F816087CD": {
+    "approved_block": 13157448,
+    "lp_token": "0x87650D7bbfC3A9F10587d7778206671719d9910D",
+    "name": "Curve.fi OUSD3CRV-f Gauge Deposit"
+  },
+  "0x2600365693F922C164E35289F2A23287002Fe0Bb": {
+    "approved_block": 24070299,
+    "lp_token": null,
+    "name": null
+  },
+  "0x260e4fBb13DD91e187AE992c3435D0cf97172316": {
+    "approved_block": 13297310,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2656B01A19A790f07e2b875d69007F88241602f0": {
+    "approved_block": 21582508,
+    "lp_token": null,
+    "name": null
+  },
+  "0x266cE172a1180134cf6C7836C516bd6A58b1f619": {
+    "approved_block": 17030212,
+    "lp_token": "0xc34993c9aDf6a5AB3b4cA27dC71b9c7894A53974",
+    "name": "Curve.fi CRVfrxETH-f Gauge Deposit"
+  },
+  "0x2687a11cb2916BfFB9406959C6d386c79c621f15": {
+    "approved_block": 21024019,
+    "lp_token": null,
+    "name": null
+  },
+  "0x26F7786de3E6D9Bd37Fcf47BE6F2bC455a21b74A": {
+    "approved_block": 17386860,
+    "lp_token": "0xCA0253A98D16e9C1e3614caFDA19318EE69772D0",
+    "name": "Curve.fi sdCRVlp-f Gauge Deposit"
+  },
+  "0x26dF2e5383aC8c93435bD678925c8b3738FFF5e8": {
+    "approved_block": 22480184,
+    "lp_token": "0xB6aF437ceEa0DBeA524115eFC905F0F44fd1eBAF",
+    "name": "Curve.fi USDNfxUSD Gauge Deposit"
+  },
+  "0x26f57596d7B9258C0ac747f20196E8ec6cD569b1": {
+    "approved_block": 24370252,
+    "lp_token": "0x23b78Dc3b1b0A27f3838219e97d806Aae377a1b2",
+    "name": "Curve.fi OUSDMUSD Gauge Deposit"
+  },
+  "0x2712E14F1C4819f7aeC4ba21e321C3E4662cf6De": {
+    "approved_block": 18034878,
+    "lp_token": "0xD4cEdEf74fB8885b8e1dE21fBA5a2E2F33F21f58",
+    "name": "Curve.fi xETHstETH-f Gauge Deposit"
+  },
+  "0x277d1424a84B35ec0a8108482551b00b4fc1539b": {
+    "approved_block": 18862379,
+    "lp_token": "0xe2Ed1dAc3A9547BC6057e32bf8133b5268D7d987",
+    "name": "Curve.fi pxfrxeth Gauge Deposit"
+  },
+  "0x279f11F8E2825dbe0b00F6776376601AC948d868": {
+    "approved_block": 14250377,
+    "lp_token": null,
+    "name": null
+  },
+  "0x27cace18f661161661683bBA43933B2E6eB1741E": {
+    "approved_block": 17380438,
+    "lp_token": "0xc794C6A95f30d0ebF7B3Bbe85e8a0A95C9e411c1",
+    "name": "Curve.fi hyUSDeUSD-f Gauge Deposit"
+  },
+  "0x2810D88509D625Fc0Fb838697098529f5cd3a0AE": {
+    "approved_block": 20262437,
+    "lp_token": "0xa3f152837492340dAAf201F4dFeC6cD73A8a9760",
+    "name": "Curve.fi COVEYFI Gauge Deposit"
+  },
+  "0x28216318D85b2D6d8c2cB38eed08001d9348803b": {
+    "approved_block": 15494289,
+    "lp_token": "0xC47EBd6c0f68fD5963005D28D0ba533750E5C11B",
+    "name": "Curve.fi pUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x28291160575e75f3F798577032677a80CcaBee1D": {
+    "approved_block": 24311451,
+    "lp_token": null,
+    "name": null
+  },
+  "0x28c164164EF91336Ae4b36C30Cdb2Ff0b77dE37b": {
+    "approved_block": 22732435,
+    "lp_token": "0x0d10FA76a79824282dfB9f6779f64A4BB7D75bd5",
+    "name": "Curve.fi crvwA7A5 Gauge Deposit"
+  },
+  "0x29284d30bcb70e86a6C3f84CbC4de0Ce16b0f1CA": {
+    "approved_block": 13668038,
+    "lp_token": "0xfa65aa60a9D45623c57D383fb4cf8Fb8b854cC4D",
+    "name": "Curve.fi tbtc2/sbtcCRV-f Gauge Deposit"
+  },
+  "0x2932a86df44Fe8D2A706d8e9c5d51c24883423F5": {
+    "approved_block": 15846216,
+    "lp_token": "0xf43211935C781D5ca1a41d2041F397B8A7366C7A",
+    "name": "Curve.fi frxETHCRV Gauge Deposit"
+  },
+  "0x294280254e1c8BcF56F8618623Ec9235e8415633": {
+    "approved_block": 19851378,
+    "lp_token": "0xff467c6E827ebbEa64DA1ab0425021E6c89Fbe0d",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x296Cb319665031Ac9E40b373d0C84e7D5fdAB80d": {
+    "approved_block": 18928659,
+    "lp_token": "0x73a0cba58c19ed5F27C6590BD792eC38dE4815Ea",
+    "name": "Curve.fi crvsFRAX Gauge Deposit"
+  },
+  "0x298D677240cA29183051516bbD45730b9CC4b1f7": {
+    "approved_block": 20780198,
+    "lp_token": "0x73e4BeC1A111869F395cBB24F6676826BF86d905",
+    "name": "Curve.fi swBTCwBTC Gauge Deposit"
+  },
+  "0x298bf7b80a6343214634aF16EB41Bb5B9fC6A1F1": {
+    "approved_block": 17424649,
+    "lp_token": "0xe8a5677171c87fCB65b76957f2852515B404C7b1",
+    "name": "Curve.fi ETH+ETH-f Gauge Deposit"
+  },
+  "0x29E9975561fAD3A7988CA96361AB5c5317CB32Af": {
+    "approved_block": 23300598,
+    "lp_token": "0xC32B0Cf36e06c790A568667A17DE80cba95A5Aad",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x29b45B633b0C281245055D6713F167818E73e38c": {
+    "approved_block": 19446915,
+    "lp_token": "0xC03FEF1c425956A3Cd5762022E511e0d4148B3D6",
+    "name": "Curve.fi ULTRAUSDC Gauge Deposit"
+  },
+  "0x29d5515d5Cf6945cafd98d46c69b115CcEb26123": {
+    "approved_block": 24729075,
+    "lp_token": null,
+    "name": null
+  },
+  "0x29e2A58e8604e600e28a313D545D1D34df762E47": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2B5a5e182768a18C70EDd265240578a72Ca475ae": {
+    "approved_block": 18479778,
+    "lp_token": "0x1539c2461d7432cc114b0903f1824079BfCA2C92",
+    "name": "Curve.fi crvsDAI-f Gauge Deposit"
+  },
+  "0x2B917214c5d6F057FBdaF9a3aAE201e9f484FdAE": {
+    "approved_block": 16570746,
+    "lp_token": "0x3f0e7916681452D23Cd36B1281457DA721F2E5dF",
+    "name": "Curve.fi CTRETH-f Gauge Deposit"
+  },
+  "0x2BA46635Be14Ea6d3b27f0ed3C3881dC95AF8a13": {
+    "approved_block": 22712375,
+    "lp_token": "0xE5c78cbcf6241f1793caF496f6480B45Fa5BDb46",
+    "name": "Curve.fi sdYNDYND Gauge Deposit"
+  },
+  "0x2CBEecEE6140e6392Ac770D0F30D80d7EFD82240": {
+    "approved_block": 20939838,
+    "lp_token": "0x0E84996AC18fcF6Fe18C372520798CE0cdf892D4",
+    "name": "Curve.fi USD3sDAI Gauge Deposit"
+  },
+  "0x2D1352Df75836a2681F8BE063571C8391C04B0Dc": {
+    "approved_block": 20412065,
+    "lp_token": "0x19B8524665aBAC613D82eCE5D8347BA44C714bDd",
+    "name": "Curve.fi ynETH-B Gauge Deposit"
+  },
+  "0x2DD2b7E07dD433B758B98A3889a63cbF48ef0D99": {
+    "approved_block": 18155103,
+    "lp_token": "0x954313005C56b555bdC41B84D6c63B69049d7847",
+    "name": "Curve.fi triSDT Gauge Deposit"
+  },
+  "0x2DFeE5874aC76C72a1F2D39Cc91A1bbe1F59BDc4": {
+    "approved_block": 18549931,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2E099Fa795B7F7053672108F1a2a0bADeCF6B58D": {
+    "approved_block": 24243748,
+    "lp_token": "0x3e823bd1015Ba1A12F2F8aFD631c822a1CBA0de7",
+    "name": "Curve.fi ifrxUSD Gauge Deposit"
+  },
+  "0x2EB49A3eff789d7B2286Bf17667acbF12d882c17": {
+    "approved_block": 16489762,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2F8bcdF1824B91D420F8951A972eE988Ebd8544d": {
+    "approved_block": 21869833,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2FD602E5B115aFd6Cb662Bebd18F3c49Da4C960B": {
+    "approved_block": 21632692,
+    "lp_token": "0x6bD88c57523bF138A19b263E8ebC8661c836B171",
+    "name": "Curve.fi INV/WETH Gauge Deposit"
+  },
+  "0x2a2F4Cf8cB8452e5Db8A2eFF286aF66C6dc213a9": {
+    "approved_block": 25013686,
+    "lp_token": "0x16a973F8e466F44e9eA67e7e2d3166bD460ea852",
+    "name": "Curve.fi frxAZND Gauge Deposit"
+  },
+  "0x2b14bde53520Dc94E0D7c5396119779A36A62ba4": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x2d5727a90eDd42B4d666fF773C7809215284c326": {
+    "approved_block": 18882664,
+    "lp_token": "0x00e6Fd108C4640d21B40d02f18Dd6fE7c7F725CA",
+    "name": "Curve.fi USDV3crv Gauge Deposit"
+  },
+  "0x2db0E83599a91b508Ac268a6197b8B14F5e72840": {
+    "approved_block": 11011076,
+    "lp_token": "0x5B5CFE992AdAC0C9D48E05854B2d91C73a003858",
+    "name": null
+  },
+  "0x2e1ea2C45e6Af813555382a6d0D9c98EB081C535": {
+    "approved_block": 19533359,
+    "lp_token": "0xbF673D8DC8FF9c9DC8F8063532A7D3bbd3799298",
+    "name": "Curve.fi rgUSDsFRAX Gauge Deposit"
+  },
+  "0x2e3AF151d5E8Ad8Dcc2C810A56f4d8921e33cFE7": {
+    "approved_block": 23383750,
+    "lp_token": "0xc061caa073f3d95F80f8e5428d32D2d76F5e1622",
+    "name": "Curve.fi USDGUSDC Gauge Deposit"
+  },
+  "0x2fA53e8fa5fAdb81f4332C8EcE39Fe62eA2f919E": {
+    "approved_block": 13172371,
+    "lp_token": "0x9c2C8910F113181783c249d8F6Aa41b51Cde0f0c",
+    "name": "Curve.fi ibCHF+sCHF-f Gauge Deposit"
+  },
+  "0x3050A62335948e008C6241B3Ef9A81a8C0613B76": {
+    "approved_block": 19624893,
+    "lp_token": null,
+    "name": null
+  },
+  "0x30831D8C8480D106A6F043356A2bED652c98e44B": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0x30Fa6dA1e042938D6325763F5b517f1BD0D31218": {
+    "approved_block": 23386463,
+    "lp_token": "0x138Bb0f3208bd729a561F3786DDb97BBc69e6628",
+    "name": "Curve.fi msUSDfxUSD Gauge Deposit"
+  },
+  "0x30dD71C08c45FBFbff6637Af5afA1b845806d54D": {
+    "approved_block": 24641787,
+    "lp_token": "0x26D85588B9eD20abA4Fa8Fb9b3C8977C4aAd133C",
+    "name": "Curve.fi KRWQfrxUS Gauge Deposit"
+  },
+  "0x30e06CADFbC54d61B7821dC1e58026bf3435d2Fe": {
+    "approved_block": 20377818,
+    "lp_token": "0x14361C243174794E2207296a6AD59bb0Dec1d388",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x319B3ec2945eE430d8418ae6e9e1e6f8AbBBB754": {
+    "approved_block": 21131905,
+    "lp_token": "0x15061E372D50792B68a8E400E89a5Da0E4861236",
+    "name": "Curve.fi crvinfxETH Gauge Deposit"
+  },
+  "0x319E268f0A4C85D404734ee7958857F5891506d7": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x322eF5A46Bb13c1812f4Fe3e07F55028eAF25698": {
+    "approved_block": 21830601,
+    "lp_token": null,
+    "name": null
+  },
+  "0x3250F35c54611620f9fB05Bf811E76CFE51c837B": {
+    "approved_block": 20490365,
+    "lp_token": "0xE1c7e7732ACe7aA9d10A5a71eb3cccdB70535F14",
+    "name": "Curve.fi crvUSD-0 Gauge Deposit"
+  },
+  "0x3251d96918a7e69f6d1D383fEE6E5336d70aEfBe": {
+    "approved_block": 21752390,
+    "lp_token": null,
+    "name": null
+  },
+  "0x326b6d1a26Fd04afAa349340022076b5a2eb0c7C": {
+    "approved_block": 21734022,
+    "lp_token": "0x4d968a5Db8dA0822A2F08840f553De4129aAe5F3",
+    "name": "Curve.fi frxscrvUSD Gauge Deposit"
+  },
+  "0x3285987Bbd0b695Ac48DC8571F519065B50aBA07": {
+    "approved_block": 24896471,
+    "lp_token": "0x6C380152Ee65D4f41EAF1A136Aa882713F2524FE",
+    "name": "Curve.fi Avant Eva Gauge Deposit"
+  },
+  "0x32B4fFA358Ee53B2Efc82115b2f0b8DdC5Fe5a05": {
+    "approved_block": 23483294,
+    "lp_token": "0x39355d9dDD84C6801c311Ac743a0EB55288BFDe1",
+    "name": "Curve.fi SPECTRAETH Gauge Deposit"
+  },
+  "0x32D113F2Edf491CBf1947898A3c2A1e949DfbECd": {
+    "approved_block": 22803138,
+    "lp_token": "0xfcCa47DdD4336F08835005d912124b472eD29448",
+    "name": "Curve.fi ynUSDx/USD Gauge Deposit"
+  },
+  "0x330Cfd12e0E97B0aDF46158D2A81E8Bd2985c6cB": {
+    "approved_block": 19329089,
+    "lp_token": "0x167478921b907422F8E88B43C4Af2B8BEa278d3A",
+    "name": "Curve.fi MtEthena Gauge Deposit"
+  },
+  "0x331d6F25A382B4961A983d6ddc6974A48E51462c": {
+    "approved_block": 19933797,
+    "lp_token": "0xDB6925eA42897ca786a045B252D95aA7370f44b4",
+    "name": "Curve.fi crvRSReUSDETH+ Gauge Deposit"
+  },
+  "0x3325055A7E27Cf774545B9E8C8C80a7a8cBC6400": {
+    "approved_block": 22659507,
+    "lp_token": "0x7C4e143B23D72E6938E06291f705B5ae3D5c7c7C",
+    "name": "Curve.fi deUSDUSDT Gauge Deposit"
+  },
+  "0x33C762Ba96B6b0b5b0CF1F34505EcEF76b1735E9": {
+    "approved_block": 18549926,
+    "lp_token": "0x36DfE783603522566C046Ba1Fa403C8c6F569220",
+    "name": "Curve.fi sdai-usdm Gauge Deposit"
+  },
+  "0x346C7BB1A7a6A30c8e81c14e90FC2f0FBddc54d8": {
+    "approved_block": 13543218,
+    "lp_token": "0xFbdCA68601f835b27790D98bbb8eC7f05FDEaA9B",
+    "name": "Curve.fi ibbtc/sbtcCRV-f Gauge Deposit"
+  },
+  "0x34883134A39B206A451c2D3B0E7Cac44BE4D9181": {
+    "approved_block": 14744695,
+    "lp_token": "0x4e0915C88bC70750D68C481540F081fEFaF22273",
+    "name": "Curve.fi 4CRV Gauge Deposit"
+  },
+  "0x34C8ff6992Beb1fF94c35643A2c2424e24303437": {
+    "approved_block": 19783776,
+    "lp_token": "0x91553BAD9Fbc8bD69Ff5d5678Cbf7D514d00De0b",
+    "name": "Curve.fi thUSD3CRV Gauge Deposit"
+  },
+  "0x34b3a436EEFaB94CF95dfE20700c43330a5208E7": {
+    "approved_block": 20699214,
+    "lp_token": "0x7F6F1E23F6479477D045e2E61F0169f6Eb561003",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x34eD182D0812D119c92907852D2B429f095A9b07": {
+    "approved_block": 14577578,
+    "lp_token": null,
+    "name": "Curve.fi Factory Crypto Pool: JPEG/ETH"
+  },
+  "0x359FD5d6417aE3D8D6497d9B2e7A890798262BA4": {
+    "approved_block": 12056030,
+    "lp_token": "0xEcd5e75AFb02eFa118AF914515D6521aaBd189F1",
+    "name": "Curve.fi TUSD3CRV-f Gauge Deposit"
+  },
+  "0x35aD1ACf0C4BE5d4Ba11342128D440fDb9e189eb": {
+    "approved_block": 18917389,
+    "lp_token": "0x4ef4c7519023F30A78647EEab321d6cFabC2513c",
+    "name": "Curve.fi FXB240630 Gauge Deposit"
+  },
+  "0x35cFBea142e5e48cC7070300aB533cF64F436DD8": {
+    "approved_block": 22602773,
+    "lp_token": null,
+    "name": null
+  },
+  "0x35e4B1Bc8818fc098EFcf9AD9784B28d8B4Bf639": {
+    "approved_block": 24397258,
+    "lp_token": "0x9AfAd25833D0F47b3A3D9204dDF965CB172De0CB",
+    "name": "Curve.fi OUSDmsUSD Gauge Deposit"
+  },
+  "0x360Dd7BA9e0811c2168Dad495fb393977A3eAba5": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0x36152AA234fcF97b5C14Fc6d4893fC0dA5328BD2": {
+    "approved_block": 19847367,
+    "lp_token": "0xde73E407EFC75EdBAfc5bcD62Ebb1E7A9b38EBCD",
+    "name": "Curve.fi USD3rgUSD Gauge Deposit"
+  },
+  "0x36C66bC294fEf4e94B3e40A1801d0AB0085Fe96e": {
+    "approved_block": 14639217,
+    "lp_token": "0x08ceA8E5B4551722dEB97113C139Dd83C26c5398",
+    "name": "Curve.fi ibCHFUSDC-f Gauge Deposit"
+  },
+  "0x36cC1d791704445A5b6b9c36a667e511d4702F3f": {
+    "approved_block": 22198296,
+    "lp_token": "0xcc7d5785AD5755B6164e21495E07aDb0Ff11C2A8",
+    "name": "Curve.fi OETH/WETH Gauge Deposit"
+  },
+  "0x37033591c84BA3FaF27eef8032F2806Fbf3Ad417": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x378e249F4F7007Bd90c2186240374D512B839770": {
+    "approved_block": 18192059,
+    "lp_token": "0x3d28f9192E34e51414e69FBEE5b11B35590FB9Fb",
+    "name": "Curve.fi fETHFraxBP-f Gauge Deposit"
+  },
+  "0x37Efc3f05D659B30A83cf0B07522C9d08513Ca9d": {
+    "approved_block": 16269269,
+    "lp_token": "0x5Be6C45e2d074fAa20700C49aDA3E88a1cc0025d",
+    "name": "Curve.fi crvGEARETH-f Gauge Deposit"
+  },
+  "0x37FAe05F10C7CAdc743BB18d795aA2aF11418607": {
+    "approved_block": 24208989,
+    "lp_token": "0x249839821B7B673bC68a6d9bC74811fa33A8a49f",
+    "name": "Curve.fi dUSDfrxUSD Gauge Deposit"
+  },
+  "0x38039dD47636154273b287F74C432Cac83Da97e2": {
+    "approved_block": 14080208,
+    "lp_token": "0xB37D6c07482Bc11cd28a1f11f1a6ad7b66Dec933",
+    "name": "Curve.fi ag+ib-EUR-f Gauge Deposit"
+  },
+  "0x38746396bd4deE3aa8032c730A0b921d02c84F83": {
+    "approved_block": 24082679,
+    "lp_token": "0x5Ee9606e5611Fd6CE14BD2BC12db70BD53dC9daA",
+    "name": "Curve.fi yYB-LP Gauge Deposit"
+  },
+  "0x389Fc079a15354E9cbcE8258433CC0F85B755A42": {
+    "approved_block": 15175858,
+    "lp_token": "0x497CE58F34605B9944E6b15EcafE6b001206fd25",
+    "name": "Curve.fi LUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x390C6eB1E824A7CCa2E646e47D8fCba4263E9E38": {
+    "approved_block": 19787814,
+    "lp_token": "0xfb8b95Fb2296a0Ad4b6b1419fdAA5AA5F13e4009",
+    "name": "Curve.fi FXScrvUSD Gauge Deposit"
+  },
+  "0x39141489Db236701604d35792555A8ae93360967": {
+    "approved_block": 20377822,
+    "lp_token": null,
+    "name": null
+  },
+  "0x393F3d6bBA96dB02C3653D21Ec582b7f843a2668": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0x39Bd19d2e9450b9e5BCdBc7501B828D86cE95fe0": {
+    "approved_block": 17164834,
+    "lp_token": "0x4424b4A37ba0088D8a718b8fc2aB7952C7e695F5",
+    "name": "Curve.fi STACMEWACM-f Gauge Deposit"
+  },
+  "0x39D053f054e9e5E5ADA759FBDDCEc904D43e9B7c": {
+    "approved_block": 19833002,
+    "lp_token": null,
+    "name": null
+  },
+  "0x39b1df92f9485A73cAdF4846aBDe59eac0901A94": {
+    "approved_block": 24571557,
+    "lp_token": "0xEfc056790bb19702b2164ec6Ea6bA3AE01d81195",
+    "name": "Curve.fi USGfrxUSD Gauge Deposit"
+  },
+  "0x3A748A2F4765BDFB119Cb7143b884Db7594a68c3": {
+    "approved_block": 14639217,
+    "lp_token": "0x127091edE112aEd7Bae281747771b3150Bb047bB",
+    "name": "Curve.fi ibJPYUSDC-f Gauge Deposit"
+  },
+  "0x3Ac4b6da715E7963BBcfb31dE39A1B139F426223": {
+    "approved_block": 21751442,
+    "lp_token": "0x29A760138FA530d51a100171cB5CE4DDf506aF2E",
+    "name": "Curve.fi BOLDLUSD Gauge Deposit"
+  },
+  "0x3B7020743Bc2A4ca9EaF9D0722d42E20d6935855": {
+    "approved_block": 11512882,
+    "lp_token": "0x94e131324b6054c0D789b190b2dAC504e4361b53",
+    "name": "Curve.fi ust/3CRV Gauge Deposit"
+  },
+  "0x3Ba9d8792Fa703eA21B6120E675aA34Bda836AEB": {
+    "approved_block": 20432578,
+    "lp_token": "0xECd491fc3D97e3b7be01E4175ECE7F91829AAef8",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x3C0FFFF15EA30C35d7A85B85c0782D6c94e1d238": {
+    "approved_block": 11555715,
+    "lp_token": "0xA3D87FffcE63B53E0d54fAa1cc983B7eB0b74A9c",
+    "name": "Curve.fi ETH/sETH Gauge Deposit"
+  },
+  "0x3C8542D9cA68a4709959B984d94d74a27A6644Af": {
+    "approved_block": 19043734,
+    "lp_token": "0x7264cc03a9126Cc063265365fB043dF9c3479b63",
+    "name": "Curve.fi ETHxwstETH Gauge Deposit"
+  },
+  "0x3D59052DEa0e0ffd9b8A59A6faE13ec037850155": {
+    "approved_block": 21734022,
+    "lp_token": "0x3BD1017929b43c1414bE2Aca39892590fBa4d6e2",
+    "name": "Curve.fi sfrxsUSDe Gauge Deposit"
+  },
+  "0x3E9a975476392575A7F269f99776cB7eE554C68D": {
+    "approved_block": 23461901,
+    "lp_token": "0xb85d5B8886b42550A97a933bA28c4A58063022c6",
+    "name": "Curve.fi yn/wst ETH Gauge Deposit"
+  },
+  "0x3a2C50192eEA59Ed5ADcF2750b68Af55531ee01a": {
+    "approved_block": 23484708,
+    "lp_token": "0xd3f423038c55333d99B5C053113d73aDB694Eb16",
+    "name": "Curve.fi yETH stETH Gauge Deposit"
+  },
+  "0x3c1377CF382B77202Dcf1dCE4B2d4c8bcf46174e": {
+    "approved_block": 22990632,
+    "lp_token": null,
+    "name": null
+  },
+  "0x3db6994028E6f4e6a4F673f893BaaCfe62c24323": {
+    "approved_block": 23590531,
+    "lp_token": "0x4eeB03b2b8f55159f47B3548fAaFE3efaFF43eb9",
+    "name": "Curve.fi Fraxelixir Gauge Deposit"
+  },
+  "0x3e3D66aD3c707A9fcBB6553da6acEc396697e173": {
+    "approved_block": 21131901,
+    "lp_token": null,
+    "name": null
+  },
+  "0x3e56EC9bD2992D9220eD615CEaeC59613cCac730": {
+    "approved_block": 23031523,
+    "lp_token": "0x3bE454C4391690ab4DDae3Fb987c8147b8Ecc08A",
+    "name": "Curve.fi USDafscrv Gauge Deposit"
+  },
+  "0x3eE0bD06D004C25273339c5aD91e1443523DC2dF": {
+    "approved_block": 15833945,
+    "lp_token": "0x9848482da3Ee3076165ce6497eDA906E66bB85C5",
+    "name": "Curve.fi pETH-ETH-f Gauge Deposit"
+  },
+  "0x3fFBc5EFCe6d8d7aB864eD309824aFFD85ef1d0d": {
+    "approved_block": 18673467,
+    "lp_token": "0xc273fd237F23cb13296D0Cc2897F0B7A61e83387",
+    "name": "Curve.fi USDV3crv Gauge Deposit"
+  },
+  "0x402EE4BD11F53B8CcA031029652C3d7D8D8E2376": {
+    "approved_block": 23954187,
+    "lp_token": "0xA256D38e73ccE6e00447fa64a95069ea7d32f841",
+    "name": "Curve.fi USD/crvUSD Gauge Deposit"
+  },
+  "0x40371aad2a24ed841316EF30938881440FD4426c": {
+    "approved_block": 16188407,
+    "lp_token": null,
+    "name": null
+  },
+  "0x40C63580846d2600DF2d2a8A3BF899E8249095FD": {
+    "approved_block": 20071025,
+    "lp_token": "0x79586fa680958102154093B795Fdb8EFBc013822",
+    "name": "Curve.fi USD3eUSD Gauge Deposit"
+  },
+  "0x4112130Ac3d7c200A7adbD4D01BdB6546C222007": {
+    "approved_block": 24418561,
+    "lp_token": "0xa7E47bf197AF3e0742460d3A302D2E950A8E31ff",
+    "name": "Curve.fi unicrvUSD Gauge Deposit"
+  },
+  "0x411387Be45F5c001159f3d76e26Fe7D200e5Dc71": {
+    "approved_block": 21927416,
+    "lp_token": "0x4b5E827F4C0a1042272a11857a355dA1F4Ceebae",
+    "name": "Curve.fi sUSD+sUSDe Gauge Deposit"
+  },
+  "0x414243F5A72bBF355999F06f0cE70C6f9b685119": {
+    "approved_block": 22510415,
+    "lp_token": null,
+    "name": null
+  },
+  "0x415F30505368fa1dB82Feea02EB778be04e75907": {
+    "approved_block": 17030212,
+    "lp_token": "0xB657B895B265C38c53FFF00166cF7F6A3C70587d",
+    "name": "Curve.fi alfrxETH-f Gauge Deposit"
+  },
+  "0x41af8cC0811DD07F167752B821CF5B11DBa7Ca85": {
+    "approved_block": 21315928,
+    "lp_token": "0x8D688646ebB400f7DE2b713B80b6a58fCF35d2d9",
+    "name": "Curve.fi AIOZETH Gauge Deposit"
+  },
+  "0x41eBf0bEC45642A675e8b7536A2cE9c078A814B4": {
+    "approved_block": 19497505,
+    "lp_token": "0xb2b23C87a4B6d1b03Ba603F7C3EB9A81fDC0AAC9",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x42144499fd4D017723B3a723953b229E64Eb1ffd": {
+    "approved_block": 17545086,
+    "lp_token": "0x58B94400bdAd7b9ac8d5335E12eF96E8B4966b4a",
+    "name": "Curve.fi crvUSDDAI-f Gauge Deposit"
+  },
+  "0x42427Bb483f20b2722300Bc4E60DE2EFB00A869a": {
+    "approved_block": 18549933,
+    "lp_token": "0xDd9E687c73A2031A8f5058B596d740f53c1cb220",
+    "name": "Curve.fi crvUSDthUS-f Gauge Deposit"
+  },
+  "0x4249F127e338cE37Fec8363440afc6847DF4E338": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4329c8F09725c0e3b6884C1daB1771bcE17934F9": {
+    "approved_block": 15175854,
+    "lp_token": "0x70fc957eb90E37Af82ACDbd12675699797745F68",
+    "name": "Curve.fi EUROC3CRV Gauge Deposit"
+  },
+  "0x43EC585717804E32309e8DeFf93eABaD76D5660D": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4426027fEeb7d958498766A792AFE595b64bbFa1": {
+    "approved_block": 18041331,
+    "lp_token": "0x19033d99A7b7010157b81e5eE5A8E63A583fB735",
+    "name": "Curve.fi feth-f Gauge Deposit"
+  },
+  "0x44e528e6a1aa1A931946fa96753F7dDc8d61B489": {
+    "approved_block": 21194607,
+    "lp_token": null,
+    "name": null
+  },
+  "0x44f30D79f62a3D5340030d64806cD73239889F07": {
+    "approved_block": 19504790,
+    "lp_token": "0x3A65cbaebBFecbeA5D0CB523ab56fDbda7fF9aAA",
+    "name": "Curve.fi ZUNFRXETH Gauge Deposit"
+  },
+  "0x455279344f84a496615DC0ffa0511D2E19ec19d8": {
+    "approved_block": 15675149,
+    "lp_token": "0x09b2E090531228d1b8E3d948C73b990Cb6e60720",
+    "name": "Curve.fi BADGERFRAX-f Gauge Deposit"
+  },
+  "0x4620D46b4db7fB04a01A75fFed228Bc027C9A899": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x462253b8F74B72304c145DB0e4Eebd326B22ca39": {
+    "approved_block": 11831181,
+    "lp_token": "0x02d341CcB60fAaf662bC0554d13778015d1b285C",
+    "name": "Curve.fi saCRV Gauge Deposit"
+  },
+  "0x4645e6476D3A5595Be9Efd39426cc10586a8393D": {
+    "approved_block": 17820688,
+    "lp_token": null,
+    "name": null
+  },
+  "0x464f97123c341D35D78Ff26475BD3C15aee96F63": {
+    "approved_block": 20325950,
+    "lp_token": "0x52bF165abd26106D810733CC29FAfF68b96DECe8",
+    "name": "Curve.fi fxUSDrUSD Gauge Deposit"
+  },
+  "0x46521Db0D31A62A2CBF8D1A7Cdc6bBBBC441A1fc": {
+    "approved_block": 14578968,
+    "lp_token": "0x401322B9FDdba8c0a8D40fbCECE1D1752C12316B",
+    "name": "Curve.fi LFTETH-f Gauge Deposit"
+  },
+  "0x46CEd23B82c6DB3A3c30B5Daa0003f751F5f99E3": {
+    "approved_block": 22447589,
+    "lp_token": null,
+    "name": null
+  },
+  "0x46FEc59Eb30C2D610917ebf4CE5114f7425b2c4A": {
+    "approved_block": 18668087,
+    "lp_token": null,
+    "name": null
+  },
+  "0x46b17b13490fF4dcd435d5d06f9Bf8649e2911Aa": {
+    "approved_block": 23884840,
+    "lp_token": "0x6dC8dE7343D2E3B4e5EF9A196e946ae4d460E2D0",
+    "name": "Curve.fi SPCETH Gauge Deposit"
+  },
+  "0x46cC987dcd1D4D84ea5ecb2ce081ac4913b7C305": {
+    "approved_block": 20098278,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4717C25df44e280ec5b31aCBd8C194e1eD24efe2": {
+    "approved_block": 19474531,
+    "lp_token": "0x635EF0056A597D13863B73825CcA297236578595",
+    "name": "Curve.fi GHOcrvUSD Gauge Deposit"
+  },
+  "0x474a58A0E75d664F450Fd9218Cb718307b25ea50": {
+    "approved_block": 22510415,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4767841D4CC3567A2a7a8f55e08b03a9dEb0bfD5": {
+    "approved_block": 16432682,
+    "lp_token": "0x6C280dB098dB673d30d5B34eC04B6387185D3620",
+    "name": "Curve.fi CLEVETH-f Gauge Deposit"
+  },
+  "0x4792B8845e4D7e18E104b535d81b6904D72915A4": {
+    "approved_block": 16085780,
+    "lp_token": "0xb3bC1833aC51aAcEA92acd551FBe1Ab7eDc59EdF",
+    "name": "Curve.fi MIMFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x479dFB03cdDEa20dC4e8788B81Fd7C7A08FD3555": {
+    "approved_block": 21753235,
+    "lp_token": "0x4f493B7dE8aAC7d55F71853688b1F7C8F0243C85",
+    "name": "Curve.fi crv2pool Gauge Deposit"
+  },
+  "0x48100238C4a3CF44cFbF6C7693eD5C216881fAcE": {
+    "approved_block": 20071025,
+    "lp_token": null,
+    "name": null
+  },
+  "0x48727018D010Dc2e414C5A14D588385Ae112869e": {
+    "approved_block": 20221774,
+    "lp_token": "0x272BF7e4Ce3308B1Fb5e54d6a1Fc32113619c401",
+    "name": "Curve.fi eBTCtBTC Gauge Deposit"
+  },
+  "0x488E6ef919C2bB9de535C634a80afb0114DA8F62": {
+    "approved_block": 12688978,
+    "lp_token": null,
+    "name": null
+  },
+  "0x48e4c7EBA2E18c8771dB2f4BA77E8ff6C3bD39A1": {
+    "approved_block": 16584417,
+    "lp_token": null,
+    "name": null
+  },
+  "0x49210703DB64124211EB032D659F098c8eCb6491": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x49865b21d1482377B14e9bE112F029edAcf56fb4": {
+    "approved_block": 19213688,
+    "lp_token": "0x6ade6971Ca3d90990C30d39c78b0534C7166e07b",
+    "name": "Curve.fi pxETHmkUSD-f Gauge Deposit"
+  },
+  "0x49887dF6fE905663CDB46c616BfBfBB50e85a265": {
+    "approved_block": 19497504,
+    "lp_token": "0xCeA18a8752bb7e7817F9AE7565328FE415C0f2cA",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x4A325E066A1C4d76fec4778464Bed15a2772D93D": {
+    "approved_block": 17991707,
+    "lp_token": "0xbC90FEC043e6DF6A084E18Df9435Ee037C940B2d",
+    "name": "Curve.fi GHOFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x4Ad7Ee6648289980240c29E8FCb95d04F5D958E0": {
+    "approved_block": 22150463,
+    "lp_token": "0xdfA525BD3A8e59d336EF725309F855250538c337",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x4B092818708A721cB187dFACF41f440ADb79044D": {
+    "approved_block": 19329384,
+    "lp_token": "0xef484de8C07B6e2d732A92B5F78e81B38f99f95E",
+    "name": "Curve.fi crvDOLA Gauge Deposit"
+  },
+  "0x4B2a6685BEc19bdb28bB0127466809BfE0156114": {
+    "approved_block": 19334272,
+    "lp_token": "0x7F20EEa5bc667F4601E35af15868F3Bc6e447050",
+    "name": "Curve.fi \"pxveth\" Gauge Deposit"
+  },
+  "0x4B43fEaB8f5ccD38Ac0831DD7eC797330114F058": {
+    "approved_block": 18423806,
+    "lp_token": "0x4D1941a887eC788F059b3bfcC8eE1E97b968825B",
+    "name": "Curve.fi crvFRAXTBTCFRXETH Gauge Deposit"
+  },
+  "0x4B6911E1aE9519640d417AcE509B9928D2F8377B": {
+    "approved_block": 16982528,
+    "lp_token": "0x892D701d94a43bDBCB5eA28891DaCA2Fa22A690b",
+    "name": "Curve.fi STBT3CRV-f Gauge Deposit"
+  },
+  "0x4B960396011A914B4ccCC3b33DFEE83A97A9D766": {
+    "approved_block": 15356995,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4C1227ECC3F99A3e510DB26fBa72F7A1cBF50586": {
+    "approved_block": 16940317,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4C1533350dfAaE6c55604160A5F70aD84A108b48": {
+    "approved_block": 22647916,
+    "lp_token": "0x5F6c431AC417f0f430B84A666a563FAbe681Da94",
+    "name": "Curve.fi deUSDUSDC Gauge Deposit"
+  },
+  "0x4C5a449c6B81b800938EFCCDB41970e9CF9eC478": {
+    "approved_block": 20863944,
+    "lp_token": "0x30bf3E17CAD0baF1d6B64079Ec219808d2708fEb",
+    "name": "Curve.fi alETHpxETH Gauge Deposit"
+  },
+  "0x4CF008632abd8F45E25314494B065677C4bfba20": {
+    "approved_block": 22990632,
+    "lp_token": null,
+    "name": null
+  },
+  "0x4D7884c5C055CCb0fD1b6B136BA37Bcd1A6e502f": {
+    "approved_block": 20172120,
+    "lp_token": "0x13eA95Ce68185e334d3747539845A3b7643a8cab",
+    "name": "Curve.fi ZUNFXUSD Gauge Deposit"
+  },
+  "0x4E057701a76De5B7aDe2fCcA2B6761325646f8fa": {
+    "approved_block": 20899013,
+    "lp_token": "0xb79bBc5C96ba248E10C1Bdac1a2B83790fF22B7F",
+    "name": "Curve.fi tBTC/thUSD Gauge Deposit"
+  },
+  "0x4E21418095d32d15c6e2B96A9910772613A50d50": {
+    "approved_block": 17973603,
+    "lp_token": "0x9c3B46C0Ceb5B9e304FCd6D88Fc50f7DD24B31Bc",
+    "name": "Curve.fi frxeth-ng-f Gauge Deposit"
+  },
+  "0x4F80f85FF3bf92643d8C0Afd5bC107051A661185": {
+    "approved_block": 21677881,
+    "lp_token": "0x169A5f124A3663a25313Ee0F7f3Bff028728867f",
+    "name": "Curve.fi yUSD USDC Gauge Deposit"
+  },
+  "0x4Fc86cd0F9b650280Fa783e3116258e0E0496A2c": {
+    "approved_block": 17720735,
+    "lp_token": "0x5426178799ee0a0181A89b4f57eFddfAb49941Ec",
+    "name": "Curve.fi crvUSDCWETHINV Gauge Deposit"
+  },
+  "0x4Fd86Ce7Ecea88F7E0aA78DC12625996Fb3a04bC": {
+    "approved_block": 13590633,
+    "lp_token": "0x3b6831c0077a1e44ED0a21841C3bC4dC11bCE833",
+    "name": "Curve.fi crvEURTUSD Gauge Deposit"
+  },
+  "0x4c18E409Dc8619bFb6a1cB56D114C3f592E0aE79": {
+    "approved_block": 10830166,
+    "lp_token": "0xb19059ebb43466C323583928285a49f558E572Fd",
+    "name": null
+  },
+  "0x4dC4A289a8E33600D8bD4cf5F6313E43a37adec7": {
+    "approved_block": 11193470,
+    "lp_token": "0xC2Ee6b0334C261ED60C72f6054450b61B8f18E35",
+    "name": null
+  },
+  "0x4e227d29b33B77113F84bcC189a6F886755a1f24": {
+    "approved_block": 17868106,
+    "lp_token": "0xa4c567c662349BeC3D0fB94C4e7f85bA95E208e4",
+    "name": "Curve.fi msETHWETH-f Gauge Deposit"
+  },
+  "0x4e6bB6B7447B7B2Aa268C16AB87F4Bb48BF57939": {
+    "approved_block": 17360058,
+    "lp_token": "0x390f3595bCa2Df7d23783dFd126427CCeb997BF4",
+    "name": "Curve.fi crvUSDUSDT-f Gauge Deposit"
+  },
+  "0x4e89713e0A9971089447d2BEE24b736F00672fEA": {
+    "approved_block": 23344811,
+    "lp_token": "0xF5c83F5f7d3975726527feaDE0e51c6e5ecf7bA5",
+    "name": "Curve.fi USDUNIT0 Gauge Deposit"
+  },
+  "0x4fCa2e802F006CBF434B3F9DC338Cda51E5FA417": {
+    "approved_block": 20899010,
+    "lp_token": "0x7B673C422e9E315Ac826FBF5d99716Cc56497109",
+    "name": "Curve.fi DYADFRAX Gauge Deposit"
+  },
+  "0x4fb13b55D6535584841dbBdb14EDC0258F7aC414": {
+    "approved_block": 14760512,
+    "lp_token": "0xbE4f3AD6C9458b901C81b734CB22D9eaE9Ad8b50",
+    "name": "Curve.fi PALETH-f Gauge Deposit"
+  },
+  "0x4fcd885B3070D5a44D22B2A4b443b67Fa95E0d8F": {
+    "approved_block": 21196660,
+    "lp_token": "0xd29f8980852c2c76fC3f6E96a7Aa06E0BedCC1B1",
+    "name": "Curve.fi llamathena Gauge Deposit"
+  },
+  "0x5010263AC1978297F56048C7D2B02316a3435404": {
+    "approved_block": 17976077,
+    "lp_token": "0xB7ECB2AA52AA64a717180E030241bC75Cd946726",
+    "name": "Curve.fi 2BTC-f Gauge Deposit"
+  },
+  "0x50161102a240b1456d770Dbb55c76d8dc2D160Aa": {
+    "approved_block": 17237379,
+    "lp_token": "0xBfAb6FA95E0091ed66058ad493189D2cB29385E6",
+    "name": "Curve.fi ETHwBETHCRV Gauge Deposit"
+  },
+  "0x5059F4A8355d7CF769A512c586e89d22D8866B60": {
+    "approved_block": 22198298,
+    "lp_token": null,
+    "name": null
+  },
+  "0x50e40d992a575544C34FdD17745C3fD842028aA1": {
+    "approved_block": 19178558,
+    "lp_token": "0x3C91EAeac42DfaEad5F356167c52837e443b9f94",
+    "name": "Curve.fi xETHpxETH Gauge Deposit"
+  },
+  "0x50ea44Bc16c4CAe5F8Ac40Ed38e081Be5C2720d2": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x511819E6Ab018106087A1a0f398244a38CEc5B62": {
+    "approved_block": 18380997,
+    "lp_token": "0x5DAC17902066D261e3701e6f52150A614cd8bdE7",
+    "name": "Curve.fi crvsDAI-f Gauge Deposit"
+  },
+  "0x512a68DD5433563Bad526C8C2838c39deBc9a756": {
+    "approved_block": 17577744,
+    "lp_token": "0x94cC50e4521bD271C1a997a3A4Dc815C2F920b41",
+    "name": "Curve.fi crvUSDSUSD-f Gauge Deposit"
+  },
+  "0x5136d95CaaBDB1A7eBa2A8D168a4BCF8fc54a2E2": {
+    "approved_block": 18602196,
+    "lp_token": "0xA3671410fa2417b110523b6cb485190Eb2a5c3ba",
+    "name": "Curve.fi USDVcrvUSD Gauge Deposit"
+  },
+  "0x51d8cC735f933a6CFA3907dFfE4b72021d785450": {
+    "approved_block": 23060970,
+    "lp_token": "0x7780884A24E4d84a6Fbb5EFF5aBa8B944d5cA52C",
+    "name": "Curve.fi uniBTCfrx Gauge Deposit"
+  },
+  "0x52618C40dDBA3cBbb69F3aAA4CB26Ae649844B17": {
+    "approved_block": 21734022,
+    "lp_token": "0x81A2612F6dEA269a6Dd1F6DeAb45C5424EE2c4b7",
+    "name": "Curve.fi frxsUSDS Gauge Deposit"
+  },
+  "0x528bED8b1E95549694519dbF8cFBdD54e274Cd48": {
+    "approved_block": 18549935,
+    "lp_token": "0x212a60171E22988492B7C38a1A3553c60F1892BE",
+    "name": "Curve.fi thUSD3CRV-f Gauge Deposit"
+  },
+  "0x52Cd58C160A51C2207504A6d28975C8f981ea8E8": {
+    "approved_block": 24571557,
+    "lp_token": "0x97BA10115da528c113462EDE9C20D7adc806D93f",
+    "name": "Curve.fi USGUSDC Gauge Deposit"
+  },
+  "0x52ed9F154F25DD0AbC67EdB15dCE90fd92d8b22f": {
+    "approved_block": 20893384,
+    "lp_token": "0xC907ba505C2E1cbc4658c395d4a2c7E6d2c32656",
+    "name": "Curve.fi USRRLP Gauge Deposit"
+  },
+  "0x533B5AeE744647C20e33653F03676c471bb8e67B": {
+    "approved_block": 17572896,
+    "lp_token": "0xBe426b0f37c112dd20d5866769c8034171567b31",
+    "name": "Curve.fi crvUSDMIM-f Gauge Deposit"
+  },
+  "0x53d1D10AE1F092dE46df35376E1Cb3eA7382384d": {
+    "approved_block": 19611851,
+    "lp_token": "0x20BB4a325924917E3336753BA5350a84F70f392e",
+    "name": "Curve.fi rev DOLA Gauge Deposit"
+  },
+  "0x541f57aB2032A042CE6B02Fd435347fBaE1F6d0A": {
+    "approved_block": 20899015,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5439Dda1cE6A4A5222dB85bB2cAf0AB32c815Be6": {
+    "approved_block": 18130110,
+    "lp_token": "0x61fA2c947e523F9ABfb8d7e2903A5D5218C119a7",
+    "name": "Curve.fi PPFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x54693Db0C8015c7cda2186E5005Da99714CE57Ff": {
+    "approved_block": 20899012,
+    "lp_token": "0x017433c8Be1ce841D2d1B9bFfD577A6b74CF302c",
+    "name": "Curve.fi RCHcrvUSD Gauge Deposit"
+  },
+  "0x549E9c98A1C18B05aE35EAF16eCc816D721602B8": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x54f14B461b30673c203b626bF0d395a7245B5152": {
+    "approved_block": 21624569,
+    "lp_token": "0x6031bDd613E6A2F587b244e078053Fe7BbaBE3B5",
+    "name": "Curve.fi ZCHFUSDT Gauge Deposit"
+  },
+  "0x555766f3da968ecBefa690Ffd49A2Ac02f47aa5f": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x55e5adb2Cb00bFdb085440Ca6a5EC628705b2E7F": {
+    "approved_block": 19196670,
+    "lp_token": "0xeE04382c4cA6c450213923fE0f0daB19b0ff3939",
+    "name": "Curve.fi rswETH/ETH Gauge Deposit"
+  },
+  "0x55f9Ba282c39793DB29C68F8f113fC97D23a6445": {
+    "approved_block": 16292459,
+    "lp_token": null,
+    "name": null
+  },
+  "0x56eda719d82aE45cBB87B7030D3FB485685Bea45": {
+    "approved_block": 13590635,
+    "lp_token": null,
+    "name": null
+  },
+  "0x576673a39CCa0F0E4333aC0617638acEbF15536E": {
+    "approved_block": 22176669,
+    "lp_token": null,
+    "name": null
+  },
+  "0x57a1ef037E0A5eEbADdE1A6d38A07Dc614f8213f": {
+    "approved_block": 24286226,
+    "lp_token": "0x0011b54a34Bbd67367a65A33e9B5DB254A19b484",
+    "name": "Curve.fi OUSDiUSD Gauge Deposit"
+  },
+  "0x57e1947e1134F6e733A4a694dE6A163eF23EDf54": {
+    "approved_block": 18317759,
+    "lp_token": "0x320B564Fb9CF36933eC507a846ce230008631fd3",
+    "name": "Curve.fi frxETHpETH-f Gauge Deposit"
+  },
+  "0x57eF895Af21A6C4813043e9D04E8A34592951280": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0x58215F083882A5eb7056Ac34a0fdDA9D3b5665d2": {
+    "approved_block": 18862382,
+    "lp_token": "0x6951bDC4734b9f7F3E1B74afeBC670c736A0EDB6",
+    "name": "Curve.fi pxsteth Gauge Deposit"
+  },
+  "0x5832E0B5F3B8E01AE49d8648dDF8a062C3844e08": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5839337bf070Fea56595A5027e83Cd7126b23884": {
+    "approved_block": 18568918,
+    "lp_token": null,
+    "name": null
+  },
+  "0x58809FF679A06adB7f1d9EE79afB47e8135bC358": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x58F64138BD2893852e72BdE80AA4e6110CFfbe56": {
+    "approved_block": 21333152,
+    "lp_token": "0xE99810Cd5AdCD7b13455aE1BE678B382d61f2d1E",
+    "name": "Curve.fi USD3scrvUS Gauge Deposit"
+  },
+  "0x58FF27787F238157AdDA3Ff25fd14D24D25AC413": {
+    "approved_block": 20699218,
+    "lp_token": "0x011F6A857503FE7acbe70Dc9F52015c937C81F12",
+    "name": "Curve.fi afSTG Gauge Deposit"
+  },
+  "0x59005665c5060D3abEE291A21DE0375cf1BBed03": {
+    "approved_block": 21231615,
+    "lp_token": null,
+    "name": null
+  },
+  "0x590f7e2b211Fa5Ff7840Dd3c425B543363797701": {
+    "approved_block": 20478709,
+    "lp_token": "0x5756bbdDC03DaB01a3900F01Fb15641C3bfcc457",
+    "name": "Curve.fi YFImkUSD Gauge Deposit"
+  },
+  "0x597fc0589DAa2AF5AB73e65d0Da9dc78CbE82F10": {
+    "approved_block": 24370258,
+    "lp_token": "0xEfa939F4932cfF8A92fd6A7C5Fe52cD2AD77f3EC",
+    "name": "Curve.fi OUSDcrvUSD Gauge Deposit"
+  },
+  "0x5980d25B4947594c26255C0BF301193ab64ba803": {
+    "approved_block": 15725980,
+    "lp_token": "0x453D92C7d4263201C69aACfaf589Ed14202d83a4",
+    "name": "Curve.fi yCRV-f Gauge Deposit"
+  },
+  "0x59E9D4672AaeB08C250F9C61484c9447456495A8": {
+    "approved_block": 19424272,
+    "lp_token": "0xF33aB11E5C4e55DAcB13644f0C0A9d1e199A796F",
+    "name": "Curve.fi fxUSDULTRA Gauge Deposit"
+  },
+  "0x5A37667fcb17De82a75FE837bBE0c25DE9EDE251": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5A537a46D780B1C70138aB98eDce69e7a53177ba": {
+    "approved_block": 21595549,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5A8fa46ebb404494D718786e55c4E043337B10bF": {
+    "approved_block": 16647591,
+    "lp_token": "0xF9835375f6b268743Ea0a54d742Aa156947f8C06",
+    "name": "Curve.fi CNCETH-f Gauge Deposit"
+  },
+  "0x5AC6886Edd18ED0AD01C0B0910660637c551FBd6": {
+    "approved_block": 14341283,
+    "lp_token": "0xE160364FD8407FFc8b163e278300c6C5D18Ff61d",
+    "name": "Curve.fi BTRFLYETH-f Gauge Deposit"
+  },
+  "0x5C0B03914f68F2717d779a0211fd98C2CC45a4dD": {
+    "approved_block": 22085125,
+    "lp_token": "0xed785Af60bEd688baa8990cD5c4166221599A441",
+    "name": "Curve.fi reusdsfrx Gauge Deposit"
+  },
+  "0x5C1d15E7e70Db682A4D3748361Bc1Da7D494d5Ed": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5C5480A5C90EAcb8f31028f0f0eA9a716d04028D": {
+    "approved_block": 19531215,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5C5db6CC20Cd2Ee600647FC48C1684c7049cdb7C": {
+    "approved_block": 19749552,
+    "lp_token": "0x9E641187391B7a5fE9ee193359408CA3894f68a2",
+    "name": "Curve.fi thUSDcrvUS Gauge Deposit"
+  },
+  "0x5Dd3e384621e00a9fe1868c257c03FA78AE24e47": {
+    "approved_block": 21769931,
+    "lp_token": "0x59a06b97b2d566B9Dee2a368EaC8787Cfa57f95D",
+    "name": "Curve.fi sUSDUSDe Gauge Deposit"
+  },
+  "0x5E54eB89fb1bA7F735C96a45e6641b362009b228": {
+    "approved_block": 24479729,
+    "lp_token": "0x57690E5287d36733664caa21fa2Dc48c156e962D",
+    "name": "Curve.fi OUSDpmUSD Gauge Deposit"
+  },
+  "0x5F24D595941De3ad7761844906f742a2e5C4F35F": {
+    "approved_block": 23377526,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5a0A8b16c8d54A80CAF121C2b9A143aA33DC56A2": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5a332717D779267B883A1bB1B5910494D73dd9C0": {
+    "approved_block": 24830591,
+    "lp_token": "0x31d563e7d382CD934014BeC8C6C931751E6b3a9a",
+    "name": "Curve.fi frxebUSD Gauge Deposit"
+  },
+  "0x5bbfa5AAf3fC821590de3EA707eB234bB1CE805E": {
+    "approved_block": 23132403,
+    "lp_token": "0x9804C30875127246AC92D72D5CDF0630aA356861",
+    "name": "Curve.fi YUSDUSDC Gauge Deposit"
+  },
+  "0x5beC8A3C2d316a05FA231bDdDD23c7E24CB421a6": {
+    "approved_block": 24931593,
+    "lp_token": "0x96BCA2cea58A8e08E7da5C9D68b8aCBb28419d1d",
+    "name": "Curve.fi frxUSPC Gauge Deposit"
+  },
+  "0x5c07440a172805d566Faf7eBAf16EF068aC05f43": {
+    "approved_block": 17360054,
+    "lp_token": "0xCa978A0528116DDA3cbA9ACD3e68bc6191CA53D0",
+    "name": "Curve.fi crvUSDUSDP-f Gauge Deposit"
+  },
+  "0x5c2f5DE79dad6Db83C14F68c4240D629aA4714aa": {
+    "approved_block": 22828451,
+    "lp_token": "0x8e6f84d924CB70b67A3872f9CA4f99C851dc7D48",
+    "name": "Curve.fi ynETHx/YND Gauge Deposit"
+  },
+  "0x5cE55D41D5E67F42Ad0283E7dB049f820f93Ee73": {
+    "approved_block": 24383675,
+    "lp_token": "0x6dD7522c83ecd5d67F8eaF11A973219C6A9f7493",
+    "name": "Curve.fi frxtmvUSDC Gauge Deposit"
+  },
+  "0x5cc0144A511807608eF644c9e99B486124D1cFd6": {
+    "approved_block": 19050282,
+    "lp_token": null,
+    "name": null
+  },
+  "0x5ccDe4BEC0F4006c3826b51EDF0D227D12EA33FA": {
+    "approved_block": 18663294,
+    "lp_token": "0xC7DE47b9Ca2Fc753D6a2F167D8b3e19c6D18b19a",
+    "name": "Curve.fi crvDBRINV Gauge Deposit"
+  },
+  "0x5d552497f8fE3317565Ee76bCc57fAd80c70A911": {
+    "approved_block": 19386037,
+    "lp_token": "0xd6982da59F1D26476E259559508f4135135cf9b8",
+    "name": "Curve.fi fxUSDpyUSD Gauge Deposit"
+  },
+  "0x5eb3Be5E9782C2f5D70B5615B24f4bB3094a3536": {
+    "approved_block": 24966432,
+    "lp_token": "0xD83C937113A2560b2c0DA4a140f31bAC61f2b798",
+    "name": "Curve.fi frxUSDat Gauge Deposit"
+  },
+  "0x5f626c30EC1215f4EdCc9982265E8b1F411D1352": {
+    "approved_block": 11056275,
+    "lp_token": "0x1AEf73d49Dedc4b1778d0706583995958Dc862e6",
+    "name": null
+  },
+  "0x5fDdB41cF566F6305293B2c9ad0fAf70dEAF7992": {
+    "approved_block": 17386860,
+    "lp_token": "0x96AAE323E111A19b1E0e26F55e8De21F1dD01f26",
+    "name": "Curve.fi sdANGLElp-f Gauge Deposit"
+  },
+  "0x602031C704f3c598e2384d61A010C89a8CE56f26": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x60355587a8D4aa67c2E64060Ab36e566B9bCC000": {
+    "approved_block": 14256261,
+    "lp_token": "0x6359B6d3e327c497453d4376561eE276c6933323",
+    "name": "Curve.fi SDTETH-f Gauge Deposit"
+  },
+  "0x60483b4792A17c980A275449caF848084231543C": {
+    "approved_block": 22631421,
+    "lp_token": "0x1220868672D5B10F3E1cB9Ab519E4d0B08545ea4",
+    "name": "Curve.fi lvlUSDUSDC Gauge Deposit"
+  },
+  "0x6070fBD4E608ee5391189E7205d70cc4A274c017": {
+    "approved_block": 13992792,
+    "lp_token": "0xCb08717451aaE9EF950a2524E33B6DCaBA60147B",
+    "name": "Curve.fi crvTETH Gauge Deposit"
+  },
+  "0x60bF324fecc663D5674EB0b7ACa8A3f15c83d667": {
+    "approved_block": 24931586,
+    "lp_token": "0x16D4d64f2b7299E57a6443a42197F71139737ECa",
+    "name": "Curve.fi froywstETH Gauge Deposit"
+  },
+  "0x60d3d7eBBC44Dc810A743703184f062d00e6dB7e": {
+    "approved_block": 17559300,
+    "lp_token": "0x2889302a794dA87fBF1D6Db415C1492194663D13",
+    "name": "Curve.fi crvCRVUSDTBTCWSTETH Gauge Deposit"
+  },
+  "0x6112c228862A92817c26D1359AF849602BCC39FD": {
+    "approved_block": 24370268,
+    "lp_token": "0xc8bDf6239614658Ed3416bc3D870b0Ed7064592C",
+    "name": "Curve.fi OUSDUSDG Gauge Deposit"
+  },
+  "0x62378611c634724F740e5Dc5e7C64B34E7d57423": {
+    "approved_block": 23347484,
+    "lp_token": null,
+    "name": null
+  },
+  "0x62B8DA8f1546a092500c457452fC2d45fa1777c4": {
+    "approved_block": 18436816,
+    "lp_token": "0xfEF79304C80A694dFd9e603D624567D470e1a0e7",
+    "name": "Curve.fi crvsFRAX-f Gauge Deposit"
+  },
+  "0x62c9d3561b42023576ca44AE54b63B9124C471b8": {
+    "approved_block": 19329093,
+    "lp_token": "0xC236BAE6e35b3Fb7335e1c35CA0862Ce92bd5DE3",
+    "name": "Curve.fi MKULTRA Gauge Deposit"
+  },
+  "0x62cd06CDe87190Fe66AA808a9a09FEc7eDd1cF24": {
+    "approved_block": 24343020,
+    "lp_token": "0xf76329c6dc10FdfbEe6CA520d0BF4d474E95E46E",
+    "name": "Curve.fi av/frxUSD Gauge Deposit"
+  },
+  "0x63037a4e3305d25D48BAED2022b8462b2807351c": {
+    "approved_block": 18705257,
+    "lp_token": "0xe080027Bd47353b5D1639772b4a75E9Ed3658A0d",
+    "name": "Curve.fi osETH-rETH Gauge Deposit"
+  },
+  "0x6339eF8Df0C2d3d3E7eE697E241666a916B81587": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6373E119F2A1Fd081249BC16FE7FEA1F6b3A4Ca8": {
+    "approved_block": 19078562,
+    "lp_token": "0x8Cd52ee292313C4D851e71A7064F096504aB3eE9",
+    "name": "Curve.fi GHOBTCwstE Gauge Deposit"
+  },
+  "0x63A4f929b93A8859098622dE821159695a55030A": {
+    "approved_block": 19265303,
+    "lp_token": null,
+    "name": null
+  },
+  "0x63DC752E11D4c9D0f2160DA20EdF2111FECB0a66": {
+    "approved_block": 19218008,
+    "lp_token": "0xC6628f00F29cc89a87BBeE7554C4725611200fD7",
+    "name": "Curve.fi cvgSDTSDT Gauge Deposit"
+  },
+  "0x63d9f3aB7d0c528797A12a0684E50C397E9e79dC": {
+    "approved_block": 13172362,
+    "lp_token": "0xD6Ac1CB9019137a896343Da59dDE6d097F710538",
+    "name": "Curve.fi ibGBP+sGBP-f Gauge Deposit"
+  },
+  "0x63f30b3f61e9F123a0051B183BB7489EB537E131": {
+    "approved_block": 21832970,
+    "lp_token": "0x9353976A6B6E7A9e1E9B1F2aaaBA629aD310947f",
+    "name": "Curve.fi sDOLA yUSD Gauge Deposit"
+  },
+  "0x64100c172D5DC8007E3ee701ECD99468619B6583": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0x64E3C23bfc40722d3B649844055F1D51c1ac041d": {
+    "approved_block": 10647925,
+    "lp_token": "0xD905e2eaeBe188fc92179b6350807D8bd91Db0D8",
+    "name": null
+  },
+  "0x65252086B98ea5d24CDEAe9f5ed12B2EfeE2A061": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x65415Bd1F00656c5A84f445278Cd195426DE66D5": {
+    "approved_block": 16514010,
+    "lp_token": "0x27f715999252a6E4d4794b4c9ff2Ce3D6ea8Fd9B",
+    "name": "Curve.fi pETHfrxETH-f Gauge Deposit"
+  },
+  "0x6579758e9E85434450D638cFBEA0F2fe79856ddA": {
+    "approved_block": 20071026,
+    "lp_token": "0xcCCD572B22dee28479B11DD99589a1e4c0682a7E",
+    "name": "Curve.fi ETHFIweETH Gauge Deposit"
+  },
+  "0x65CA7Dc5CB661fC58De57B1E1aF404649a27AD35": {
+    "approved_block": 13590633,
+    "lp_token": "0x3D229E1B4faab62F621eF2F6A610961f7BD7b23B",
+    "name": "Curve.fi crvEURSUSDC Gauge Deposit"
+  },
+  "0x65cdB05be7d84C832d635da6F3D75ad440c7aA21": {
+    "approved_block": 23419403,
+    "lp_token": "0x0589AAa58d55D1A91745a8364Ac1Bb3303a235E7",
+    "name": "Curve.fi xETHynETHx Gauge Deposit"
+  },
+  "0x6616CCfA456F72104452341fa470E9B08A11b1aB": {
+    "approved_block": 18087431,
+    "lp_token": null,
+    "name": null
+  },
+  "0x663FC22e92f26C377Ddf3C859b560C4732ee639a": {
+    "approved_block": 14742933,
+    "lp_token": "0xf7b55C3732aD8b2c2dA7c24f30A69f55c54FB717",
+    "name": "Curve.fi sdCRVCRV-f Gauge Deposit"
+  },
+  "0x6650B53d32FeC5967A55449aEd2dBa55A5b10a7b": {
+    "approved_block": 19527676,
+    "lp_token": "0xDB81ee37b9dd2E636e2B87023029bD7F07c045b3",
+    "name": "Curve.fi rev crvUSD Gauge Deposit"
+  },
+  "0x66915f81deaFcFbA171aEaa914c76A607437Dd4a": {
+    "approved_block": 16929585,
+    "lp_token": "0xfBB481A443382416357fA81F16dB5A725DC6ceC8",
+    "name": "Curve.fi cvxFpis-f Gauge Deposit"
+  },
+  "0x66EFd8E255B8B7Cf32961E90A5820f289402629e": {
+    "approved_block": 19364613,
+    "lp_token": null,
+    "name": null
+  },
+  "0x66F65323bdE835B109A92045Aa7c655559dbf863": {
+    "approved_block": 18121758,
+    "lp_token": "0x9978c6B08d28d3B74437c917c5dD7C026df9d55C",
+    "name": "Curve.fi LUSDcrvUSD-f Gauge Deposit"
+  },
+  "0x66ec719045bBD62db5eBB11184c18237D3Cc2E62": {
+    "approved_block": 13810759,
+    "lp_token": "0x6BA5b4e438FA0aAf7C1bD179285aF65d13bD3D90",
+    "name": "Curve.fi RAI3CRV Gauge Deposit"
+  },
+  "0x6729C5B5d08A141eA9c2B0C79726333A5bc399A8": {
+    "approved_block": 19265298,
+    "lp_token": null,
+    "name": null
+  },
+  "0x681EE77c66C43b80298c6Cc5a1611e69293daB81": {
+    "approved_block": 16729002,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6828bcF74279eE32f2723eC536c22c51Eed383C6": {
+    "approved_block": 11101482,
+    "lp_token": "0x64eda51d3Ad40D56b9dFc5554E06F94e1Dd786Fd",
+    "name": null
+  },
+  "0x688Eb2C49D352c9448049A2263CFcE63D0918d3e": {
+    "approved_block": 17423342,
+    "lp_token": "0x7C0d189E1FecB124487226dCbA3748bD758F98E4",
+    "name": "Curve.fi dETHfrxETH-f Gauge Deposit"
+  },
+  "0x68d11cdc980EDd8dF5B0e9405a81e802fA30688c": {
+    "approved_block": 23155568,
+    "lp_token": "0x640Bc08845EA4bd89842D51D48c8f53EAC84Cfa6",
+    "name": "Curve.fi litsfrxUSD Gauge Deposit"
+  },
+  "0x6955a55416a06839309018A8B0cB72c4DDC11f15": {
+    "approved_block": 12647943,
+    "lp_token": "0xcA3d75aC011BF5aD07a98d02f18225F9bD9A6BDF",
+    "name": "Curve.fi crvTricrypto Gauge Deposit"
+  },
+  "0x696d31431E543Ffb36BE77DF95B73bAb95828233": {
+    "approved_block": 17727330,
+    "lp_token": "0xd82C2eB10F4895CABED6EDa6eeee234bd1A9838B",
+    "name": "Curve.fi ETHxWETH-f Gauge Deposit"
+  },
+  "0x696dbfe3B5861120B2c4b7d5c28B1325E8b232F4": {
+    "approved_block": 19544948,
+    "lp_token": "0x119806f0e93a213029b599D7bBAE50bD965C2cC4",
+    "name": "Curve.fi ZETACRVUSD Gauge Deposit"
+  },
+  "0x69Fb7c45726cfE2baDeE8317005d3F94bE838840": {
+    "approved_block": 10647919,
+    "lp_token": "0x3B3Ac5386837Dc563660FB6a0937DFAa5924333B",
+    "name": null
+  },
+  "0x6A2bEd64864bf2DdCeFdFE555BdEfBA24d82f887": {
+    "approved_block": 19154921,
+    "lp_token": "0xeb07FcD7A8627281845ba3aCbed24435802d4B52",
+    "name": "Curve.fi PUSd-3CRV3CRV-f Gauge Deposit"
+  },
+  "0x6A7b02338A0A7152e08f768c46D9Dd837c35C2df": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6Aba93E10147f86744bb9A50238d25F49eD4F342": {
+    "approved_block": 16425336,
+    "lp_token": "0x0AD66FeC8dB84F8A3365ADA04aB23ce607ac6E24",
+    "name": "Curve.fi pitchFXS-f Gauge Deposit"
+  },
+  "0x6B43af6A06Aa0d06C0Cc9c87A49f0F7d2E1CE044": {
+    "approved_block": 25029118,
+    "lp_token": "0x6865Be0D0da507EA57684cEe935cF22ea1d5A106",
+    "name": "Curve.fi OBUSD/USDC Gauge Deposit"
+  },
+  "0x6C09F6727113543Fd061a721da512B7eFCDD0267": {
+    "approved_block": 12785713,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6D787113F23bED1D5e1530402B3f364D0A6e5Af3": {
+    "approved_block": 16231227,
+    "lp_token": "0x051d7e5609917Bd9b73f04BAc0DED8Dd46a74301",
+    "name": "Curve.fi crvWSBTC Gauge Deposit"
+  },
+  "0x6D8bc3Cfbd1b62F3Fb0E5517eBcA283Af1185576": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6DC311B6633989e790783AE9cB4bD88948aF9E0E": {
+    "approved_block": 19544946,
+    "lp_token": "0x277FA53c8a53C880E0625c92C92a62a9F60f3f04",
+    "name": "Curve.fi FXNETH Gauge Deposit"
+  },
+  "0x6E9a99F8b3e22c3Ee81d888d7e29293E939B6f9C": {
+    "approved_block": 20377820,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6F98dA2D5098604239C07875C6B7Fd583BC520b9": {
+    "approved_block": 14567128,
+    "lp_token": "0x3a70DfA7d2262988064A2D051dd47521E43c9BdD",
+    "name": "Curve.fi BEAN3CRV-f Gauge Deposit"
+  },
+  "0x6a253c9fe5AaFF662e072Aa694CE53b917aDb278": {
+    "approved_block": 23676310,
+    "lp_token": "0x9A9e2e70919c75D80aAaA1D483c46CdBb8ac4d1b",
+    "name": "Curve.fi FrxMsUSD Gauge Deposit"
+  },
+  "0x6a69FfD1353Fa129f7F9932BB68Fa7bE88F3888A": {
+    "approved_block": 16231226,
+    "lp_token": "0x79E281BC69A03DaBCcD66858c65EF6724e50aebe",
+    "name": "Curve.fi sdYFIYFI-f Gauge Deposit"
+  },
+  "0x6a9d992c456e65d3b55203B71137c37De054d149": {
+    "approved_block": 19265303,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6b576eC4BEa85d861E154adAb6BFB142083C2076": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6b794C5e3188c2C8C1412DBF38Fd70e9b20446a7": {
+    "approved_block": 20965723,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6d10ed2cF043E6fcf51A0e7b4C2Af3Fa06695707": {
+    "approved_block": 11831181,
+    "lp_token": "0xaA17A236F2bAdc98DDc0Cf999AbB47D47Fc0A6Cf",
+    "name": "Curve.fi ankrCRV Gauge Deposit"
+  },
+  "0x6d3328F0333f6FB0B2FaC87cF5a0FFa7e77beB60": {
+    "approved_block": 14639217,
+    "lp_token": "0x4647B6D835f3B393C7A955df51EEfcf0db961606",
+    "name": "Curve.fi KP3RETH-f Gauge Deposit"
+  },
+  "0x6e69796d3d091f0Ef0266a96D6dC68E991381D56": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x6eb6B5915432c890dF1999a491A6929998634bAb": {
+    "approved_block": 21731786,
+    "lp_token": "0x82202CAEC5E6d85014eADC68D4912F3C90093e7C",
+    "name": "Curve.fi sdeUSDDOLA Gauge Deposit"
+  },
+  "0x6ffE8b9d815bC58E9Dca24E91AbAA8A91f336d16": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x705350c4BcD35c9441419DdD5d2f097d7a55410F": {
+    "approved_block": 10647947,
+    "lp_token": "0x075b1bb99792c9E1041bA13afEf80C91a1e70fB3",
+    "name": null
+  },
+  "0x705969Ff5eC6ccB89330c07Dde9145D92b022ABe": {
+    "approved_block": 20490367,
+    "lp_token": null,
+    "name": null
+  },
+  "0x70e60Cbb7762EF1861d2016447b39DA67931ce1b": {
+    "approved_block": 19571207,
+    "lp_token": "0x7c6ba632F9C27C68350bfd24d67d8f599209C953",
+    "name": "Curve.fi rev mkUSD Gauge Deposit"
+  },
+  "0x70e80e0adA57AF6A6040132FFb6cA3E5aDF87b9F": {
+    "approved_block": 21897644,
+    "lp_token": "0xbEB1336C523Ca3Bd0408f1F8A7Aeb0a6305B3157",
+    "name": "Curve.fi ynETHxOETH Gauge Deposit"
+  },
+  "0x710d677830f7D7337C428ABf0E368e09B7B5Ce6A": {
+    "approved_block": 17627538,
+    "lp_token": "0x6663b6D50992ef4fc0380199397c87C2f5256075",
+    "name": "Curve.fi ALDETH-f Gauge Deposit"
+  },
+  "0x71873000399dB5FDDcD8d953E0e6570a0cb4c50C": {
+    "approved_block": 17751510,
+    "lp_token": "0x1982Fe483f4bff067A2183c98fA231423d41E92B",
+    "name": "Curve.fi crvUSDMAI-f Gauge Deposit"
+  },
+  "0x718Fe7ab113c2e02B61d947B80b6fA0C434ba60b": {
+    "approved_block": 21834070,
+    "lp_token": null,
+    "name": null
+  },
+  "0x71D97aEEEfe4715E05354D009B8B7a77c325CC2d": {
+    "approved_block": 20419786,
+    "lp_token": null,
+    "name": null
+  },
+  "0x721cAc0F4715A29aCD76752408636e8A49222C11": {
+    "approved_block": 19068406,
+    "lp_token": null,
+    "name": null
+  },
+  "0x724476f141ED2DE4DA22eBDF435905dEf1118317": {
+    "approved_block": 18314265,
+    "lp_token": "0x1062FD8eD633c1f080754c19317cb3912810B5e5",
+    "name": "Curve.fi cvxfxn-fxn-f Gauge Deposit"
+  },
+  "0x7292AfC5d77F988c873ca18F73CD96636c4Ac145": {
+    "approved_block": 17386860,
+    "lp_token": "0x852b90239C5034b5bb7a5e54eF1bEF3Ce3359CC8",
+    "name": "Curve.fi sdYFIpool-f Gauge Deposit"
+  },
+  "0x72Bd89F2E3470fA5d188cF04eda17E8145eb4BF1": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0x72D36D0EAd377425BD6DB66Fe334a42fdCebff28": {
+    "approved_block": 15707244,
+    "lp_token": "0x7483Dd57f6488b0e194A151C57Df6Ec85C00aCE9",
+    "name": "Curve.fi BTRFLYETH-f Gauge Deposit"
+  },
+  "0x72E158d38dbd50A483501c24f792bDAAA3e7D55C": {
+    "approved_block": 12328617,
+    "lp_token": "0xd632f22692FaC7611d2AA1C0D552930D43CAEd3B",
+    "name": "Curve.fi FRAX3CRV-f Gauge Deposit"
+  },
+  "0x72a70517839a5560Dba1476ca345994Ef6e75E0F": {
+    "approved_block": 23897505,
+    "lp_token": null,
+    "name": null
+  },
+  "0x730Aa4A461FED92EC0e74b0F68A8FdB1A09988B5": {
+    "approved_block": 23823033,
+    "lp_token": null,
+    "name": null
+  },
+  "0x737147590e5BeF2D99F47A4714950B2FaB3B7a56": {
+    "approved_block": 23654360,
+    "lp_token": null,
+    "name": null
+  },
+  "0x73f6D184c039AE7C56c9bfE07658a1b62e6B5298": {
+    "approved_block": 23370169,
+    "lp_token": null,
+    "name": null
+  },
+  "0x740BA8aa0052E07b925908B380248cb03f3DE5cB": {
+    "approved_block": 15175858,
+    "lp_token": "0xB30dA2376F63De30b42dC055C93fa474F31330A5",
+    "name": "Curve.fi alUSDFRAXB3CRV-f Gauge Deposit"
+  },
+  "0x74231E4d96498A30FCEaf9aACCAbBD79339Ecd7f": {
+    "approved_block": 21647778,
+    "lp_token": "0x37715D41Ee0AF05E77ad3a434a11bbFF473eFe41",
+    "name": "Curve.fi OUSD/USDT Gauge Deposit"
+  },
+  "0x74770838d86Fe45cc86c1EDb22089DEC349d8210": {
+    "approved_block": 18662922,
+    "lp_token": "0xF980B4A4194694913Af231De69AB4593f5E0fCDc",
+    "name": "Curve.fi mkUSDUSDC Gauge Deposit"
+  },
+  "0x75D05190f35567e79012c2F0a02330D3Ed8a1F74": {
+    "approved_block": 13410019,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7611DDC8b5029184f900a5a1Dca5C1610684F71e": {
+    "approved_block": 20490380,
+    "lp_token": null,
+    "name": null
+  },
+  "0x761B4888Af16536D1Da9f5aFcFB6507E01DE521B": {
+    "approved_block": 18825451,
+    "lp_token": null,
+    "name": null
+  },
+  "0x762648808EF8B25C6D92270b1C84Ec97dF3bED6B": {
+    "approved_block": 15934234,
+    "lp_token": "0x23E7817bC73645063FB2fa85c1d098EfFE84bE90",
+    "name": "Curve.fi JPEGpETH-f Gauge Deposit"
+  },
+  "0x7671299eA7B4bbE4f3fD305A994e6443b4be680E": {
+    "approved_block": 18108443,
+    "lp_token": "0x59Ab5a5b5d617E478a2479B0cAD80DA7e2831492",
+    "name": "Curve.fi ethx-f Gauge Deposit"
+  },
+  "0x76f236A0Cc1C90425D8Ab5F042970454311482AB": {
+    "approved_block": 20047537,
+    "lp_token": "0x57064F49Ad7123C92560882a45518374ad982e85",
+    "name": "Curve.fi crvU-sUSDe Gauge Deposit"
+  },
+  "0x7738Ca93E0a122d3e66Bb4e863f1572958F2c150": {
+    "approved_block": 24343646,
+    "lp_token": "0xCF8A5C32953D08C197f0A92676CFb59314b5c62e",
+    "name": "Curve.fi OUSDeUSD Gauge Deposit"
+  },
+  "0x77ef5D544FF6C739E7E10a549f64Dd08055538d1": {
+    "approved_block": 17030212,
+    "lp_token": "0x663aC72a1c3E1C4186CD3dCb184f216291F4878C",
+    "name": "Curve.fi s-frxETH-f Gauge Deposit"
+  },
+  "0x784342E983E9283A7108F20FcA21995534b3fE65": {
+    "approved_block": 14445806,
+    "lp_token": "0x2302aaBe69e6E7A1b0Aa23aAC68fcCB8A4D2B460",
+    "name": "Curve.fi silofrax-f Gauge Deposit"
+  },
+  "0x7845031a8327885c5f14e0473dbbd5aD38C8c8BC": {
+    "approved_block": 18602136,
+    "lp_token": "0x4AE86d8732390d852A13cb918463BC6e5775FaDD",
+    "name": "Curve.fi frxETHIQ-f Gauge Deposit"
+  },
+  "0x7850654012af870590b3d6aF84c538E9667B0D19": {
+    "approved_block": 21432819,
+    "lp_token": "0x432c5AdfB430238F46723B8DFc3B63097c0B38a2",
+    "name": "Curve.fi sDOLA/USDz Gauge Deposit"
+  },
+  "0x785dFF4aD2b6e55D150D335B46D567D854053dC8": {
+    "approved_block": 17386860,
+    "lp_token": "0x26f3f26F46cBeE59d1F8860865e13Aa39e36A8c0",
+    "name": "Curve.fi sdPENDLElp-f Gauge Deposit"
+  },
+  "0x7970489a543FB237ABab63d62524d8A5CE165B86": {
+    "approved_block": 16426637,
+    "lp_token": "0xF9078Fb962A7D13F55d40d49C8AA6472aBD1A5a6",
+    "name": "Curve.fi clevCVX-f Gauge Deposit"
+  },
+  "0x79F21BC30632cd40d2aF8134B469a0EB4C9574AA": {
+    "approved_block": 17328635,
+    "lp_token": "0x21E27a5E5513D6e65C4f830167390997aA84843a",
+    "name": "Curve.fi stETH-ng-f Gauge Deposit"
+  },
+  "0x79F73A29DBaE30B79c00787f594A6C8f64cAD242": {
+    "approved_block": 24019209,
+    "lp_token": "0x90455bd11Ce8a67C57d467e634Dc142b8e4105Aa",
+    "name": "Curve.fi cUSDOUSDC Gauge Deposit"
+  },
+  "0x79edc58C471Acf2244B8f93d6f425fD06A439407": {
+    "approved_block": 18130108,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7A49C6ca4e03185F82004d2d7b40fa8B7Bad8ba4": {
+    "approved_block": 20377811,
+    "lp_token": "0xe14096296Fdb49EF2F7Bc4141631dc547E9b25B3",
+    "name": "Curve.fi USD3eUSD Gauge Deposit"
+  },
+  "0x7AE49935b8BC11023e5b04d86a44055f999fca31": {
+    "approved_block": 18965885,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7B6c14cCCA515D6d1f234054254bdcED56ac173E": {
+    "approved_block": 20335144,
+    "lp_token": "0xE4251b067C541f12C5032198884306b66122e44e",
+    "name": "Curve.fi dgnETHETH+ Gauge Deposit"
+  },
+  "0x7B7CBa43df4295C468969b737523C2b09364FeA4": {
+    "approved_block": 18764287,
+    "lp_token": "0xf8D390F23b06D420daa629d3B6A9A24BD27c1eF3",
+    "name": "Curve.fi PYUSDUSDC Gauge Deposit"
+  },
+  "0x7C634909DDbfd5C6EEd7Ccf3611e8C4f3643635d": {
+    "approved_block": 20471956,
+    "lp_token": "0x88DFb9370fE350aA51ADE31C32549d4d3A24fAf2",
+    "name": "Curve.fi deUSDFRAX Gauge Deposit"
+  },
+  "0x7D6b0D7e8F5E78c0890F9e512eD70F57fd225cac": {
+    "approved_block": 23383815,
+    "lp_token": "0xB5571E76693ba60110B5811DD650FFefce1C955f",
+    "name": "Curve.fi MUSD/2pool Gauge Deposit"
+  },
+  "0x7E1444BA99dcdFfE8fBdb42C02F0005D14f13BE1": {
+    "approved_block": 13829509,
+    "lp_token": "0x3A283D9c08E8b55966afb64C515f5143cf907611",
+    "name": "Curve.fi crvCVXETH Gauge Deposit"
+  },
+  "0x7bA1e40dAe22847E6c521bA297d40fF1c5fD97dd": {
+    "approved_block": 20071025,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7ca5b0a2910B33e9759DC7dDB0413949071D7575": {
+    "approved_block": 10647899,
+    "lp_token": "0x845838DF265Dcd2c412A1Dc9e959c7d08537f8a2",
+    "name": null
+  },
+  "0x7ce8aF75A9180B602445bE230860DDcb4cAc3E42": {
+    "approved_block": 19050282,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7d4ee86e7d1f9604A968cCbea0E91616fA33555c": {
+    "approved_block": 18989906,
+    "lp_token": "0x525e99f743EE495F3b032baa737BC590dc1C85b5",
+    "name": "Curve.fi WBETHSTETH Gauge Deposit"
+  },
+  "0x7dCB252f7Ea2B8dA6fA59C79EdF63f793C8b63b6": {
+    "approved_block": 19851141,
+    "lp_token": "0xccd37EB6374Ae5b1f0b85ac97eFf14770e0D0063",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x7e66486D9Af4c208E0C9196244A79bf25c429802": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0x7eE263b3676A8cbaAa030f139238C573Dc52FbF4": {
+    "approved_block": 22135203,
+    "lp_token": "0x080A4941aad94dDC19C2fEd604D55109119b5774",
+    "name": "Curve.fi ELX-stELX Gauge Deposit"
+  },
+  "0x8014083AD9A7e8e78bd2f5f2A5419E0a28d94369": {
+    "approved_block": 18396352,
+    "lp_token": "0x680f8abdA81B4db9219665EeAB814785Bf8AcEc6",
+    "name": "Curve.fi frxETHJPEG-f Gauge Deposit"
+  },
+  "0x805Aef679B1379Ee1d24c52158E7F56098D199D9": {
+    "approved_block": 16046939,
+    "lp_token": "0x893DA8A02b487FEF2F7e3F35DF49d7625aE549a3",
+    "name": "Curve.fi sdtfraxbp-f Gauge Deposit"
+  },
+  "0x8101E6760130be2C8Ace79643AB73500571b7162": {
+    "approved_block": 11831181,
+    "lp_token": "0x571FF5b7b346F706aa48d696a9a4a288e9Bb4091",
+    "name": "Curve.fi cy3CRV Gauge Deposit"
+  },
+  "0x8133e6B0B2420bBa10574A6668ea275f5E7Ed253": {
+    "approved_block": 16479002,
+    "lp_token": "0x9de1c3D446237ab9BaFF74127eb4F303802a2683",
+    "name": "Curve.fi STG/FRAXBP-f Gauge Deposit"
+  },
+  "0x81d837437fD18736ffD3B5C9A5a2aA835c7637e7": {
+    "approved_block": 24093022,
+    "lp_token": "0xBf5047039F2980C21eB5692c790BAd8A9533b900",
+    "name": "Curve.fi pmfrxUSD Gauge Deposit"
+  },
+  "0x82049b520cAc8b05E703bb35d1691B5005A92848": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x821529Bb07c83803C9CC7763e5974386e9eFEdC7": {
+    "approved_block": 17030212,
+    "lp_token": "0x4d9f9D15101EEC665F77210cB999639f760F831E",
+    "name": "Curve.fi st-frxETH-f Gauge Deposit"
+  },
+  "0x82195f78C313540E0363736b8320A256A019F7DD": {
+    "approved_block": 19544945,
+    "lp_token": "0x52096539ed1391CB50C6b9e4Fd18aFd2438ED23b",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x824F13f1a2F29cFEEa81154b46C0fc820677A637": {
+    "approved_block": 12512230,
+    "lp_token": "0x53a901d48795C58f485cBB38df08FA96a24669D5",
+    "name": "Curve.fi rCRV Gauge Deposit"
+  },
+  "0x827B8F142A54cC901A626911f4934a75a292f687": {
+    "approved_block": 19043733,
+    "lp_token": "0x5005e71f10d006B087F5dEb48f24480824D3A80B",
+    "name": "Curve.fi weETHswETH Gauge Deposit"
+  },
+  "0x82EDd50A204D86D90deF4deDc4671E9A21145d5E": {
+    "approved_block": 16584417,
+    "lp_token": null,
+    "name": null
+  },
+  "0x834C459BF7D7a9209849bDCd2AF84FEE11e14dC5": {
+    "approved_block": 16085780,
+    "lp_token": "0xA500Cd4E520682e1B1113e1055D55bAceAD61122",
+    "name": "Curve.fi cusdfraxbp3CRV-f Gauge Deposit"
+  },
+  "0x839d92046F1e62A51A2b5705ecaE41DF152545ec": {
+    "approved_block": 18022141,
+    "lp_token": "0xDA68f66fC0f10Ee61048E70106Df4BDB26bAF595",
+    "name": "Curve.fi JPEGpETH-f Gauge Deposit"
+  },
+  "0x83b4aA4C6798ED0F1EeE704B03D67216CaBeeC48": {
+    "approved_block": 21832969,
+    "lp_token": null,
+    "name": null
+  },
+  "0x83f12B0506a115E610c3e76292885192731e9b53": {
+    "approved_block": 24422455,
+    "lp_token": "0x1Edd809Bc939dc80630Cd9F7aeA2247A83440fe5",
+    "name": "Curve.fi alUSDUSDC Gauge Deposit"
+  },
+  "0x84275625A1BFaeC7DFDe91f987f10352624547A7": {
+    "approved_block": 23419393,
+    "lp_token": "0xe8CFa3d4Ef1Ccbd86D40263adcF8789DC500DE2c",
+    "name": "Curve.fi Lit Sky Gauge Deposit"
+  },
+  "0x84Ef03eaA31eC36b1C6e6fC4ED355da25183348b": {
+    "approved_block": 18602230,
+    "lp_token": "0x76Ae7A7DC125E4163a2137e650b7726231FdB917",
+    "name": "Curve.fi USDV3crv Gauge Deposit"
+  },
+  "0x84fDE24a1694B5CD955d792A5022D6B2d83c2873": {
+    "approved_block": 22340671,
+    "lp_token": null,
+    "name": null
+  },
+  "0x856DBb19e0ce8368ab242f96FD424CE63060Cab0": {
+    "approved_block": 20512780,
+    "lp_token": "0x5bA541585D6297B756F08B7c61a7E37752123B4F",
+    "name": "Curve.fi dgnETHETH+ Gauge Deposit"
+  },
+  "0x8584d7F7bf9803d45e8df75Afe824f1Ae83C6256": {
+    "approved_block": 18215948,
+    "lp_token": "0xfa0BBB0A5815F6648241C9221027b70914dd8949",
+    "name": "Curve.fi frxETHOETH-f Gauge Deposit"
+  },
+  "0x8594C471ce7419F4Afb925739B2015E8C7Bb20A0": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8596721b74d92196E19c5Cb57cf7A46ADbf2b32a": {
+    "approved_block": 21517555,
+    "lp_token": null,
+    "name": null
+  },
+  "0x85Ce5eBeEbd253adbc21ab9289FDA8E2387BCcA2": {
+    "approved_block": 19571212,
+    "lp_token": "0x627c22bD39C69e65F749F6307430da881709941c",
+    "name": "Curve.fi rev FRAX Gauge Deposit"
+  },
+  "0x85D44861D024CB7603Ba906F2Dc9569fC02083F6": {
+    "approved_block": 17424307,
+    "lp_token": "0x7F86Bf177Dd4F3494b841a37e810A34dD56c829B",
+    "name": "Curve.fi crvUSDCWBTCWETH Gauge Deposit"
+  },
+  "0x8605C1fDE3Bed25b4cdE604daEc1599644629159": {
+    "approved_block": 24370263,
+    "lp_token": "0xDbdc27b649239f9C5aFdc92e57c2601A0cE71a89",
+    "name": "Curve.fi OUSDUSDe Gauge Deposit"
+  },
+  "0x8605dc0C339a2e7e85EEA043bD29d42DA2c6D784": {
+    "approved_block": 16820654,
+    "lp_token": "0xAEda92e6A3B1028edc139A4ae56Ec881f3064D4F",
+    "name": "Curve.fi eUSD3CRV-f Gauge Deposit"
+  },
+  "0x861F9DdD354c820B0236a99C943d7fa564AbC967": {
+    "approved_block": 22648410,
+    "lp_token": "0xcBcD4d46FF017B90C0d1cDA1CbD20086b0901738",
+    "name": "Curve.fi crvOPEN Gauge Deposit"
+  },
+  "0x86611888764D7F1787aAF9697894Ab0F78aA616b": {
+    "approved_block": 22791014,
+    "lp_token": "0x78C579A2Dcfe10Ae8B3C888A583337Beb4D91733",
+    "name": "Curve.fi uniEfrxE Gauge Deposit"
+  },
+  "0x8682FA9C4b6495Ddf38643807Ca088eBE0d22b8B": {
+    "approved_block": 20016914,
+    "lp_token": "0x85847Ef522d78EfDBeC8Afb0045dC7D6982837c3",
+    "name": "Curve.fi PALETHV2 Gauge Deposit"
+  },
+  "0x86A79cEE2734E5357FF6B5495c4a30915921223a": {
+    "approved_block": 21210754,
+    "lp_token": null,
+    "name": null
+  },
+  "0x86CA30719bF5E6212628bf351d858fDB9903E7Cf": {
+    "approved_block": 22104940,
+    "lp_token": null,
+    "name": null
+  },
+  "0x86f8d7Ced9A8F5563C1198466968B02238E05917": {
+    "approved_block": 17030212,
+    "lp_token": "0xa8e14F03124Ea156A4fc416537c82ff91a647D50",
+    "name": "Curve.fi ankrfrxETH-f Gauge Deposit"
+  },
+  "0x875CE7e0565b4C8852CA2a9608F27B7213A90786": {
+    "approved_block": 16940211,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8771b3537e31774613F395566c6E43DEBFA6B54a": {
+    "approved_block": 17742008,
+    "lp_token": "0x4029f7DcBdF6059ed80DA6856526E7510D64fA21",
+    "name": "Curve.fi ETHxfrxETH-f Gauge Deposit"
+  },
+  "0x8796a5B0383fb08d8F0749864a4FA0B28F5532D7": {
+    "approved_block": 24079549,
+    "lp_token": null,
+    "name": null
+  },
+  "0x87F791090B09069b3F9c64E3be3cBBc0b45Fc9b6": {
+    "approved_block": 20032997,
+    "lp_token": "0x08BfA22bB3e024CDfEB3eca53c0cb93bF59c4147",
+    "name": "Curve.fi eUSDUSDC Gauge Deposit"
+  },
+  "0x88342AB58Ae18391F1e26A8287aB418B009322e6": {
+    "approved_block": 21131902,
+    "lp_token": "0x6fBc5Ddc181240Cb1d9bcEc6Fdea429036818035",
+    "name": "Curve.fi zunBTCtBTC Gauge Deposit"
+  },
+  "0x8882eB84d0c4894753C0450f2D514E39883c0C82": {
+    "approved_block": 19625854,
+    "lp_token": null,
+    "name": null
+  },
+  "0x89289DC2192914a9F0674f1E9A17C56456549b8A": {
+    "approved_block": 18087427,
+    "lp_token": null,
+    "name": null
+  },
+  "0x89664D561E79Ca22Fd2eA4076b3e5deF0b219C15": {
+    "approved_block": 14695118,
+    "lp_token": "0x8EE017541375F6Bcd802ba119bdDC94dad6911A1",
+    "name": "Curve.fi PUSd-3CRV-f Gauge Deposit"
+  },
+  "0x8966A85b414620ef460DeEaCD821c30c442C433F": {
+    "approved_block": 21293231,
+    "lp_token": "0x52036c9046247C3358c987A2389FFDe6Ef8564c9",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x8967997184Afb72341389c24A15406d971fD1d9c": {
+    "approved_block": 23424985,
+    "lp_token": "0x2b854e225d7282854819327D0CA5b8D8AA8CAaED",
+    "name": "Curve.fi DOLAfxSAVE Gauge Deposit"
+  },
+  "0x898e9fD99047DF6646D8B1eC84EEFc8637bD6982": {
+    "approved_block": 22703140,
+    "lp_token": "0xB1c189dfDe178FE9F90E72727837cC9289fB944F",
+    "name": "Curve.fi crvUSDVUSD Gauge Deposit"
+  },
+  "0x89b4AFFCD53503CE52090d868310212436d693f3": {
+    "approved_block": 19833002,
+    "lp_token": "0xb2B1458960E4d64716c8C472c114441A02fBA1De",
+    "name": "Curve.fi ZUNETHZUN Gauge Deposit"
+  },
+  "0x8A111B47B31bBa40C2F0D2f9a8Cf6B6C4B50114E": {
+    "approved_block": 19218006,
+    "lp_token": "0x421E13b4e805993A0d50aD8c6c47A4F693f04424",
+    "name": "Curve.fi CVGFRAXBP-f Gauge Deposit"
+  },
+  "0x8AD6F98184a0cb79887244b4E7e8beB1b4ba26D4": {
+    "approved_block": 20335139,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8B0aBcFC78a5c14520682FCD76A0E52B71126079": {
+    "approved_block": 21231618,
+    "lp_token": "0x8b83c4aA949254895507D09365229BC3a8c7f710",
+    "name": "Curve.fi DOLA-sUSDS Gauge Deposit"
+  },
+  "0x8B859fb47b6377a84B61D3891774De462560742C": {
+    "approved_block": 19276543,
+    "lp_token": "0x0f2F4D68308dB60d36268a602EF273421A227021",
+    "name": "Curve.fi uniETH ETH Gauge Deposit"
+  },
+  "0x8C84B88562cED07F84aF488CC45d434186d07B6e": {
+    "approved_block": 22383369,
+    "lp_token": "0xB5b93dde9D87563184d31F3b7f85dd58404E2ee0",
+    "name": "Curve.fi msETHOETH Gauge Deposit"
+  },
+  "0x8CBbe2b27c574B2F283853E3eDC20271D100c285": {
+    "approved_block": 21825960,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8D867BEf70C6733ff25Cc0D1caa8aA6c38B24817": {
+    "approved_block": 17820701,
+    "lp_token": "0x4eBdF703948ddCEA3B11f675B4D1Fba9d2414A14",
+    "name": "Curve.fi crvUSDETHCRV Gauge Deposit"
+  },
+  "0x8D9649e50A0d1da8E939f800fB926cdE8f18B47D": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8DfF75976F22db58D7c3Fd7b68d782238B0DbE30": {
+    "approved_block": 19298985,
+    "lp_token": "0x6685fcFCe05e7502bf9f0AA03B36025b09374726",
+    "name": "Curve.fi vETHETH Gauge Deposit"
+  },
+  "0x8E11046d5a05E123090726e88Bf66f977f27Bb6b": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8F4e42343AF1CBF4f364cE448252d801E3f73937": {
+    "approved_block": 24795434,
+    "lp_token": "0x552827613fEA5EaDa3871f83b2d407d50CB04116",
+    "name": "Curve.fi frxevaUSDT Gauge Deposit"
+  },
+  "0x8F4ecCfaa4B6B0042970baDE0E3e9F3bE272B55f": {
+    "approved_block": 19178703,
+    "lp_token": "0x982bcd444C9445c15CCe3eca506ef01E8348Fe5D",
+    "name": "Curve.fi ETH+pxETH-f Gauge Deposit"
+  },
+  "0x8Fa728F393588E8D8dD1ca397E9a710E53fA553a": {
+    "approved_block": 13608549,
+    "lp_token": "0xAA5A67c256e27A5d80712c51971408db3370927D",
+    "name": "Curve.fi DOLA3POOL3CRV-f Gauge Deposit"
+  },
+  "0x8aD7e0e6EDc61bC48ca0DD07f9021c249044eD30": {
+    "approved_block": 14308893,
+    "lp_token": "0x447Ddd4960d9fdBF6af9a790560d0AF76795CB08",
+    "name": "Curve.fi rETHwstETH-f Gauge Deposit"
+  },
+  "0x8b397084699Cc64E429F610F81Fac13bf061ef55": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8b87c8d75a620Df2271eD06B161de6cf811221b6": {
+    "approved_block": 18022143,
+    "lp_token": "0x1C5F80b6B68A9E1Ef25926EeE00b5255791b996B",
+    "name": "Curve.fi pETH-WETH-f Gauge Deposit"
+  },
+  "0x8c1DFF7B6c20240C31f4F5BdFbC09ec6fF788d7a": {
+    "approved_block": 17029873,
+    "lp_token": "0x8C88538688aca3b733aD08b12BEe4574c0C00907",
+    "name": "Curve.fi eCFXETH-f Gauge Deposit"
+  },
+  "0x8d1600015aE09eAaCaEd08531a03ecb8f2bD40fA": {
+    "approved_block": 20098293,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8d4Fc7cCB459722Fdc675BfBe6Fa52540bb70A4B": {
+    "approved_block": 20419789,
+    "lp_token": null,
+    "name": null
+  },
+  "0x8d5AF1F5DD3dC4B73e3A9Af682aDC3641FADE9a5": {
+    "approved_block": 17765168,
+    "lp_token": "0x3175f54A354C83e8ADe950c14FA3e32fc794c0Dc",
+    "name": "Curve.fi GRAIFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0x8dF6FdAe05C9405853dd4cF2809D5dc2b5E77b0C": {
+    "approved_block": 14704434,
+    "lp_token": "0x3660BD168494d61ffDac21E403d0F6356cF90fD7",
+    "name": "Curve.fi OHMETH-f Gauge Deposit"
+  },
+  "0x8df0b326AfE459589A521a583CC9dedE84E90812": {
+    "approved_block": 23681890,
+    "lp_token": "0x466eBB6eEeC7a3fd0628f6b05E53E848f9F3451F",
+    "name": "Curve.fi DBITWBTC Gauge Deposit"
+  },
+  "0x8f162742a7BCDb87EB52d83c687E43356055a68B": {
+    "approved_block": 15150839,
+    "lp_token": "0xdaDfD00A2bBEb1abc4936b1644a3033e1B653228",
+    "name": "Curve.fi xFraxTplLP-f Gauge Deposit"
+  },
+  "0x8f5e52BE9B7BDe850BA13e40284F63f14677058f": {
+    "approved_block": 21231617,
+    "lp_token": "0x744793B5110f6ca9cC7CDfe1CE16677c3Eb192ef",
+    "name": "Curve.fi DOLA-sUSDe Gauge Deposit"
+  },
+  "0x8f8E854EF0dc76D88D2e217D3c2653672d13b252": {
+    "approved_block": 19124962,
+    "lp_token": "0x3772ba91B46f456AE487CB0974040c861c045810",
+    "name": "Curve.fi rsETHsfrx Gauge Deposit"
+  },
+  "0x8feF1eFBa3DD222059f312E14CD3e03D0Bd2c0f1": {
+    "approved_block": 24802090,
+    "lp_token": null,
+    "name": null
+  },
+  "0x903dA6213a5A12B61c821598154EfAd98C3B20E4": {
+    "approved_block": 13157457,
+    "lp_token": "0x9D0464996170c6B9e75eED71c68B99dDEDf279e8",
+    "name": "Curve.fi cvxcrv-f Gauge Deposit"
+  },
+  "0x903ffab5fCd2a67875EE83525EcE7aa04B6ca05F": {
+    "approved_block": 19544947,
+    "lp_token": "0xF5a7906b41B858B66d3A7cBe167dF1fB43FfE977",
+    "name": "Curve.fi rev alUSD Gauge Deposit"
+  },
+  "0x9044E12fB1732f88ed0c93cfa5E9bB9bD2990cE5": {
+    "approved_block": 13277700,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9066247d78958bf20Ae34a35d8763eDdEb899cB1": {
+    "approved_block": 22182103,
+    "lp_token": "0xA4eDDFE4bA5143Ac17Fd6bC1E53de0384DF8C660",
+    "name": "Curve.fi AUSDUSDT Gauge Deposit"
+  },
+  "0x90B9a965dB81e787738A1cD6F8a3f7c6449B62F5": {
+    "approved_block": 17872075,
+    "lp_token": null,
+    "name": null
+  },
+  "0x90Bb609649E0451E5aD952683D64BD2d1f245840": {
+    "approved_block": 11512882,
+    "lp_token": "0x194eBd173F6cDacE046C53eACcE9B953F28411d1",
+    "name": "Curve.fi eursCRV Gauge Deposit"
+  },
+  "0x90EFD41e75360FFC7FD1d3C5Fc0e4f43E8BcD9BC": {
+    "approved_block": 19527674,
+    "lp_token": "0xdf9015472Ea23e3BeA6fbD6092915F9Ed6980a99",
+    "name": "Curve.fi revPool Gauge Deposit"
+  },
+  "0x90F1Cc006cB77492dE54C62B08cF7ccDB9dFd42d": {
+    "approved_block": 21977018,
+    "lp_token": null,
+    "name": null
+  },
+  "0x91C95Bb84AA561D93d165Ff24D0e54E6B006447C": {
+    "approved_block": 24208987,
+    "lp_token": "0x2C2A700766886290359ccf39Cb2173a39af1CEf9",
+    "name": "Curve.fi dsfrxUSD Gauge Deposit"
+  },
+  "0x91D0F7022edb620429B4F63D482fcfbb2cbE7F30": {
+    "approved_block": 22567034,
+    "lp_token": "0x01144442fba7aDccB5C9DC9cF33dd009D50A9e1D",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x92106DCFa053A8283213a062735649cbf0e718A2": {
+    "approved_block": 21791624,
+    "lp_token": null,
+    "name": null
+  },
+  "0x92219862F9F40fe27444e45a9554E824e8556A62": {
+    "approved_block": 22480182,
+    "lp_token": "0xc73B0328Bd40Ea35Aad34d0fDC1dBE64C4f9c59F",
+    "name": "Curve.fi tacETH Gauge Deposit"
+  },
+  "0x928961d0C4F6E8C683bd5695527D060f18d7d60b": {
+    "approved_block": 23572759,
+    "lp_token": "0x68d03Ed49800e92D7Aa8aB171424007e55Fd1F49",
+    "name": "Curve.fi frxUSDOUSD Gauge Deposit"
+  },
+  "0x92Acebc0a18B9aCdd67B2813F8B10c5992c7d78b": {
+    "approved_block": 23112075,
+    "lp_token": "0xc2FcdD48209DD383B1f2AC120b84b2A75EE18BD3",
+    "name": "Curve.fi RFRX-CRV Gauge Deposit"
+  },
+  "0x92C4a06209ec44919A7cfA62E11357Fe7E012090": {
+    "approved_block": 19424268,
+    "lp_token": "0xcA554E2e2948a211D4650Fe0F4E271f01f9cB5F1",
+    "name": "Curve.fi fxUSDmkUSD Gauge Deposit"
+  },
+  "0x92d956C1F89a2c71efEEB4Bac45d02016bdD2408": {
+    "approved_block": 22052733,
+    "lp_token": "0xB8ac7ce449Ed72FF61dE8043d67B507f9F523Fa2",
+    "name": "Curve.fi OGNETHUSD Gauge Deposit"
+  },
+  "0x93933FA992927284e9d508339153B31eb871e1f4": {
+    "approved_block": 18087425,
+    "lp_token": null,
+    "name": null
+  },
+  "0x93E00a383fE73AEAFf0643Cc8Ddd93e5f12a4e31": {
+    "approved_block": 20220557,
+    "lp_token": "0x50f627FA35D3C47D9A99F4E4cdf40C6E94679bf6",
+    "name": "Curve.fi ZUNPUFETH Gauge Deposit"
+  },
+  "0x941C2Acdb6B85574Ffc44419c2AA237a9e67be03": {
+    "approved_block": 16443556,
+    "lp_token": "0xc897b98272AA23714464Ea2A0Bd5180f1B8C0025",
+    "name": "Curve.fi msETH-ETH-f Gauge Deposit"
+  },
+  "0x9496Bb56aEdA8305A2EfF1814ec058795Ed6E16B": {
+    "approved_block": 21831487,
+    "lp_token": null,
+    "name": null
+  },
+  "0x94A5E05D66834c6C6961E199D34dA576679fC187": {
+    "approved_block": 14651443,
+    "lp_token": null,
+    "name": null
+  },
+  "0x94E4fd3747dCD100D333E896D7352C5FbCCF4cE7": {
+    "approved_block": 19373793,
+    "lp_token": "0x8fFC7b89412eFD0D17EDEa2018F6634eA4C2FCb2",
+    "name": "Curve.fi fxUSDcrvUS Gauge Deposit"
+  },
+  "0x95069889DF0BCdf15bc3182c1A4D6B20631F3B46": {
+    "approved_block": 14330215,
+    "lp_token": null,
+    "name": null
+  },
+  "0x95285Ea6fF14F80A2fD3989a6bAb993Bd6b5fA13": {
+    "approved_block": 15356995,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9562c4D2E06aAf85efC5367Fb4544ECeB788465E": {
+    "approved_block": 14418659,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9582C4ADACB3BCE56Fea3e590F05c3ca2fb9C477": {
+    "approved_block": 12512230,
+    "lp_token": "0x43b4FdFD4Ff969587185cDB6f0BD875c5Fc83f8c",
+    "name": "Curve.fi alUSD3CRV-f Gauge Deposit"
+  },
+  "0x95d16646311fDe101Eb9F897fE06AC881B7Db802": {
+    "approved_block": 14456533,
+    "lp_token": "0xdf55670e27bE5cDE7228dD0A6849181891c9ebA1",
+    "name": "Curve.fi STGUSDC-f Gauge Deposit"
+  },
+  "0x95f00391cB5EebCd190EB58728B4CE23DbFa6ac1": {
+    "approved_block": 17360061,
+    "lp_token": "0x4DEcE678ceceb27446b35C672dC7d61F30bAD69E",
+    "name": "Curve.fi crvUSDUSDC-f Gauge Deposit"
+  },
+  "0x960Eca61ec93c9c80C7Aa1Ac89a5d62C88b1e309": {
+    "approved_block": 21877035,
+    "lp_token": "0xF0909Ea2428bBBA587797D6874a3F611B31d907c",
+    "name": "Curve.fi ROMEUSDT Gauge Deposit"
+  },
+  "0x9614B0210357014Ba7e2C1fe5Ae35825bCCDD4D9": {
+    "approved_block": 23533072,
+    "lp_token": "0x77AF9A7Fe97855C64e55EAD43aBBB081c9D376c5",
+    "name": "Curve.fi USDGUSDL Gauge Deposit"
+  },
+  "0x96262F3510BcE613a68e804B811fe7BE758C9067": {
+    "approved_block": 24081087,
+    "lp_token": "0xd04E38dae7203F6Ab49238Ede14dF7a5Ba7da63e",
+    "name": "Curve.fi ynETH/ETHx Gauge Deposit"
+  },
+  "0x962F71A37Ccb6224de4DDbAfFd2d9EB7678c9a42": {
+    "approved_block": 23600120,
+    "lp_token": null,
+    "name": null
+  },
+  "0x96424E6b5eaafe0c3B36CA82068d574D44BE4e3c": {
+    "approved_block": 17413897,
+    "lp_token": "0x0CD6f267b2086bea681E922E19D40512511BE538",
+    "name": "Curve.fi crvUSDFRAX-f Gauge Deposit"
+  },
+  "0x9755e37A291a37d8a0AB0828699A59b445477514": {
+    "approved_block": 20434115,
+    "lp_token": "0x7956FAd09a1D1C47550331E7f06bF7c7B7C2aF08",
+    "name": "Curve.fi CVXafCVX Gauge Deposit"
+  },
+  "0x97826750c5B66EDce3Ce503783B5BE2938Ec6e5A": {
+    "approved_block": 20939856,
+    "lp_token": "0x8999EB39237DD9E3C184fb2f10780a95a34A14ef",
+    "name": "Curve.fi USD3USDM Gauge Deposit"
+  },
+  "0x978bA3517D1f0fFd8758b2E0D2187E7F63342421": {
+    "approved_block": 23933746,
+    "lp_token": "0x98b540fa89690969D111D045afCa575C91519B1A",
+    "name": "Curve.fi sdYBYB-LP Gauge Deposit"
+  },
+  "0x985ca600257BFc1adC2b630B8A7E2110b834A20e": {
+    "approved_block": 22427368,
+    "lp_token": "0x7E13876B92F1a62C599C231f783f682E96B91761",
+    "name": "Curve.fi stLINK-ng Gauge Deposit"
+  },
+  "0x98a6C35546be6F7c545c99EfB48F4673eD2c99fc": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0x98c05bb51B202d8EFEFaAe3Eb8D9eC6b497Dc8B0": {
+    "approved_block": 17413355,
+    "lp_token": "0x490217Ea1e69042A56716698d803DeABE8B9B148",
+    "name": "Curve.fi VCHFFRAXBP-f Gauge Deposit"
+  },
+  "0x98ff4EE7524c501F582C48b828277D2B42bbc894": {
+    "approved_block": 16644478,
+    "lp_token": "0x8109A51542294cDBB489AE5516f42FfBD92177aa",
+    "name": "Curve.fi OGVETH-f Gauge Deposit"
+  },
+  "0x9907faED132A7bdb1f0DfD98B19248BB4CA983CB": {
+    "approved_block": 18928652,
+    "lp_token": "0x787C520346AEDFd1BE2b413AEf30855daD636c3d",
+    "name": "Curve.fi crvUSDSTBT Gauge Deposit"
+  },
+  "0x99178264ec6b9de40689eE4F2f561cA3885a4BD2": {
+    "approved_block": 20490372,
+    "lp_token": null,
+    "name": null
+  },
+  "0x997997cE40963fe9D31019642d3A42f54406BEf6": {
+    "approved_block": 19671327,
+    "lp_token": null,
+    "name": null
+  },
+  "0x99fb76F75501039089AAC8f20f487bf84E51d76F": {
+    "approved_block": 13172367,
+    "lp_token": "0x19b080FE1ffA0553469D20Ca36219F17Fcf03859",
+    "name": "Curve.fi ibEUR+sEUR-f Gauge Deposit"
+  },
+  "0x9A3dCece0968b8a94AfF643C9c72127a2C1D80dc": {
+    "approved_block": 18527715,
+    "lp_token": "0xb34e1a3D07f9D180Bc2FDb9Fd90B8994423e33c1",
+    "name": "Curve.fi PRISMAETH-f Gauge Deposit"
+  },
+  "0x9AB99A323fc3244d89a049dD96Dc8f533283c36A": {
+    "approved_block": 21613694,
+    "lp_token": "0x5Fc50C99E175DFeB8Faa7613e050645583Ac1501",
+    "name": "Curve.fi inwstETHsC Gauge Deposit"
+  },
+  "0x9AF13a7B1f1Bbf1A2B05c6fBF23ac23A9E573b4E": {
+    "approved_block": 13361367,
+    "lp_token": "0x5B3b5DF2BF2B6543f78e053bD91C4Bdd820929f1",
+    "name": "Curve.fi USDM3CRV-f Gauge Deposit"
+  },
+  "0x9B4A97e79a5Dfec829f72c074bEdc78f6074f676": {
+    "approved_block": 21945573,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9B7BD68e32B29ce0669dAa9b4c4DCe44a9faB80C": {
+    "approved_block": 18928655,
+    "lp_token": "0xC55Bcf5370e67fbA281E2aac8937B4Ea71E7785F",
+    "name": "Curve.fi crvsDAI Gauge Deposit"
+  },
+  "0x9B8519A9a00100720CCdC8a120fBeD319cA47a14": {
+    "approved_block": 12328617,
+    "lp_token": "0xEd279fDD11cA84bEef15AF5D39BB4d4bEE23F0cA",
+    "name": "Curve.fi LUSD3CRV-f Gauge Deposit"
+  },
+  "0x9C798b022B014A37FCbF871b8DE42D63c7ccD7f9": {
+    "approved_block": 24192585,
+    "lp_token": "0x2E1776968EC75Bfd13dbC5B94AE57034d7e85Fb9",
+    "name": "Curve.fi savUSDUSDC Gauge Deposit"
+  },
+  "0x9CeD5fC96F6f28530BBBbBf34c3634De50b682b7": {
+    "approved_block": 18549936,
+    "lp_token": "0x9b77bd0a665F05995b68e36fC1053AFFfAf0d4B5",
+    "name": "Curve.fi mevETHfrxE-f Gauge Deposit"
+  },
+  "0x9E7641A394859860210203e6D9cb82044712421C": {
+    "approved_block": 21992009,
+    "lp_token": "0x8E3009b59200668e1efda0a2F2Ac42b24baa2982",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x9Ef2253b60337cCCeC1674E3CDbbCBB44148cfDD": {
+    "approved_block": 21322283,
+    "lp_token": "0x7f1D0f4Dbb906b2D8a7CED488B96Fcad7643E492",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0x9F86c5142369B1Ffd4223E5A2F2005FC66807894": {
+    "approved_block": 13277700,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9a002726d7B9D9Dc90d3277F7531FE15a31b47Df": {
+    "approved_block": 21131899,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9a356132605Ad599ABA34651aa2a606730bacaAa": {
+    "approved_block": 23378331,
+    "lp_token": "0xF292eB6c5dcb693Eaaf392D0562a01C3710E5978",
+    "name": "Curve.fi sfrxUSD2 Gauge Deposit"
+  },
+  "0x9bd94Af225D48e8334B5c549f5C90a3C2097E5B0": {
+    "approved_block": 22919302,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9c735e617050fA6849462299513633d87FbD3f05": {
+    "approved_block": 18549999,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9ccC509a5b4869bAC6BE86e79Ea00c25942852F4": {
+    "approved_block": 19529315,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9d4D981d8a9066f5db8532A5816543dE8819d4A8": {
+    "approved_block": 16666273,
+    "lp_token": "0x6c38cE8984a890F5e46e6dF6117C26b3F1EcfC9C",
+    "name": "Curve.fi rETH-f Gauge Deposit"
+  },
+  "0x9dC22Ca10BB8210C8788827204Da091eb6cA04a5": {
+    "approved_block": 17751512,
+    "lp_token": "0xA8a02c7D9ada50444F8c658F43Dc440675B21797",
+    "name": "Curve.fi crvUSDXAI-f Gauge Deposit"
+  },
+  "0x9da75997624C697444958aDeD6790bfCa96Af19A": {
+    "approved_block": 18880236,
+    "lp_token": "0x383E6b4437b59fff47B619CBA855CA29342A8559",
+    "name": "Curve.fi PYUSDUSDC Gauge Deposit"
+  },
+  "0x9f051B4aED6d675E9117cd1A2E6694D59f5d0492": {
+    "approved_block": 20335141,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9f330Db38caAAe5B61B410e2f0aaD63fff2109d8": {
+    "approved_block": 14747020,
+    "lp_token": "0x1005F7406f32a61BD760CfA14aCCd2737913d546",
+    "name": "Curve.fi 2CRV Gauge Deposit"
+  },
+  "0x9f57569EaA61d427dEEebac8D9546A745160391C": {
+    "approved_block": 15309111,
+    "lp_token": "0xe7A3b38c39F97E977723bd1239C3470702568e7B",
+    "name": "Curve.fi europool-f Gauge Deposit"
+  },
+  "0x9f71Acd539E41d9B82ab106F20fA94a7428804F7": {
+    "approved_block": 22476141,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9f94196491dC2cA9F8f4e8cc423487E6f25CE98F": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0x9fB7c82dAC1823a472def8B506EA70FDBfC3fC3F": {
+    "approved_block": 21128222,
+    "lp_token": "0x5378C23F4cF85FC28FDdea16153cf9213AefE9BE",
+    "name": "Curve.fi crvinstETH Gauge Deposit"
+  },
+  "0xA21043Df8d25DC876F38Bc5C7e54285F3e1a936b": {
+    "approved_block": 22141351,
+    "lp_token": "0x992B77179A5cF876bcD566FF4b3EAE6482012B90",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xA213dC6F411a7f2A6b029786611a35aC07d3e08E": {
+    "approved_block": 20369905,
+    "lp_token": "0x8655521A3B237872707B3eC001c4B8C991A63724",
+    "name": "Curve.fi solibcUSDT Gauge Deposit"
+  },
+  "0xA3FdAA1bBFfc799f3e7e5b49630818e6E151eB16": {
+    "approved_block": 24637058,
+    "lp_token": null,
+    "name": null
+  },
+  "0xA3bdC5EEfc8d8081E1638B55a39656a6D1E7B611": {
+    "approved_block": 21848746,
+    "lp_token": null,
+    "name": null
+  },
+  "0xA5793aFa36bB22322F3670AC58e50360c2cE20E5": {
+    "approved_block": 19050052,
+    "lp_token": "0x2E1D500091ef244FDcB6b83C86143e28388E473A",
+    "name": "Curve.fi 3payLlama Gauge Deposit"
+  },
+  "0xA6762d10D6471F778C9c6Ce21A38245e9387915e": {
+    "approved_block": 18317813,
+    "lp_token": "0x28Ca243dc0aC075dD012fCf9375C25D18A844d96",
+    "name": "Curve.fi sdFXNFXN-f Gauge Deposit"
+  },
+  "0xA6E72215B59265638Ea6A48bF32b51B00d21f56c": {
+    "approved_block": 24078226,
+    "lp_token": null,
+    "name": null
+  },
+  "0xA6f106d5AcFc6f7AC5d4aB84c3D7A8DaE658345F": {
+    "approved_block": 16426644,
+    "lp_token": "0x84C333e94AEA4a51a21F6cf0C7F528C50Dc7592C",
+    "name": "Curve.fi clevUSD3CRV-f Gauge Deposit"
+  },
+  "0xA6ff75281eACa4cD5fEEb333e8E15558208295e5": {
+    "approved_block": 14487402,
+    "lp_token": null,
+    "name": null
+  },
+  "0xA812C37122046ebff408C90Db8065E36F0586A36": {
+    "approved_block": 18302975,
+    "lp_token": "0x8e9De7E69424c848972870798286E8bc5EcB295F",
+    "name": "Curve.fi USTPFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xA8bB51606dB8e81F0ac964f0855C20D9e474Ab63": {
+    "approved_block": 21751441,
+    "lp_token": "0xaDb6851875B7496E3D565B754d8a79508480a203",
+    "name": "Curve.fi BOLDUSDC Gauge Deposit"
+  },
+  "0xA90996896660DEcC6E997655E065b23788857849": {
+    "approved_block": 10647940,
+    "lp_token": "0xC25a3A3b969415c80451098fa907EC722572917F",
+    "name": null
+  },
+  "0xAA6dDbA00DE48D41E41543eF0a78AB31aae4dE8d": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0xAA7Fb75AC4A0729fB45C3aD165505B435973e812": {
+    "approved_block": 22763914,
+    "lp_token": "0xA90bb21c391acF795638Fa07F78C325AC8f73fbA",
+    "name": "Curve.fi unibrBTC Gauge Deposit"
+  },
+  "0xAB1927160EC7414C6Fa71763E2a9f3D107c126dd": {
+    "approved_block": 14306941,
+    "lp_token": "0xF3A43307DcAFa93275993862Aae628fCB50dC768",
+    "name": "Curve.fi cvxFXSFXS-f Gauge Deposit"
+  },
+  "0xAB704870D468FC3b6C313d5e63FD550FFe3d513B": {
+    "approved_block": 24415444,
+    "lp_token": "0x1791bBFa950F7db0B52Ecb0729584BaD886665F5",
+    "name": "Curve.fi OUSDUSDnr Gauge Deposit"
+  },
+  "0xAB9B0Cc1c14F695aB851163d8eD87856534bbc90": {
+    "approved_block": 22696832,
+    "lp_token": null,
+    "name": null
+  },
+  "0xABaD903647511a0EC755a118849f733f7d2Ba002": {
+    "approved_block": 18862370,
+    "lp_token": "0xC8Eb2Cf2f792F77AF0Cd9e203305a585E588179D",
+    "name": "Curve.fi pxethweth Gauge Deposit"
+  },
+  "0xACc9F5CEDC631180a2aD4C945377930fCFCC782F": {
+    "approved_block": 16425354,
+    "lp_token": "0x6E0e681441BE6cB1d8405752462488BD4D691E3A",
+    "name": "Curve.fi TRYB3POOL-f Gauge Deposit"
+  },
+  "0xAD52A81D8aeA772b8D21Fe2bC573Ef388bDDaC69": {
+    "approved_block": 20300298,
+    "lp_token": "0x839020cf9528f24c303e7789455D94534CbdCbC1",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xAD6D1a4B1B2F33712A8b18BeDc95c0A1f9832269": {
+    "approved_block": 22682749,
+    "lp_token": "0x2c683fAd51da2cd17793219CC86439C1875c353e",
+    "name": "Curve.fi ETH+ETH Gauge Deposit"
+  },
+  "0xAE1680Ef5EFc2486E73D8d5D0f8a8dB77DA5774E": {
+    "approved_block": 20049736,
+    "lp_token": "0x4a7999c55d3a93dAf72EA112985e57c2E3b9e95D",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xAE74afF5cb36885568A87126a4C8B491E8f4fDc8": {
+    "approved_block": 21945604,
+    "lp_token": null,
+    "name": null
+  },
+  "0xAEA6c312f4b3E04D752946d329693F7293bC2e6D": {
+    "approved_block": 11193471,
+    "lp_token": "0x3a664Ab939FD8482048609f652f9a0B0677337B9",
+    "name": null
+  },
+  "0xAF78381216a8eCC7Ad5957f3cD12a431500E0B0D": {
+    "approved_block": 13590717,
+    "lp_token": null,
+    "name": null
+  },
+  "0xAb1BB9811B99D04E356FCb7D3af106Ae4EE2F06d": {
+    "approved_block": 18398639,
+    "lp_token": "0xE8449F1495012eE18dB7Aa18cD5706b47e69627c",
+    "name": "Curve.fi dYFIETH-f Gauge Deposit"
+  },
+  "0xAc05cd62ba7874a4e3AdA9F0CCE4A3CD077EEec8": {
+    "approved_block": 21726001,
+    "lp_token": null,
+    "name": null
+  },
+  "0xAd96E10123Fa34a01cf2314C42D75150849C9295": {
+    "approved_block": 15620531,
+    "lp_token": "0x5b6C539b224014A09B3388e51CaAA8e354c959C8",
+    "name": "Curve.fi cbETH/ETH-f Gauge Deposit"
+  },
+  "0xAeac6Dcd12CC0BE74c8f99EfE4bB5205a1f9A608": {
+    "approved_block": 15175858,
+    "lp_token": "0x8fdb0bB9365a46B145Db80D0B1C5C5e979C84190",
+    "name": "Curve.fi BUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xAf8523e351EE8D4DBad4b26F5A93CF628653536d": {
+    "approved_block": 24471241,
+    "lp_token": "0xBdCA01E29fd4310d96FcbC2fFeCCf7b3B84ad4B3",
+    "name": "Curve.fi xpUSDsUSDS Gauge Deposit"
+  },
+  "0xAfcD73E242C6D880edFa87b8146825639BDa3881": {
+    "approved_block": 22581829,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB069D59fDDFE8e2e6E624951e306D4FdC056fA82": {
+    "approved_block": 24422457,
+    "lp_token": "0x17F9682c9cd1a448b31C0428F1D0783eD13a9Fa3",
+    "name": "Curve.fi alfrxUSD Gauge Deposit"
+  },
+  "0xB08FEf57bFcc5f7bF0EF69C0c090849d497C8F8A": {
+    "approved_block": 19062419,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB1A829a05E618F7C4f50Cb86f8F64Fb86e42dE5a": {
+    "approved_block": 19342673,
+    "lp_token": "0x8C24b3213FD851db80245FCCc42c40B94Ac9a745",
+    "name": "Curve.fi CRVZUNUSD Gauge Deposit"
+  },
+  "0xB1F2cdeC61db658F091671F5f199635aEF202CAC": {
+    "approved_block": 10647931,
+    "lp_token": "0x49849C98ae39Fff122806C06791Fa73784FB3675",
+    "name": null
+  },
+  "0xB2066462D6156714bcD53a448396336561d2C977": {
+    "approved_block": 23681890,
+    "lp_token": "0x7D8b8344f2Acc6C1Edba0dA1B5313AF1e30C3369",
+    "name": "Curve.fi DETHWETH Gauge Deposit"
+  },
+  "0xB251c0885c7c1975D773B57e67c138FBcEaa6db4": {
+    "approved_block": 18915614,
+    "lp_token": "0x8eFD02a0a40545F32DbA5D664CbBC1570D3FedF6",
+    "name": "Curve.fi alETHwETH Gauge Deposit"
+  },
+  "0xB280fab4817C54796F9E6147aa1ad0198CFEfb41": {
+    "approved_block": 19624893,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB2A56616037E1b3830f7F10F77b91b109aB2C44e": {
+    "approved_block": 24966439,
+    "lp_token": "0x70E7e484fd1bDdaD9b7154574BD7932F07De282A",
+    "name": "Curve.fi frxsroyETH Gauge Deposit"
+  },
+  "0xB3481D292fC04836febA2e8bb5cc6C95ba8aACee": {
+    "approved_block": 21193839,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB3627140BEacb97f9CA52b34090352FdAfC77d72": {
+    "approved_block": 17602025,
+    "lp_token": "0xfC89b519658967fCBE1f525f1b8f4bf62d9b9018",
+    "name": "Curve.fi z-frxETH-f-f Gauge Deposit"
+  },
+  "0xB3783f527B7704DeeD4993f7c1c779E426A04368": {
+    "approved_block": 15535519,
+    "lp_token": "0x66E335622ad7a6C9c72c98dbfCCE684996a20Ef9",
+    "name": "Curve.fi MAIPool3CRV-f Gauge Deposit"
+  },
+  "0xB3C33ba734EA2698c509d2498BABc75b3608b735": {
+    "approved_block": 22984461,
+    "lp_token": "0x20F858D88124857274994516eEaC7720fe39B8ea",
+    "name": "Curve.fi VSPWETH Gauge Deposit"
+  },
+  "0xB4269947A752810Ec1f2B4a8eBAA508eA0E59199": {
+    "approved_block": 21181862,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB504b6EB06760019801a91B451d3f7BD9f027fC9": {
+    "approved_block": 13410019,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB518f5e3242393d4eC792BD3f44946A3b98d0E48": {
+    "approved_block": 13383889,
+    "lp_token": "0x55A8a39bc9694714E2874c1ce77aa1E599461E18",
+    "name": "Curve.fi MIM-UST-f Gauge Deposit"
+  },
+  "0xB53c23D2CC6219adf78ea22Bfd38bFfc50eC54cB": {
+    "approved_block": 18917220,
+    "lp_token": "0x5dc1BF6f1e983C0b21EfB003c105133736fA0743",
+    "name": "Curve.fi FRAXUSDe Gauge Deposit"
+  },
+  "0xB5efA93d5D23642f970aF41a1ea9A26f19CbD2Eb": {
+    "approved_block": 14409494,
+    "lp_token": "0xC9467E453620f16b57a34a770C6bceBECe002587",
+    "name": "Curve.fi pbtc/sbtcCRV-f Gauge Deposit"
+  },
+  "0xB6Ec26A3433D6CD11084c2094F12c4E571806D06": {
+    "approved_block": 19212655,
+    "lp_token": "0xB3c8Ce1eE157b0DCAa96897C9170aEe6281706c9",
+    "name": "Curve.fi crvPufETH Gauge Deposit"
+  },
+  "0xB721Cc32160Ab0da2614CC6aB16eD822Aeebc101": {
+    "approved_block": 14736029,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB7A3C519889a916C5ecB54101E69ECf11DE60d0b": {
+    "approved_block": 17028992,
+    "lp_token": "0x2d600BbBcC3F1B6Cb9910A70BaB59eC9d5F81B9A",
+    "name": "Curve.fi msfrxETH-f Gauge Deposit"
+  },
+  "0xB7EF2E55aD867C31A5FC09058885D5A1B621bEeb": {
+    "approved_block": 23762399,
+    "lp_token": "0xeAdA7C8f252f4fb34a7b1617c32f41b3645450Cb",
+    "name": "Curve.fi ynETHx/ETH Gauge Deposit"
+  },
+  "0xB7a51F9d5B2903FCA3Be111BEb5A2448F772D9B8": {
+    "approved_block": 20098292,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB7b07dbbC5ddC31EB2B6aC15527a99e7bA967f43": {
+    "approved_block": 19847370,
+    "lp_token": "0xD7Bf9bb6Bd088317Effd116E2B70ea3A054cBceb",
+    "name": "Curve.fi fxUSDMIM Gauge Deposit"
+  },
+  "0xB7cBE208F7568a62544923Af52b455d261c58c4e": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB7e23A438C9cad2575d3C048248A943a7a03f3fA": {
+    "approved_block": 20179391,
+    "lp_token": null,
+    "name": null
+  },
+  "0xB81465Ac19B9a57158a79754bDaa91C60fDA91ff": {
+    "approved_block": 14244150,
+    "lp_token": "0x4aCc1BF7D6a591016641325aA6664A1Cd178F002",
+    "name": "Curve.fi DYDXETH-f Gauge Deposit"
+  },
+  "0xB84637aB9Be835580821A67823f414FFd0bbf625": {
+    "approved_block": 20432524,
+    "lp_token": "0xA19bf6fBf05624282cb6ed498f4761f22e084Edd",
+    "name": "Curve.fi SDTWETH Gauge Deposit"
+  },
+  "0xBC89cd85491d81C6AD2954E6d0362Ee29fCa8F53": {
+    "approved_block": 10647905,
+    "lp_token": "0x9fC689CCaDa600B6DF723D9E47D84d76664a1F23",
+    "name": null
+  },
+  "0xBE266d68Ce3dDFAb366Bb866F4353B6FC42BA43c": {
+    "approved_block": 15522446,
+    "lp_token": "0xE57180685E3348589E9521aa53Af0BCD497E884d",
+    "name": "Curve.fi DOLAFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xBE2c62b8aEDb54165FDAe22733Cfb5DBE55d061b": {
+    "approved_block": 18668089,
+    "lp_token": "0x35B269Fe0106d3645d9780C5aaD97C8eb8041c40",
+    "name": "Curve.fi TriBSN Gauge Deposit"
+  },
+  "0xBE31fA3401776722b590E73f22CD7A410F54ff4a": {
+    "approved_block": 22383407,
+    "lp_token": null,
+    "name": null
+  },
+  "0xBE543fC11B6Eb4aE1A80cb4e06828f06dC3791DA": {
+    "approved_block": 20098277,
+    "lp_token": null,
+    "name": null
+  },
+  "0xBEb468BEb5C72d8b4d4f076F473Db398562769ed": {
+    "approved_block": 19947059,
+    "lp_token": "0x94a5B3A7AAF67415B7F5973ed1Adf542897a45F1",
+    "name": "Curve.fi eBTCwstETH Gauge Deposit"
+  },
+  "0xBb1B19495B8FE7C402427479B9aC14886cbbaaeE": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0xBd4Af2a6510b988878805956e5111839e55de069": {
+    "approved_block": 20042339,
+    "lp_token": null,
+    "name": null
+  },
+  "0xBdCA4F610e7101Cc172E2135ba025737B99AbD30": {
+    "approved_block": 16891550,
+    "lp_token": "0x68934F60758243eafAf4D2cFeD27BF8010bede3a",
+    "name": "Curve.fi UZDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xBe4aCE70CC8b0b3aAAE16B2B5455079CcfcFe2eA": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xC03F1f20414BC3710C9E980bAd8310E0B3c80Af0": {
+    "approved_block": 22303408,
+    "lp_token": "0xC48A38499A90E3b883c509ca08eC1b540CDF15EE",
+    "name": "Curve.fi GOLD++ Gauge Deposit"
+  },
+  "0xC1b06b52848fd69D4734983d923e0a0101111e21": {
+    "approved_block": 22691864,
+    "lp_token": null,
+    "name": null
+  },
+  "0xC25836AD05F14B7161638eDC67FD9C65B19F0C5A": {
+    "approved_block": 16514012,
+    "lp_token": "0xD8eb58D76aF99547333cfEeb6a0f9bd1A63b6492",
+    "name": "Curve.fi ETH MATIC-f Gauge Deposit"
+  },
+  "0xC2EfDbC1a21D82A677380380eB282a963A6A6ada": {
+    "approved_block": 19265303,
+    "lp_token": null,
+    "name": null
+  },
+  "0xC2FE9D3c761994897594Df63B33b6D843Ab7b1cF": {
+    "approved_block": 18917380,
+    "lp_token": "0x6307E6688819951Cf8D6B6066018243D2496952F",
+    "name": "Curve.fi FXB241231 Gauge Deposit"
+  },
+  "0xC2b1DF84112619D190193E48148000e3990Bf627": {
+    "approved_block": 11011198,
+    "lp_token": "0x97E2768e8E73511cA874545DC5Ff8067eB19B787",
+    "name": null
+  },
+  "0xC3328b4c7c87cC0682120528E9D358274580b1da": {
+    "approved_block": 22726288,
+    "lp_token": "0x2c7A1b4950Fe369e79fB3471284d4a4E66fbEA76",
+    "name": "Curve.fi sdeUSDdeUS Gauge Deposit"
+  },
+  "0xC48abd0446E7d637588A6342C5EF14E97eEd0D94": {
+    "approved_block": 22617802,
+    "lp_token": "0x95591348FE9718bE8bfa3afcC9b017D9Ec18A7fa",
+    "name": "Curve.fi crv2USDaf Gauge Deposit"
+  },
+  "0xC48f4653dd6a9509De44c92beb0604BEA3AEe714": {
+    "approved_block": 12603283,
+    "lp_token": null,
+    "name": null
+  },
+  "0xC548f3aB7bd06FBd968B83f3b197372e641Deae3": {
+    "approved_block": 20981450,
+    "lp_token": "0x1f7e9321CE32Af1F9EA1185fD10D31Fea31FFD95",
+    "name": "Curve.fi hETHWETH Gauge Deposit"
+  },
+  "0xC58706e1C2D7C56d1a79407401a0647630fe6413": {
+    "approved_block": 19386043,
+    "lp_token": "0x189B4e49B5cAf33565095097b4B960F14032C7D0",
+    "name": "Curve.fi fxUSDDola Gauge Deposit"
+  },
+  "0xC58cb38c462c27BAeE0aBb9790402f2e80cfb471": {
+    "approved_block": 24500457,
+    "lp_token": "0xb1E75B9C6367a27499CD59631d3B27224BeFDE4f",
+    "name": "Curve.fi OUSDavUSD Gauge Deposit"
+  },
+  "0xC5cfaDA84E902aD92DD40194f0883ad49639b023": {
+    "approved_block": 11011072,
+    "lp_token": "0xD2967f45c4f384DEEa880F807Be904762a3DeA07",
+    "name": null
+  },
+  "0xC74796D3ec1a0165f2c127f3F50caa259823D36A": {
+    "approved_block": 22084839,
+    "lp_token": "0xFc05ee9dEC7275A273B1E1A8a821dA3CdF752f9B",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xC798130644b8962a357dfBe8BB30b19b681AA7D4": {
+    "approved_block": 19531323,
+    "lp_token": "0x592878b920101946Fb5915aB97961bC546f211CC",
+    "name": "Curve.fi ETHCJPY Gauge Deposit"
+  },
+  "0xC7e98cA5E8327689B0C7a374c1f9C94Ed2e252Ff": {
+    "approved_block": 21331352,
+    "lp_token": "0xfD1627E3f3469C8392C8c3A261D8F0677586e5e1",
+    "name": "Curve.fi SkySaver Gauge Deposit"
+  },
+  "0xC840E5Ed7A1b6A9C1A6BF1ecAcA6DDb151b2fd6e": {
+    "approved_block": 19329089,
+    "lp_token": "0x1ab3D612EA7df26117554ddDD379764EBcE1A5Ad",
+    "name": "Curve.fi mkUSDUSDe Gauge Deposit"
+  },
+  "0xC85b385C8587219b1085A264f0235225644a5dD9": {
+    "approved_block": 11877231,
+    "lp_token": "0x9e732cF531b965Cd172968163BbF4E05b64600f8",
+    "name": "Curve.fi USDP3CRV-f Gauge Deposit"
+  },
+  "0xC91113B4Dd89dd20FDEECDAC82477Bc99A840355": {
+    "approved_block": 19050282,
+    "lp_token": null,
+    "name": null
+  },
+  "0xC95bdf13A08A547E4dD9f29B00aB7fF08C5d093d": {
+    "approved_block": 13505364,
+    "lp_token": "0xc270b3B858c335B6BA5D5b10e2Da8a09976005ad",
+    "name": "Curve.fi pax-usdp3CRV-f Gauge Deposit"
+  },
+  "0xCA312DEd99175f7eca0C41a29b3A83F01F149626": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xCAe10a7553AccA53ad58c4EC63e3aB6Ad6546F71": {
+    "approved_block": 23902606,
+    "lp_token": "0xce439753c8D14423e9D79b519Be18E85a452d0Cd",
+    "name": "Curve.fi OETHETH+ Gauge Deposit"
+  },
+  "0xCB25249bFA8CdB6012a75070E5C2885151368Bef": {
+    "approved_block": 22313150,
+    "lp_token": "0x48d670D189B4b48757992D36897bCa6E3f889040",
+    "name": "Curve.fi reusdsdola Gauge Deposit"
+  },
+  "0xCB8883D1D8c560003489Df43B30612AAbB8013bb": {
+    "approved_block": 15083864,
+    "lp_token": null,
+    "name": null
+  },
+  "0xCC0CD610dFe3e2638f9658050Fe0A3d2f628E74F": {
+    "approved_block": 21194608,
+    "lp_token": null,
+    "name": null
+  },
+  "0xCC57f3a930551EfF0eFE20C996b7e723E3f5e572": {
+    "approved_block": 23634842,
+    "lp_token": "0xec977F46467a3021785Cff88894886E617abd65b",
+    "name": "Curve.fi YB-crvUSD Gauge Deposit"
+  },
+  "0xCCC69bDeEa2143DEF4279676E5D80a33E58174a0": {
+    "approved_block": 16982526,
+    "lp_token": null,
+    "name": null
+  },
+  "0xCE5F24B7A95e9cBa7df4B54E911B4A3Dc8CDAf6f": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0xCEdfC636210D4b4Aa703393B9CEf43967c733A3d": {
+    "approved_block": 24193206,
+    "lp_token": "0x421194e547eb49304B3e99ffD26b164f9832d395",
+    "name": "Curve.fi refrxUSD Gauge Deposit"
+  },
+  "0xCFc25170633581Bf896CB6CDeE170e3E3Aa59503": {
+    "approved_block": 15007608,
+    "lp_token": "0x3175Df0976dFA876431C2E9eE6Bc45b65d3473CC",
+    "name": "Curve.fi crvFRAX Gauge Deposit"
+  },
+  "0xCa7DbCee5EC558289B3a42493688a784Bb695811": {
+    "approved_block": 18653611,
+    "lp_token": "0xe1E77dE32fb301cE55871bA095fd6b8e5D9aBAd8",
+    "name": "Curve.fi USDVcrvUSD Gauge Deposit"
+  },
+  "0xCc01e9D346F57b62A6aDD19AbC0DD33F57B83E2f": {
+    "approved_block": 23784129,
+    "lp_token": "0x06Cf5F9B93E9FCFDB33D6B3791eb152567Cd8D36",
+    "name": "Curve.fi USPDUSDC Gauge Deposit"
+  },
+  "0xCc0214391c24a948308F27E0d5aB4E832082d09A": {
+    "approved_block": 23089511,
+    "lp_token": "0xb89aF59FfD0c2Bf653F45B60441B875027696733",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xCdE4504e0CcAf51C7aFb13891Bda6c595e20C8Ad": {
+    "approved_block": 22789997,
+    "lp_token": "0xc46D3395b60982398CF5f0c821C1CC7BA44B99c2",
+    "name": "Curve.fi saveFXAF Gauge Deposit"
+  },
+  "0xCf1787F70533b4cFb5B2f727d8D024107518943a": {
+    "approved_block": 21993737,
+    "lp_token": "0xA10d15538E09479186b4D3278BA5c979110dDdB1",
+    "name": "Curve.fi tETHwstETH Gauge Deposit"
+  },
+  "0xCf79921D99b99FEe3DcF1A4657fCDA95195B46d1": {
+    "approved_block": 15748831,
+    "lp_token": "0x3F436954afb722F5D14D868762a23faB6b0DAbF0",
+    "name": "Curve.fi RSRcrvFRAX-f Gauge Deposit"
+  },
+  "0xD088ef050E22458c6F0b9e838cb7eDEe74F94C45": {
+    "approved_block": 20377814,
+    "lp_token": null,
+    "name": null
+  },
+  "0xD10C17D82053DD0AB65851a9A93a0abE0C4F4794": {
+    "approved_block": 17030212,
+    "lp_token": "0x548E063CE6F3BaC31457E4f5b4e2345286274257",
+    "name": "Curve.fi cbETHfrxET-f Gauge Deposit"
+  },
+  "0xD1426C391A7Cbe9DeCd302ac9c44e65C3505d1f0": {
+    "approved_block": 14740674,
+    "lp_token": null,
+    "name": null
+  },
+  "0xD1D981dDD0c9A0469E7d8cEE877f83B5877D7260": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0xD44AeeCc0928c016C29EA3E0C902bDcD0784C0FA": {
+    "approved_block": 21517558,
+    "lp_token": null,
+    "name": null
+  },
+  "0xD44eB2061362D28f741Bb3547b1a36aB13A8a582": {
+    "approved_block": 18465460,
+    "lp_token": null,
+    "name": null
+  },
+  "0xD491639539c7434F3a788f6C88e818e5d7a552e9": {
+    "approved_block": 18045918,
+    "lp_token": "0x16eAd9a10b1A77007E6E329B076aD1Fe97a6F7C0",
+    "name": "Curve.fi xETHETH-f Gauge Deposit"
+  },
+  "0xD5bE6A05B45aEd524730B6d1CC05F59b021f6c87": {
+    "approved_block": 15522446,
+    "lp_token": "0xf985005a3793DbA4cCe241B3C19ddcd3Fe069ff4",
+    "name": "Curve.fi ALCXFRAXBP-f Gauge Deposit"
+  },
+  "0xD6F025f87De29B71dE36Ad4C93499E9C8B2D8507": {
+    "approved_block": 25013689,
+    "lp_token": "0x01646F6fe0d75CEd6E514faB0Ea2F4ed5e1A5C9F",
+    "name": "Curve.fi frxmuBOND Gauge Deposit"
+  },
+  "0xD6e48Cc0597a1Ee12a8BeEB88e22bFDb81777164": {
+    "approved_block": 15175858,
+    "lp_token": "0x04b727C7e246CA70d496ecF52E6b6280f3c8077D",
+    "name": "Curve.fi APEUSDBP3CRV-f Gauge Deposit"
+  },
+  "0xD7f9111D529ed8859A0d5A1DC1BA7a021b61f22A": {
+    "approved_block": 20276309,
+    "lp_token": "0x5018BE882DccE5E3F2f3B0913AE2096B9b3fB61f",
+    "name": "Curve.fi USDCfxUSD Gauge Deposit"
+  },
+  "0xD8389B892252C49FE9225Db4528F553317Ac09e9": {
+    "approved_block": 19043740,
+    "lp_token": "0xc37c0E88551Ed383c1aBEDc6628a5579071BF56f",
+    "name": "Curve.fi eUSDmkUSD Gauge Deposit"
+  },
+  "0xD9277b0D007464eFF133622eC0d42081c93Cef02": {
+    "approved_block": 13361097,
+    "lp_token": "0x3Fb78e61784C9c637D560eDE23Ad57CA1294c14a",
+    "name": "Curve.fi EURN/EURT-f Gauge Deposit"
+  },
+  "0xD981f69572F2803Ecb1249bf54392a4d2B754402": {
+    "approved_block": 20899014,
+    "lp_token": "0x30cE6E5A75586F0E83bCAc77C9135E980e6bc7A8",
+    "name": "Curve.fi USDMcrvUSD Gauge Deposit"
+  },
+  "0xDB3fd1bfC67b5D4325cb31C04E0Cae52f1787FD6": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0xDDCFb091f3FdCaDEe38465Da9A73cb5e356E145b": {
+    "approved_block": 21734022,
+    "lp_token": "0x15e4ff94B70a8F146b4e4aFD069014d126035752",
+    "name": "Curve.fi sfrscrvUSD Gauge Deposit"
+  },
+  "0xDDDecA2fd82B240d64CD8467a7586Ffdf1714c33": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xDE8C5b5D5E08EF1831110bdB19A13F39359cb3Fd": {
+    "approved_block": 23864058,
+    "lp_token": "0x3204d754a3003cEc155e2D8F44b3b48eD60b7Cc6",
+    "name": "Curve.fi fxUSDnr Gauge Deposit"
+  },
+  "0xDF103aCC4826C169B5e3fF874548Cb82123E9F51": {
+    "approved_block": 18926551,
+    "lp_token": "0x678053c553B963f83798b54D7F69deC086D527BA",
+    "name": "Curve.fi crvstUSDT Gauge Deposit"
+  },
+  "0xDFF0ed66fdDCC440FB3aDFB2f12029925799979c": {
+    "approved_block": 20214508,
+    "lp_token": "0xd0c183C9339e73D7c9146D48E1111d1FBEe2D6f9",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xDa0C79988b30d07857994e2C2650FCe644b690E1": {
+    "approved_block": 21204035,
+    "lp_token": "0x76A962BA6770068bCF454D34dDE17175611e6637",
+    "name": "Curve.fi savedola Gauge Deposit"
+  },
+  "0xDa9A503E67A075AF2c3Ea840256b02891535471A": {
+    "approved_block": 19093395,
+    "lp_token": null,
+    "name": null
+  },
+  "0xDe14d2B848a7a1373E155Cc4db9B649f4BE24296": {
+    "approved_block": 17820690,
+    "lp_token": "0xeCDd0cE505da71cd9dE855CD6804BA1e8C7bdB07",
+    "name": "Curve.fi crvUSDGUSD-f Gauge Deposit"
+  },
+  "0xDe27862E8433EF502011e2d729184d041dA66165": {
+    "approved_block": 20688175,
+    "lp_token": "0x7704D01908afD31bf647d969c295BB45230cD2d6",
+    "name": "Curve.fi eBTCWBTC Gauge Deposit"
+  },
+  "0xDeFd8FdD20e0f34115C7018CCfb655796F6B2168": {
+    "approved_block": 12870611,
+    "lp_token": "0xc4AD29ba4B3c580e6D59105FFf484999997675Ff",
+    "name": "Curve.fi crv3crypto Gauge Deposit"
+  },
+  "0xE049AA6fbd64210bDEddC15F5a861084E6eE8b57": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE1750a89EFD12FDD5743F93ABfF18f5410D39d29": {
+    "approved_block": 24118799,
+    "lp_token": "0xb2ee8f9622C5A480928836c0575df7d150f72d98",
+    "name": "Curve.fi ETHfxUSD Gauge Deposit"
+  },
+  "0xE1D520B1263D6Be5678568BD699c84F7f9086023": {
+    "approved_block": 14639217,
+    "lp_token": "0x8682Fbf0CbF312C891532BA9F1A91e44f81ad7DF",
+    "name": "Curve.fi ibEURUSDC-f Gauge Deposit"
+  },
+  "0xE3A38fb229224a0238f92c0A37983a9AC3C5B8b5": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE40DeF1147775411Ce8Bd5a169dA0303200D438A": {
+    "approved_block": 24383670,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE424b21a40CAd025B2f806B9a2d32Fdeaa78eE58": {
+    "approved_block": 23555642,
+    "lp_token": "0x20d4c49a873EaeFf76EfBD0cF19002F6E19EF52c",
+    "name": "Curve.fi frxUSDaf Gauge Deposit"
+  },
+  "0xE44DEb242804952dE2C4C4E4405eA23f1eB51c9E": {
+    "approved_block": 22929702,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE4823926AE189b6D15630c67a742C1104B129d7E": {
+    "approved_block": 22602773,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE4B096B201f1EbaD381F1aCA4020f0AC3067b9dA": {
+    "approved_block": 21872499,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE4aE20f82bb1847cA2e93DA997A2d40C2F320De1": {
+    "approved_block": 23453270,
+    "lp_token": null,
+    "name": null
+  },
+  "0xE51F022488246FDb6a93a27a4a43b85ffe49dE03": {
+    "approved_block": 20377812,
+    "lp_token": "0x5E2fe8A2B316c4565D59fA4dD9B389032d9DA78e",
+    "name": "Curve.fi ZUNFRXETH Gauge Deposit"
+  },
+  "0xE6A9fd148Ad624a5A8700c6366e23E3cD308DFcB": {
+    "approved_block": 17328637,
+    "lp_token": "0xe49AdDc2D1A131c6b8145F0EBa1C946B7198e0BA",
+    "name": "Curve.fi swETHfxETH-f Gauge Deposit"
+  },
+  "0xE786Df7076AFeECC3faCD841ED4AD20d0F04CF19": {
+    "approved_block": 14263274,
+    "lp_token": "0x1054Ff2ffA34c055a13DCD9E0b4c0cA5b3aecEB9",
+    "name": "Curve.fi CADCUSDC-f Gauge Deposit"
+  },
+  "0xE95ba2CbFD86E7A747dAA3bc83C9A5Bb445a9BE4": {
+    "approved_block": 19575574,
+    "lp_token": "0x27cB9629aE3Ee05cb266B99cA4124EC999303c9D",
+    "name": "Curve.fi fxUSDalUSD Gauge Deposit"
+  },
+  "0xE9c898BA654deC2bA440392028D2e7A194E6dc3e": {
+    "approved_block": 18087429,
+    "lp_token": null,
+    "name": null
+  },
+  "0xEA8183982920a3C4af0bA1a763768d0A3097Ab3d": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xEAED59025d6Cf575238A9B4905aCa11E000BaAD0": {
+    "approved_block": 20199474,
+    "lp_token": "0xc687141c18F20f7Ba405e45328825579fDdD3195",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xEEBC06d495c96E57542A6d829184A907A02ef602": {
+    "approved_block": 16871032,
+    "lp_token": "0x99f5aCc8EC2Da2BC0771c32814EFF52b712de1E5",
+    "name": "Curve.fi yCRV-f Gauge Deposit"
+  },
+  "0xEcAD6745058377744c09747b2715c0170B5699e5": {
+    "approved_block": 17805192,
+    "lp_token": "0x8272E1A3dBef607C04AA6e5BD3a1A134c8ac063B",
+    "name": "Curve.fi crvUSDDOLA-f Gauge Deposit"
+  },
+  "0xEca4aD46891ace396bbB37dA59516caee5Ec7b65": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF184d80915Ba7d835D941BA70cDdf93DE36517ee": {
+    "approved_block": 18080203,
+    "lp_token": "0x0CFe5C777A7438C9Dd8Add53ed671cEc7A5FAeE5",
+    "name": "Curve.fi mkUSD3CRV-f Gauge Deposit"
+  },
+  "0xF1bb643F953836725c6E48BdD6f1816f871d3E07": {
+    "approved_block": 20155271,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF1f45e2ffACC9DEE03B6FFf9a1bec6ea722DD7CD": {
+    "approved_block": 22988931,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF20EEb9A13301293d6ACF2D141e39DB0C4104640": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF20bd4D5A4112d5f9c64aDF53726F3ef1b7d0D61": {
+    "approved_block": 17030212,
+    "lp_token": "0xbA6c373992AD8ec1f7520E5878E5540Eb36DeBf1",
+    "name": "Curve.fi rETHfrxETH-f Gauge Deposit"
+  },
+  "0xF29FfF074f5cF755b55FbB3eb10A29203ac91EA2": {
+    "approved_block": 17424306,
+    "lp_token": "0xf5f5B97624542D72A9E06f04804Bf81baA15e2B4",
+    "name": "Curve.fi crvUSDTWBTCWETH Gauge Deposit"
+  },
+  "0xF2dDF89C04d702369Ab9eF8399Edb99a76e951Ce": {
+    "approved_block": 14303365,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF347e58166521A6DdCFa4A2Ccbae1f1E93fAe7De": {
+    "approved_block": 22919302,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF3D9c7903EfD23C8c7dCF298f80A4186B8386D07": {
+    "approved_block": 25013559,
+    "lp_token": "0x6206cA315c2fCDd2A857b47EFB285AA12c529a7a",
+    "name": "Curve.fi USDCsUSDat Gauge Deposit"
+  },
+  "0xF3F6D6d412a77b680ec3a5E35EbB11BbEC319739": {
+    "approved_block": 20086115,
+    "lp_token": "0x8fb1c7AEDcbBc1222325C39dd5c1D2d23420CAe3",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xF3c43E7D722963b9569d1E39873dF9E2dFE8C087": {
+    "approved_block": 24093018,
+    "lp_token": "0xEcb0F0d68C19BdAaDAEbE24f6752A4Db34e2c2cb",
+    "name": "Curve.fi pmcrvUSD Gauge Deposit"
+  },
+  "0xF429AeC167C92aCA16cD77aef54F196B1988cBA3": {
+    "approved_block": 25010986,
+    "lp_token": "0x516C3eCfe45F0820653E08DD7c93633d71B93Cb5",
+    "name": "Curve.fi LL-CRV-rec Gauge Deposit"
+  },
+  "0xF42E2b73Ea79812a7c3E4bA8ed052c523765719f": {
+    "approved_block": 18312934,
+    "lp_token": "0xE06A65e09Ae18096B99770A809BA175FA05960e2",
+    "name": "Curve.fi FXNETH-f Gauge Deposit"
+  },
+  "0xF4e306405e3aa66E042f52e6e047872b1f55561d": {
+    "approved_block": 24734647,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF4eA7617E7999710244e2eAbfC8730d35482EE76": {
+    "approved_block": 14663621,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF5194c3325202F456c95c1Cf0cA36f8475C1949F": {
+    "approved_block": 11877231,
+    "lp_token": "0x5282a4eF67D9C33135340fB3289cc1711c13638C",
+    "name": "Curve.fi ib3CRV Gauge Deposit"
+  },
+  "0xF575337B54C101111DA80B7a2e5440F6177BFF1a": {
+    "approved_block": 23433379,
+    "lp_token": "0x54628EA95D7e748c3783b855f4583DA96FB21895",
+    "name": "Curve.fi LQTYFORKS Gauge Deposit"
+  },
+  "0xF668E6D326945d499e5B35E7CD2E82aCFbcFE6f0": {
+    "approved_block": 16655610,
+    "lp_token": "0x828b154032950C8ff7CF8085D841723Db2696056",
+    "name": "Curve.fi STETHETH_C-f Gauge Deposit"
+  },
+  "0xF7205c995b7E5f8F755ecbe7eEbb92eC742633C9": {
+    "approved_block": 20419787,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF73AAf236ffD467d2CC544055CA3559A0F7CD92C": {
+    "approved_block": 22763903,
+    "lp_token": "0x404fdadA7fC68B5B633D184067c9643732f8A045",
+    "name": "Curve.fi uniBTCwBTC Gauge Deposit"
+  },
+  "0xF7F4b8bFb6dE08435adc37eaAd626a22ED730A92": {
+    "approved_block": 24985044,
+    "lp_token": "0xd50492DE3541d75E61eDC34D1Aa79C7dC2d20da9",
+    "name": "Curve.fi frxUSP Gauge Deposit"
+  },
+  "0xF7b9c402c4D6c2eDbA04a7a515b53D11B1E9b2cc": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0xF814283bfd37dC24B2fB5515982F5C0708E508b6": {
+    "approved_block": 24694014,
+    "lp_token": "0x57129759d0E23116c1e7402dbC084E53d2e209a2",
+    "name": "Curve.fi iREETpmUSD Gauge Deposit"
+  },
+  "0xF98450B5602fa59CC66e1379DFfB6FDDc724CfC4": {
+    "approved_block": 11011200,
+    "lp_token": "0x4f3E8F405CF5aFC05D68142F3783bDfE13811522",
+    "name": null
+  },
+  "0xF98cBBe9Eb3fcB9A793Fb4d0A82854023970D4A4": {
+    "approved_block": 20340777,
+    "lp_token": "0xB73527615C25ac2D226db2581525f69968926caf",
+    "name": "Curve.fi crv-stUSDT Gauge Deposit"
+  },
+  "0xF9F46eF781b9C7B76e8B505226d5E0e0E7FE2f04": {
+    "approved_block": 15526900,
+    "lp_token": "0xBa3436Fd341F2C8A928452Db3C5A3670d1d5Cc73",
+    "name": "Curve.fi agEUREUROC-f Gauge Deposit"
+  },
+  "0xFA49B2a5D9E77f6748bf05801aa22356D514137b": {
+    "approved_block": 14654325,
+    "lp_token": "0x34eD182D0812D119c92907852D2B429f095A9b07",
+    "name": "Curve.fi JPEGETH-f Gauge Deposit"
+  },
+  "0xFA55129abC65a3ca0649D91f00dF0a954Fd722B4": {
+    "approved_block": 23132402,
+    "lp_token": "0xCF908d925b21594f9a92b264167A85B0649051a8",
+    "name": "Curve.fi YUSDUSDT Gauge Deposit"
+  },
+  "0xFA712EE4788C042e2B7BB55E6cb8ec569C4530c1": {
+    "approved_block": 10647912,
+    "lp_token": "0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8",
+    "name": null
+  },
+  "0xFB2e7B73E28f48CFD27a6bb0d8Ea633C581cd739": {
+    "approved_block": 23713822,
+    "lp_token": "0x3d2df172cB529FAFa2753c5945C4A2432B735439",
+    "name": "Curve.fi USDUNIT0 Gauge Deposit"
+  },
+  "0xFB496973ac782813A0885761295B13ae4a292A2f": {
+    "approved_block": 23806088,
+    "lp_token": "0x027B40F5917FCd0eac57d7015e120096A5F92ca9",
+    "name": "Curve.fi ZCHF/CRVUSD Gauge Deposit"
+  },
+  "0xFB5B02863E2917AE1662598F7eBdE60AFEaFe84e": {
+    "approved_block": 18928661,
+    "lp_token": "0x9EfE1A1Cbd6Ca51Ee8319AFc4573d253C3B732af",
+    "name": "Curve.fi wETHrETH Gauge Deposit"
+  },
+  "0xFBb2Ca5411DD3C08AefD8807572636D7cBb875D4": {
+    "approved_block": 23132094,
+    "lp_token": null,
+    "name": null
+  },
+  "0xFC6891C8482aeF6AEF71a09A09ce14432617A403": {
+    "approved_block": 20899016,
+    "lp_token": null,
+    "name": null
+  },
+  "0xFD4D8a17df4C27c1dD245d153ccf4499e806C87D": {
+    "approved_block": 11921803,
+    "lp_token": "0xcee60cFa923170e4f8204AE08B4fA6A3F5656F3a",
+    "name": "Curve.fi linkCRV Gauge Deposit"
+  },
+  "0xFF0871601158e506338967aB8C19fB59d8d5cAB2": {
+    "approved_block": 23518149,
+    "lp_token": null,
+    "name": null
+  },
+  "0xFFf3e31fbAB60ea73ea4a11eA796877F73d77E0f": {
+    "approved_block": 22805440,
+    "lp_token": "0x7430f11Eeb64a4ce50C8f92177485d34C48DA72c",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xFc3212Bd9Ad9A28Da6B2bd50a2918969C126894F": {
+    "approved_block": 22020049,
+    "lp_token": "0xD001aE433f254283FeCE51d4ACcE8c53263aa186",
+    "name": "Curve.fi RLUSD/USDC Gauge Deposit"
+  },
+  "0xFc58C946A2D541cfA29Ad8c16FC2994323e34458": {
+    "approved_block": 17751509,
+    "lp_token": "0x86152dF0a0E321Afb3B0B9C4deb813184F365ADa",
+    "name": "Curve.fi crvUSDGHO-f Gauge Deposit"
+  },
+  "0xFcaDecfc207e3329a38821E5B04f88029cc4fa62": {
+    "approved_block": 24117210,
+    "lp_token": "0x95753095F15870ACC0cB0Ed224478ea61aeb0b8e",
+    "name": "Curve.fi OETHAstETH Gauge Deposit"
+  },
+  "0xFe964d3E779752C7598985436A8598F13f22F6F4": {
+    "approved_block": 22041071,
+    "lp_token": "0x394a1e1b934cb4F4a0dC17BDD592ec078741542F",
+    "name": "Curve.fi tETHweETH Gauge Deposit"
+  },
+  "0xFedD13509753fE2fe4467278dc14145e3b686a35": {
+    "approved_block": 24450973,
+    "lp_token": "0x73C98528E655b57B9a888ce2264424ec87Ae6d3e",
+    "name": "Curve.fi OUSDebUSD Gauge Deposit"
+  },
+  "0xFf17560d746F85674FE7629cE986E949602EF948": {
+    "approved_block": 13277700,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa05E565cA0a103FcD999c7A7b8de7Bd15D5f6505": {
+    "approved_block": 13410019,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa0C08C0Aede65a0306F7dD042D2560dA174c91fC": {
+    "approved_block": 14879709,
+    "lp_token": "0x7ea4aD8C803653498bF6AC1D2dEbc04DCe8Fd2aD",
+    "name": "Curve.fi TOKEETH-f Gauge Deposit"
+  },
+  "0xa0d48d56B28Cd13d4F6BedecD1DfF9E9c746B2f3": {
+    "approved_block": 22135206,
+    "lp_token": "0x7d10A8734d985dBB3aD91Fce9c48CcC78b9F8B94",
+    "name": "Curve.fi crv2dola Gauge Deposit"
+  },
+  "0xa2f921c5400319659A3252773402814d8b7CD666": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa37cdce0207127204682D3235EAd2c7a4C5D6C5C": {
+    "approved_block": 22695697,
+    "lp_token": "0x7ED17e037B7d88A8270c89B3aFA9C38e5218F12b",
+    "name": "Curve.fi BOLDLUSD Gauge Deposit"
+  },
+  "0xa40C1E9aA3781c74c437212cd0353eAAB3EBBa6F": {
+    "approved_block": 20335138,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa47d0837F84Fb2d1aA08077D10d10101316a959d": {
+    "approved_block": 15522446,
+    "lp_token": "0x527331F3F550f6f85ACFEcAB9Cc0889180C6f1d5",
+    "name": "Curve.fi cvxCrvFrax-f Gauge Deposit"
+  },
+  "0xa48A3c91b062ca06Fd0d0569695432EB066f8c7E": {
+    "approved_block": 21731785,
+    "lp_token": "0x6691DBb44154A9f23f8357C56FC9ff5548A8bdc4",
+    "name": "Curve.fi deUSD/DOLA Gauge Deposit"
+  },
+  "0xa4cd3c7F8E71115C856dad1DBe042B17722f7807": {
+    "approved_block": 20304711,
+    "lp_token": "0x8c65CeC3847ad99BdC02621bDBC89F2acE56934B",
+    "name": "Curve.fi ezpzETH Gauge Deposit"
+  },
+  "0xa5Dc66685bD13A0924505807c29F8C65dDa0d207": {
+    "approved_block": 19531321,
+    "lp_token": "0xca546aE6c3B2BB9Fba2b6e5EeB0881097CecE5B0",
+    "name": "Curve.fi crvUSDCJPY Gauge Deposit"
+  },
+  "0xa5F5DBdFc6baFc69bb4107AF97Ca79519304Dbd7": {
+    "approved_block": 24966435,
+    "lp_token": "0x310a9Fd2906c6a3eE97289095b183f96309c56AE",
+    "name": "Curve.fi srRYfrxusd Gauge Deposit"
+  },
+  "0xa7d71871b82c9058d6baA2706F7A0Ee1b7a6a769": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa8Ea11465A1375BF42463C3B613dFC54248b9C7B": {
+    "approved_block": 15961522,
+    "lp_token": "0x326290A1B0004eeE78fa6ED4F1d8f4b2523ab669",
+    "name": "Curve.fi XAIFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xa96832746393aA4465050580D35A1DfD626D0C6f": {
+    "approved_block": 22798393,
+    "lp_token": "0x27CB06F65d8B7228147375E15d37912b93b501CC",
+    "name": "Curve.fi MANAETH Gauge Deposit"
+  },
+  "0xa971354DB30DF69b35cf99B434875A32AEA0718A": {
+    "approved_block": 21181857,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa9A9BC60fc80478059A83f516D5215185eeC2fc0": {
+    "approved_block": 14742933,
+    "lp_token": "0x8c524635d52bd7b1Bd55E062303177a7d916C046",
+    "name": "Curve.fi sdFXSFXS-f Gauge Deposit"
+  },
+  "0xa9F71f07BB592c85B7a4257BE021Cc336Db2C627": {
+    "approved_block": 24422462,
+    "lp_token": null,
+    "name": null
+  },
+  "0xa9eb5EB1155B2FF5Cd50F4859b6073eEA41C6157": {
+    "approved_block": 24383672,
+    "lp_token": "0x994886961B4fD0f500f1CfA28D1B1aEd1C4e514C",
+    "name": "Curve.fi OUSDUSDtb Gauge Deposit"
+  },
+  "0xaA8B8643a29cECB5de7B4ea115D04384C041423F": {
+    "approved_block": 19329089,
+    "lp_token": "0xF55B0f6F2Da5ffDDb104b58a60F2862745960442",
+    "name": "Curve.fi USDecrvUSD Gauge Deposit"
+  },
+  "0xaB79226E4fbd6d299316C0964Be9F417c8f920C9": {
+    "approved_block": 18317806,
+    "lp_token": "0x5b3BA844b3859f56524e99Ae54857b36c8Ae3eFE",
+    "name": "Curve.fi crvUSDETHLDO Gauge Deposit"
+  },
+  "0xaF01d68714E7eA67f43f08b5947e367126B889b1": {
+    "approved_block": 22085125,
+    "lp_token": "0xc522A6606BBA746d7960404F22a3DB936B6F4F50",
+    "name": "Curve.fi reusdscrv Gauge Deposit"
+  },
+  "0xaa386EF96A910Ee2F9cbEf7B139e99A88DF3b2ba": {
+    "approved_block": 15522446,
+    "lp_token": "0x7F17A6C77C3938D235b014818092eb6305BdA110",
+    "name": "Curve.fi CVXFRAXBP-f Gauge Deposit"
+  },
+  "0xab78AE97cBedE5B1f6Bb212D839f920147020aE7": {
+    "approved_block": 19287121,
+    "lp_token": "0xd0Fb39E59037fC6Ae8aF5cb495CeA690ED501fDd",
+    "name": "Curve.fi BSGGUSDT-f Gauge Deposit"
+  },
+  "0xac61350CA6B2fae192273Fe0B12cA3f3747C1745": {
+    "approved_block": 23806077,
+    "lp_token": "0x54f81E313eb47236C5AB781f680bB91e58Ac6dB7",
+    "name": "Curve.fi USD/RWA Gauge Deposit"
+  },
+  "0xad14507AEe61dA8D5A6Aae28183C5311bd8b6092": {
+    "approved_block": 23727084,
+    "lp_token": "0xBDf86bD28cB3a8Af5D46cCD2f56131Be6718B1d8",
+    "name": "Curve.fi RWA/fxUSD Gauge Deposit"
+  },
+  "0xad7B288315b0d71D62827338251A8D89A98132A0": {
+    "approved_block": 19787815,
+    "lp_token": "0x7586C58bf6292B3C9DeFC8333fc757d6c5dA0f7E",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xad85FB8A5eD9E2f338d2798A9eEF176D31cA6A57": {
+    "approved_block": 20377817,
+    "lp_token": null,
+    "name": null
+  },
+  "0xae0f794Bc4Cad74739354223b167dbD04A3Ac6A5": {
+    "approved_block": 21517557,
+    "lp_token": null,
+    "name": null
+  },
+  "0xaf3df70E5E5E24f85A4A93183f69CF735003a8D9": {
+    "approved_block": 22510415,
+    "lp_token": null,
+    "name": null
+  },
+  "0xafd796E7c579EE49851DBa31Ad9EEc4aBDc0F31A": {
+    "approved_block": 23321145,
+    "lp_token": "0x2D1eB1704D0EE227B7528C5BDB4Fd256d6aC5B09",
+    "name": "Curve.fi curvecap Gauge Deposit"
+  },
+  "0xb040e8e2355880628c75Bf9572b1987561b8240f": {
+    "approved_block": 24383676,
+    "lp_token": "0xfEf45C3F537f623Ce9A301f55140E4bb8490EFA4",
+    "name": "Curve.fi sjUSDUSDC Gauge Deposit"
+  },
+  "0xb0549599d8446A196541dE11008eF5e79fA14F57": {
+    "approved_block": 17866976,
+    "lp_token": "0xfcc067EFb7bE2EEbD32615F14fC22195abB68e9B",
+    "name": "Curve.fi rETHfrxETH-f Gauge Deposit"
+  },
+  "0xb07AFD8bb54AbF9eC6D9713F19632193C687991E": {
+    "approved_block": 21751439,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb07d00e0eE9b1b2eb9f1B483924155Af7AF0c8Fa": {
+    "approved_block": 14263277,
+    "lp_token": "0xbcb91E689114B9Cc865AD7871845C95241Df4105",
+    "name": "Curve.fi PWRD3CRV-f Gauge Deposit"
+  },
+  "0xb0C633Eb467F721d4d02891edcA629387fcFF99b": {
+    "approved_block": 24974224,
+    "lp_token": "0x2877ece562057ee8B0A711bFfA10987C3D6398E7",
+    "name": "Curve.fi USSTUSDC Gauge Deposit"
+  },
+  "0xb0a6F55a758C8F035C067672e89903d76A5AbE9b": {
+    "approved_block": 17245192,
+    "lp_token": "0x8Bc3F1e82Ca3d63987dc12F90538c6bF818FcD0f",
+    "name": "Curve.fi DCHF3CRV-f Gauge Deposit"
+  },
+  "0xb0f5d00e5916c8b8981e99191A1458704B587b2b": {
+    "approved_block": 13530037,
+    "lp_token": "0xCEAF7747579696A2F0bb206a14210e3c9e6fB269",
+    "name": "Curve.fi UST_whv23CRV-f Gauge Deposit"
+  },
+  "0xb12600D06753Df7c706225c901E6C1346A654D0b": {
+    "approved_block": 18965883,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb1507ce316950690D424ba0454E397d49E4aC9c2": {
+    "approved_block": 19208267,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb2135e9B790C50Fa018ca14e4B04BDb4ADd2a61B": {
+    "approved_block": 18430628,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb2640AfF1B72046B590C9bB5882F2d316E6A3424": {
+    "approved_block": 22602773,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb2A385f10DAF66D5eA1418A2BB819b85F1bc3a5B": {
+    "approved_block": 19386045,
+    "lp_token": "0x1EE81c56e42EC34039D993d12410d437DdeA341E",
+    "name": "Curve.fi fxUSDFrax Gauge Deposit"
+  },
+  "0xb341f2d7e56524B52E3F7989A2E59366e1e5F18F": {
+    "approved_block": 24080950,
+    "lp_token": "0xFFd3b4D343A8964a5C3c1caAc20f319C41A97BFF",
+    "name": "Curve.fi yn-RWA/USD Gauge Deposit"
+  },
+  "0xb352c96ceb4189b9801817243EB4887aDF241905": {
+    "approved_block": 24750410,
+    "lp_token": "0xbA2C915ec9c37Dd6e5Bb94682040b5dAd2F58755",
+    "name": "Curve.fi sdUSDOUSD Gauge Deposit"
+  },
+  "0xb4E7b9826Ec7a2d21E343Ab1705A650422750e46": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb6492b8077A3Ae49A5a33a4FD21ea1983dafE5FE": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xb6d7C2bda5a907832d4556AE5f7bA800FF084C2a": {
+    "approved_block": 14639217,
+    "lp_token": "0x80CAcCdBD3f07BbdB558DB4a9e146D099933D677",
+    "name": "Curve.fi ibKRWUSDC-f Gauge Deposit"
+  },
+  "0xb87Ec044152C49E52F7c429B2B9DBAcb7Ea8FB15": {
+    "approved_block": 16425352,
+    "lp_token": "0x413928a25D6ea1A26F2625d633207755f67Bf97c",
+    "name": "Curve.fi agEUREURe-f Gauge Deposit"
+  },
+  "0xb8b9dfCB48614FA873ccEC72c79D728d39EC9a5c": {
+    "approved_block": 15175858,
+    "lp_token": "0x4606326b4Db89373F5377C316d3b0F6e55Bc6A20",
+    "name": "Curve.fi USDDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xb901a92F2c385AfA0A019e8A307a59A570239ca4": {
+    "approved_block": 18130105,
+    "lp_token": "0x86bF09aCB47AB31686bE413d614E9ded3666a1d3",
+    "name": "Curve.fi crvUSDETHSILO Gauge Deposit"
+  },
+  "0xb91cE18be6e3c04a8D22E350551e4313dE23527d": {
+    "approved_block": 23299693,
+    "lp_token": "0x8B878AFE454e31CF0A79c6D7cf2f077DD286C12f",
+    "name": "Curve.fi BDfxUSDCaf Gauge Deposit"
+  },
+  "0xb9BDcDcD7c3C1A3255402D44639cb6c7281833cF": {
+    "approved_block": 18915614,
+    "lp_token": "0xcE6431D21E3fb1036CE9973a3312368ED96F5CE7",
+    "name": "Curve.fi FRAXsDAI Gauge Deposit"
+  },
+  "0xb9C05B8EE41FDCbd9956114B3aF15834FDEDCb54": {
+    "approved_block": 12603168,
+    "lp_token": null,
+    "name": null
+  },
+  "0xbAF05d7aa4129CA14eC45cC9d4103a9aB9A9fF60": {
+    "approved_block": 14441032,
+    "lp_token": null,
+    "name": null
+  },
+  "0xbB05Ca38069d14eD34930Cb37F5C04438Df8C3f4": {
+    "approved_block": 24931590,
+    "lp_token": "0xcAF1969E9ba98C05113b75d8633A17196e2D02a5",
+    "name": "Curve.fi frxsUSDat Gauge Deposit"
+  },
+  "0xbB6eDb6E10fC89F1032F3c4DdB2e73d1BeDa423f": {
+    "approved_block": 23698444,
+    "lp_token": "0x6C5Ff8DCe52BE77b4eCE6B51996018f0C1713bA9",
+    "name": "Curve.fi USDCUSDU Gauge Deposit"
+  },
+  "0xbC1aB4dc01CC2592c79aE207c4B35a71502d51eE": {
+    "approved_block": 24534568,
+    "lp_token": "0x56A344F1aA03943f536b94436dE6A6e10116Cf86",
+    "name": "Curve.fi OGNOETH Gauge Deposit"
+  },
+  "0xbC38bD19227F91424eD4132F630f51C9A42Fa338": {
+    "approved_block": 14601073,
+    "lp_token": null,
+    "name": null
+  },
+  "0xbD6d1A33A6FA37379eCc89b6CFf7c7d7F8C305eC": {
+    "approved_block": 24885527,
+    "lp_token": "0x9D8AFD5Ce19A3b948049468188f1De13951A4383",
+    "name": "Curve.fi frxUsDOLA Gauge Deposit"
+  },
+  "0xbD7ddCe4D5a97F102DE674Ef56823b600e843C8A": {
+    "approved_block": 21734022,
+    "lp_token": "0xdBb1d219d84eaCEFb850ee04caCf2f1830934580",
+    "name": "Curve.fi frxUSDe Gauge Deposit"
+  },
+  "0xbE3CfbA845fB3C4F5CeD299Ed668d6C0598aF1fF": {
+    "approved_block": 22677206,
+    "lp_token": "0x6A0c68Bc96658A2B97201d94986Bf7753000f2cF",
+    "name": "Curve.fi JUSD USDC Gauge Deposit"
+  },
+  "0xbE6228125448E40F5DCBB2DbdF7fF3F5721000B4": {
+    "approved_block": 24896467,
+    "lp_token": "0x3C0965582dB7A0F660D491aA6174B9438f911c21",
+    "name": "Curve.fi evaUSDMAIN Gauge Deposit"
+  },
+  "0xbFcF63294aD7105dEa65aA58F8AE5BE2D9d0952A": {
+    "approved_block": 10856102,
+    "lp_token": "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+    "name": null
+  },
+  "0xba2FE07D59550e1DFcA6CDa6F8B2313cd21838e1": {
+    "approved_block": 22842534,
+    "lp_token": "0xe2b1a5D7d3802B011647Ae578E4b1EaE31e48252",
+    "name": "Curve.fi fxUSDBold Gauge Deposit"
+  },
+  "0xbb6c782738bc37484d0773f3D6bEce4DDc20cBdF": {
+    "approved_block": 22712500,
+    "lp_token": "0x98E9599dab3A936C35DE48E13E026Ef4eA20B5e6",
+    "name": "Curve.fi frxUSDUSDf Gauge Deposit"
+  },
+  "0xbb7AF3ef4A3A5d57085E2cAeD0e9a2068B13e781": {
+    "approved_block": 23121021,
+    "lp_token": null,
+    "name": null
+  },
+  "0xbdF78dafEBee68C3610EECE18295452ad356E6c7": {
+    "approved_block": 23219908,
+    "lp_token": "0x86fecb2f93c537397f9dFD894bCf6A95fa87a25e",
+    "name": "Curve.fi sfrxUSDe Gauge Deposit"
+  },
+  "0xc05d9A1b8CabBDD8551e7c292ffE2C06466c9383": {
+    "approved_block": 22480182,
+    "lp_token": "0xFfF8634dE89271b6075C55FA89B4E9A087Fdb9FE",
+    "name": "Curve.fi tacBTCpool Gauge Deposit"
+  },
+  "0xc0798d022eEE81F1408895325A9fBe171d2a24f1": {
+    "approved_block": 18122717,
+    "lp_token": null,
+    "name": null
+  },
+  "0xc0806D02B4E9ac39278300A1D169564758B02433": {
+    "approved_block": 19586397,
+    "lp_token": "0x86EA1191a219989d2dA3a85c949a12A92f8ED3Db",
+    "name": "Curve.fi CDCETH/ETH Gauge Deposit"
+  },
+  "0xc11B5bAD6Ef7b1BDC90c85d5498a91D7F19B5806": {
+    "approved_block": 20899012,
+    "lp_token": "0xAE6Ee608b297305AbF3EB609B81FEBbb8F6A0bb3",
+    "name": "Curve.fi tBTC/cbBTC Gauge Deposit"
+  },
+  "0xc1394d6c89cf8F553da8c8256674C778ccFf3E80": {
+    "approved_block": 18549929,
+    "lp_token": "0xfffAE954601cFF1195a8E20342db7EE66d56436B",
+    "name": "Curve.fi ETHxwstETH-f Gauge Deposit"
+  },
+  "0xc1c5B8aAfE653592627B54B9527C7E98326e83Ff": {
+    "approved_block": 14354667,
+    "lp_token": null,
+    "name": null
+  },
+  "0xc2075702490F0426E84E00d8B328119027813AC5": {
+    "approved_block": 17030212,
+    "lp_token": "0x6e52cCe4EaFDf77091dD1c82183b2D97b776b397",
+    "name": "Curve.fi frxETHCVX-f Gauge Deposit"
+  },
+  "0xc245c6a0946b26D7A892Eb84F765b62d0b3C46F3": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xc26f3C4F14e90649260A19896E27674Ba188862e": {
+    "approved_block": 23031405,
+    "lp_token": "0xD25f2cC6819FBD34641712122397eFbaf9b6A6e2",
+    "name": "Curve.fi ebUSDUSDC Gauge Deposit"
+  },
+  "0xc33098ceB5C5A3d471802333Cfc98Ac78acAb4CA": {
+    "approved_block": 21889723,
+    "lp_token": "0x21B45B2c1C53fDFe378Ed1955E8Cc29aE8cE0132",
+    "name": "Curve.fi MIMUSDV-f Gauge Deposit"
+  },
+  "0xc372CCdD24Bb0753CEB78bBaC4D24EB7dE4aBE4e": {
+    "approved_block": 21719551,
+    "lp_token": "0x4628f13651eaD6793F8d838B34B8f8522Fb0cc52",
+    "name": "Curve.fi GHOUSR Gauge Deposit"
+  },
+  "0xc3e9C79681C0C23d5a9A5A732DAA52EBe7Dff714": {
+    "approved_block": 16241854,
+    "lp_token": "0x141acE5Fd4435Fd341E396d579C91Df99fED10d4",
+    "name": "Curve.fi pbtc-sw3CRV-f Gauge Deposit"
+  },
+  "0xc4316d27eC627E03BD4d176E570cD0018e6a0456": {
+    "approved_block": 21926125,
+    "lp_token": "0x3CEf1AFC0E8324b57293a6E7cE663781bbEFBB79",
+    "name": "Curve.fi sUSDEsUSDS Gauge Deposit"
+  },
+  "0xc58faAf6eAc90bbCAD725d700efF613116393DE9": {
+    "approved_block": 21721424,
+    "lp_token": "0x1f59cC10c6360DA918B0235c98E58008452816EB",
+    "name": "Curve.fi yn-ETH/LSD Gauge Deposit"
+  },
+  "0xc5aE4B5F86332e70f3205a8151Ee9eD9F71e0797": {
+    "approved_block": 14528759,
+    "lp_token": null,
+    "name": null
+  },
+  "0xc62B10c61BF060eBf40A60859dCDbeA025Fc7e2e": {
+    "approved_block": 20822942,
+    "lp_token": "0x839d6bDeDFF886404A6d7a788ef241e4e28F4802",
+    "name": "Curve.fi cbBTC-WBTC Gauge Deposit"
+  },
+  "0xc68d8C4aF88E2EE2F4B8bC5eC3fEdd061afc2344": {
+    "approved_block": 19212656,
+    "lp_token": "0xb66D28a1683bA02d63282beEcC35Dc54b65fB1B0",
+    "name": "Curve.fi OETHprimeE Gauge Deposit"
+  },
+  "0xc69F26575943672c9F65Ef747F442B14D52D5328": {
+    "approved_block": 22039570,
+    "lp_token": "0x7a4AdfbC173E2D4f224f11496b0d0ef86F336091",
+    "name": "Curve.fi BOBOETH Gauge Deposit"
+  },
+  "0xc7995D84bcC245e7526AA953f3deD2231e1335c0": {
+    "approved_block": 19033306,
+    "lp_token": "0x0024271A09284bbF227465a9AF312667BE62346E",
+    "name": "Curve.fi ETHxWETH Gauge Deposit"
+  },
+  "0xc7A770dE69479bEEEEf22b2C9851760BaC3630Da": {
+    "approved_block": 15522446,
+    "lp_token": "0xF57ccaD8122B898A147Cc8601B1ECA88B1662c7E",
+    "name": "Curve.fi cvxFxsFrax-f Gauge Deposit"
+  },
+  "0xc7C770cA14D06a0C881eC551AB8E58E6b256326a": {
+    "approved_block": 20214508,
+    "lp_token": "0x8F476f43bAA2D4b6C215d2408340919bF7DE0520",
+    "name": "Curve.fi aUSDT-USDT Gauge Deposit"
+  },
+  "0xc92F18Ff65fE563c6D22476460a59ABA22E7a075": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xc98179648625316A8e1763e58256D31f517ea02a": {
+    "approved_block": 23542020,
+    "lp_token": "0xf05Bc5C38a8F5E3D98c72f11bC59E713F8a32228",
+    "name": "Curve.fi ynRWAx/USD Gauge Deposit"
+  },
+  "0xcE8FC6f703D9517660b2C8b1d90d86dD894cA732": {
+    "approved_block": 19043738,
+    "lp_token": null,
+    "name": null
+  },
+  "0xcEa806562B757AefFa9fE9D0a03C909b4a204254": {
+    "approved_block": 17701149,
+    "lp_token": null,
+    "name": null
+  },
+  "0xcF5136C67fA8A375BaBbDf13c0307EF994b5681D": {
+    "approved_block": 18720189,
+    "lp_token": "0x425BfB93370F14fF525aDb6EaEAcfE1f4e3b5802",
+    "name": "Curve.fi sdai-usdm Gauge Deposit"
+  },
+  "0xcb7CEB005dce5743026cDDaD2364d74f594b95A4": {
+    "approved_block": 16828602,
+    "lp_token": "0xE60986759872393a8360A4a7abEAb3A6e0BA7848",
+    "name": "Curve.fi pUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xd03BE91b1932715709e18021734fcB91BB431715": {
+    "approved_block": 17216964,
+    "lp_token": "0x94B17476A93b3262d87B9a326965D1E91f9c13E7",
+    "name": "Curve.fi OETHCRV-f Gauge Deposit"
+  },
+  "0xd0698b2E41C42bcE42B51f977F962Fd127cF82eA": {
+    "approved_block": 14515445,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd2cE52833a2a70Cf6255c6374Bc44525a0FB93D8": {
+    "approved_block": 19043735,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd303994a0Db9b74f3E8fF629ba3097fC7060C331": {
+    "approved_block": 21731786,
+    "lp_token": "0x38De22a3175708D45E7c7c64CD78479C8B56f76E",
+    "name": "Curve.fi DOLA/USR Gauge Deposit"
+  },
+  "0xd32F4bE8f777Ac27c6AAd544457de6d4f17a1BFA": {
+    "approved_block": 18327345,
+    "lp_token": "0x707EAe1CcFee0B8fef07D3F18EAFD1246762d587",
+    "name": "Curve.fi crvSTBT-f Gauge Deposit"
+  },
+  "0xd4430498E632F4614c8A83ba4a8cbB3918288800": {
+    "approved_block": 17872076,
+    "lp_token": "0xEBa0E8Ff5B90576886A01679E140E00Df5E47a0a",
+    "name": "Curve.fi FRcrvUSD-f Gauge Deposit"
+  },
+  "0xd4B22fEdcA85E684919955061fDf353b9d38389b": {
+    "approved_block": 12285967,
+    "lp_token": "0x4807862AA8b2bF68830e4C8dc86D0e9A998e085a",
+    "name": "Curve.fi BUSD3CRV-f Gauge Deposit"
+  },
+  "0xd4b19642701964c402DFa668F96F294266bC0a86": {
+    "approved_block": 18578865,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd51E1Eee15eF7dc924AAA8B82ff2D2E73408F58c": {
+    "approved_block": 21231604,
+    "lp_token": "0xff17dAb22F1E61078aBa2623c89cE6110E878B3c",
+    "name": "Curve.fi dola-save Gauge Deposit"
+  },
+  "0xd5E56807dFa48A411e2BFA335C63a07b6F04eDdf": {
+    "approved_block": 20377816,
+    "lp_token": "0xb92B054b9CC33685e7F8c3f85177C4b6DC061391",
+    "name": "Curve.fi weETHsWETH Gauge Deposit"
+  },
+  "0xd5d3efC90fFB38987005FdeA303B68306aA5C624": {
+    "approved_block": 14755921,
+    "lp_token": "0xe6b5CC1B4b47305c58392CE3D359B10282FC36Ea",
+    "name": "Curve.fi USDD3CRV3CRV-f Gauge Deposit"
+  },
+  "0xd5f2e6612E41bE48461FDBA20061E3c778Fe6EC4": {
+    "approved_block": 16443556,
+    "lp_token": "0xc3b19502F8c02be75F3f77fd673503520DEB51dD",
+    "name": "Curve.fi msUSDFRAX3CRV-f Gauge Deposit"
+  },
+  "0xd61C417df610531Fb507E2Da32C7f74C2a81f203": {
+    "approved_block": 19218063,
+    "lp_token": "0xE9245A9eFf6282d95EC885e29c77ad1Ae557adE6",
+    "name": "Curve.fi PRISMAUSD-f Gauge Deposit"
+  },
+  "0xd662908ADA2Ea1916B3318327A97eB18aD588b5d": {
+    "approved_block": 11555715,
+    "lp_token": "0xFd2a8fA60Abd58Efe3EeE34dd494cD491dC14900",
+    "name": "Curve.fi a3CRV Gauge Deposit"
+  },
+  "0xd68089D9dAa2da7888B7Ef54158480e09ecC3580": {
+    "approved_block": 19043736,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd69ac8d9D25e99446171B5D0B3E4234dAd294890": {
+    "approved_block": 11555715,
+    "lp_token": "0x09f4B84A87FC81FC84220fD7287b613B8A9D4c05",
+    "name": "Curve.fi i3CRV Gauge Deposit"
+  },
+  "0xd6DAcdCB438f048cF90e53415872cDb3FCC95421": {
+    "approved_block": 17416187,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd7d147c6Bb90A718c3De8C0568F9B560C79fa416": {
+    "approved_block": 11512882,
+    "lp_token": "0xDE5331AC4B3630f94853Ff322B66407e0D6331E8",
+    "name": "Curve.fi pBTC/sbtcCRV Gauge Deposit"
+  },
+  "0xd84d18e0BDC7026B63388AAdA8898CBD288f2d2a": {
+    "approved_block": 23851325,
+    "lp_token": "0xE2Ce044f8d3f7FD32833aF603409B0F016448aA9",
+    "name": "Curve.fi OETHstETH Gauge Deposit"
+  },
+  "0xd85C478A7828734376bC6Bc77373a260CC3A9407": {
+    "approved_block": 22546858,
+    "lp_token": "0xeb593fe90591923FDdd97F2e5fCb1a14CE656E5D",
+    "name": "Curve.fi wA7A5USDT Gauge Deposit"
+  },
+  "0xd8b712d29381748dB89c36BCa0138d7c75866ddF": {
+    "approved_block": 13005937,
+    "lp_token": "0x5a6A4D54456819380173272A5E8E9B9904BdF41B",
+    "name": "Curve.fi MIM-3LP3CRV-f Gauge Deposit"
+  },
+  "0xd8e309F20605E0eE8486c26957f95DBdAe99F913": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xd93b3CD2718321DDB341845925DB273aEdEC4D56": {
+    "approved_block": 23424985,
+    "lp_token": "0x64273624eb57c5cA961d366CBF3968e760Bf0452",
+    "name": "Curve.fi DOLAwstUSR Gauge Deposit"
+  },
+  "0xd9a4b85f90dcAD8793e1c5241E3c4A08c96705E1": {
+    "approved_block": 23067843,
+    "lp_token": "0xE2996284C72f59a52Be59d9fC763FEB38ebda42B",
+    "name": "Curve.fi USSTUSDC Gauge Deposit"
+  },
+  "0xdA0DD1798BE66E17d5aB1Dc476302b56689C2DB4": {
+    "approved_block": 16139604,
+    "lp_token": "0x5ca0313D44551e32e0d7a298EC024321c4BC59B4",
+    "name": "Curve.fi bLUSDLUSD3-f Gauge Deposit"
+  },
+  "0xdA22f2De17547E3A5CADcC960EB4e9cfDC52e10A": {
+    "approved_block": 19872424,
+    "lp_token": "0x9dBcfC09E651c040EE68D6DbEB8a09F8dd0cAA77",
+    "name": "Curve.fi ZUNWETH Gauge Deposit"
+  },
+  "0xdA690c2EA49a058a9966C69f46a05Bfc225939f4": {
+    "approved_block": 14563661,
+    "lp_token": null,
+    "name": null
+  },
+  "0xdB7cbbb1d5D5124F86E92001C9dFDC068C05801D": {
+    "approved_block": 14651134,
+    "lp_token": "0x4704aB1fb693ce163F7c9D3A31b3FF4eaF797714",
+    "name": "Curve.fi FPIFRAX-f Gauge Deposit"
+  },
+  "0xdBbb0056E4C27886516CCaEfDDB3DaF25a0D8F50": {
+    "approved_block": 19822503,
+    "lp_token": null,
+    "name": null
+  },
+  "0xdC69D4cB5b86388Fff0b51885677e258883534ae": {
+    "approved_block": 14027753,
+    "lp_token": "0x06cb22615BA53E60D67Bf6C341a0fD5E718E1655",
+    "name": "Curve.fi FEI3CRV3CRV-f Gauge Deposit"
+  },
+  "0xdF901BE65847AaCED69319394835E7Dce5740556": {
+    "approved_block": 18423939,
+    "lp_token": "0x2dabF79E16ceb92B651651f47b6E835C9DB5828A",
+    "name": "Curve.fi crvUSDM-f Gauge Deposit"
+  },
+  "0xdFc7AdFa664b08767b735dE28f9E84cd30492aeE": {
+    "approved_block": 11512882,
+    "lp_token": "0x410e3E86ef427e30B9235497143881f717d93c2A",
+    "name": "Curve.fi bBTC/sbtcCRV Gauge Deposit"
+  },
+  "0xda7F9DD286577cC338047B040c289463743a474e": {
+    "approved_block": 15175858,
+    "lp_token": "0x4e43151b78b5fbb16298C1161fcbF7531d5F8D93",
+    "name": "Curve.fi GUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xda8769595FF12B0Ac0561a7622957E76D543B79A": {
+    "approved_block": 19575539,
+    "lp_token": "0x2116BFaD62b383043230501f6a124c6EA60CcfA5",
+    "name": "Curve.fi fxUSDrUSD Gauge Deposit"
+  },
+  "0xdc6d319FAc1498125e871ccEdF7f1B9998ebA3C5": {
+    "approved_block": 18917215,
+    "lp_token": "0xA5588F7cdf560811710A2D82D3C9c99769DB1Dcb",
+    "name": "Curve.fi FRAXPYUSD Gauge Deposit"
+  },
+  "0xdf19894056c736935C90fE08c54f1742e2593E62": {
+    "approved_block": 20276309,
+    "lp_token": "0xf7E009b8111c09a906D1D84938745b9EDEedFdDE",
+    "name": "Curve.fi TriLST-PT Gauge Deposit"
+  },
+  "0xdf31e363cD85acF7d5A897DBE3F335515F29d0F1": {
+    "approved_block": 22375692,
+    "lp_token": null,
+    "name": null
+  },
+  "0xdfb3AfAF21c3907bEb98aAEba78327572F5300FC": {
+    "approved_block": 22375687,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe042515355e6852DbAEc269D04d574E0B8d8C6F4": {
+    "approved_block": 21131900,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe1bDB9973080741e864Eb2483aBcc86925f97356": {
+    "approved_block": 22984466,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe245d3264D9072937ed6cc1E2E34B946DE03cD53": {
+    "approved_block": 21396376,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe39c817fe25Ac1A8Bd343A74037E3C90b09bEeEF": {
+    "approved_block": 17751513,
+    "lp_token": "0xfC636D819d1a98433402eC9dEC633d864014F28C",
+    "name": "Curve.fi crvUSDUZD-f Gauge Deposit"
+  },
+  "0xe4963A639532f4042Be5FbCf8cc77e86145BbAdC": {
+    "approved_block": 22648410,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe5E5ed1B50AE33E66ca69dF17Aa6381FDe4e9C7e": {
+    "approved_block": 19733205,
+    "lp_token": null,
+    "name": null
+  },
+  "0xe5d5Aa1Bbe72F68dF42432813485cA1Fc998DE32": {
+    "approved_block": 16534936,
+    "lp_token": "0xb79565c01b7Ae53618d9B847b9443aAf4f9011e7",
+    "name": "Curve.fi LDOETH-f Gauge Deposit"
+  },
+  "0xe6c76b3Ce14973D070C0fE5C75e102Aba9DeFae1": {
+    "approved_block": 19093844,
+    "lp_token": "0x91285c4fC766ffF6F3acAfeEC7a0423275257faE",
+    "name": "Curve.fi eUSDcrvUSD Gauge Deposit"
+  },
+  "0xe744cee18486fB669A5E608F241Db2c88E942EE0": {
+    "approved_block": 24988747,
+    "lp_token": "0xC09e82f81Cb811DB0922dD48206fc2e212322caf",
+    "name": "Curve.fi USD1-2crv Gauge Deposit"
+  },
+  "0xe7F35256D3Ac4Bcf743f2b81054b3f3130C52998": {
+    "approved_block": 24967661,
+    "lp_token": "0xA16d24785637175241999347C658d1F8998de04C",
+    "name": "Curve.fi evaETHav Gauge Deposit"
+  },
+  "0xe8060Ad8971450E624d5289A10017dD30F5dA85F": {
+    "approved_block": 12959942,
+    "lp_token": "0xFD5dB7463a3aB53fD211b4af195c5BCCC1A03890",
+    "name": "Curve.fi EURT-f Gauge Deposit"
+  },
+  "0xe8ee520BE6B03eaCC4628e7df6137e869e8028cA": {
+    "approved_block": 20699216,
+    "lp_token": "0x6A8A274a670484fC358aB5aE00a1e0aa9aB11Ae6",
+    "name": "Curve.fi weETH/s/k Gauge Deposit"
+  },
+  "0xeA012f5b25Fa0D8e46123B85f585d0A5075e96b5": {
+    "approved_block": 18319151,
+    "lp_token": "0x2570f1bD5D2735314FC102eb12Fc1aFe9e6E7193",
+    "name": "Curve.fi TryLSD Gauge Deposit"
+  },
+  "0xeA63247e831f870160896A29F5240EfD7EeE44a5": {
+    "approved_block": 19212657,
+    "lp_token": "0xBed58C1053fd347843883eadE0781f562A66f623",
+    "name": "Curve.fi triCVG Gauge Deposit"
+  },
+  "0xeA7368019a686320927298Cda56E389a23a9bc63": {
+    "approved_block": 17991704,
+    "lp_token": "0x40928E9af1Ff90093670daA60C1E34249D68A69B",
+    "name": "Curve.fi crUSDCFRAX-f Gauge Deposit"
+  },
+  "0xeCBcF829742987c0600e0ee1117a32d09451882E": {
+    "approved_block": 24055072,
+    "lp_token": "0x66039342C66760874047c36943B1e2d8300363BB",
+    "name": "Curve.fi HemiCbWBTC Gauge Deposit"
+  },
+  "0xeCb860e54E33FEA8fAb5B076734e2591D1A9ebA4": {
+    "approved_block": 14629153,
+    "lp_token": "0xE95E4c2dAC312F31Dc605533D5A4d0aF42579308",
+    "name": "Curve.fi sETH2stETH-f Gauge Deposit"
+  },
+  "0xeE624fCbb0C197E41ffc58999e6D35b9B893533E": {
+    "approved_block": 20214507,
+    "lp_token": "0xc50E191F703FB3160fC15d8b168A8c740fec3666",
+    "name": "Curve.fi cvgCVXCVX1 Gauge Deposit"
+  },
+  "0xeF66472681654922dD78649aA71cE47C281C49e9": {
+    "approved_block": 19611850,
+    "lp_token": "0x6fC7eA6CA8Cd2759803eb78159C931a8FF5E0557",
+    "name": "Curve.fi rev fxUSD Gauge Deposit"
+  },
+  "0xeFF437A56A22D7dD86C1202A308536ED8C7da7c1": {
+    "approved_block": 13157462,
+    "lp_token": "0x8818a9bb44Fbf33502bE7c15c500d0C783B73067",
+    "name": "Curve.fi ibJPY+sJPY-f Gauge Deposit"
+  },
+  "0xec303960CF0456aC304Af45C0aDDe34921a10Fdf": {
+    "approved_block": 19386045,
+    "lp_token": "0x74345504Eaea3D9408fC69Ae7EB2d14095643c5b",
+    "name": "Curve.fi fxUSDGHO Gauge Deposit"
+  },
+  "0xed708e4eA54a525142db0a991C5B0112727541A0": {
+    "approved_block": 18915613,
+    "lp_token": "0x63b546F3860a75F732EFDE9Ff8EB1a6bA96b5c64",
+    "name": "Curve.fi FRAXUSDV Gauge Deposit"
+  },
+  "0xefA4091e9D8944A8a417e47bD51A794c8989E9b2": {
+    "approved_block": 22534985,
+    "lp_token": "0x81301848168bAe6Add206aA50052E247Cb366d3A",
+    "name": "Curve.fi yUSD USDC Gauge Deposit"
+  },
+  "0xf0cF26Dd24FB0a8f88C19D7AAb9c70a28c215549": {
+    "approved_block": 22375693,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf0dF994D065C79B8cDFb64aC5c5223Fe67aa9477": {
+    "approved_block": 21837643,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf16b07241Bbbf676324FaDEE6Bd6611423Faa4ae": {
+    "approved_block": 19329089,
+    "lp_token": "0xF36a4BA50C603204c3FC6d2dA8b78A7b69CBC67d",
+    "name": "Curve.fi USDeDAI Gauge Deposit"
+  },
+  "0xf1ce237a1E1a88F6e289CD7998A826138AEB30b0": {
+    "approved_block": 18622813,
+    "lp_token": "0x69833361991ed76f9e8DBBcdf9ea1520fEbFb4a7",
+    "name": "Curve.fi yPRISMA-f Gauge Deposit"
+  },
+  "0xf2Cde8c47C20aCbffC598217Ad5FE6DB9E00b163": {
+    "approved_block": 13455039,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf2cBa59952cc09EB23d6F7baa2C47aB79B9F2945": {
+    "approved_block": 17515580,
+    "lp_token": "0xe9123CBC5d1EA65301D417193c40A72Ac8D53501",
+    "name": "Curve.fi 3CRVlvUSD3CRV-f Gauge Deposit"
+  },
+  "0xf30348F8947F46aEdE57d9b9fFE42B56E4220D13": {
+    "approved_block": 22510415,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf431263dD7bc0A5b49A43b2fbbC77129E7220349": {
+    "approved_block": 21997185,
+    "lp_token": "0x7fd04C3eb261308154789db3A363dF789B53644f",
+    "name": "Curve.fi scrvdeUSD Gauge Deposit"
+  },
+  "0xf4FA0C7833e778fB9FB392eC36217e17C9133976": {
+    "approved_block": 19967643,
+    "lp_token": "0xEEda34A377dD0ca676b9511EE1324974fA8d980D",
+    "name": "Curve.fi pufETHwstE Gauge Deposit"
+  },
+  "0xf54342D2AA95f6F6aFd2535Bfafe98a233e201AB": {
+    "approved_block": 23806082,
+    "lp_token": "0x38093de2Ac037524C28814889B2823aEC4c0fae3",
+    "name": "Curve.fi RWA/crvUSD Gauge Deposit"
+  },
+  "0xf5456dE3a08fA12253153414FBEBAaE63e0C7884": {
+    "approved_block": 22480182,
+    "lp_token": "0x51F5466690978173f45270f57e06e25b0c888261",
+    "name": "Curve.fi tacUSDpool Gauge Deposit"
+  },
+  "0xf589273a91622f1f48C0CD378881f0b3e6c40a95": {
+    "approved_block": 20276310,
+    "lp_token": "0x3eE841F47947FEFbE510366E4bbb49e145484195",
+    "name": "Curve.fi USRUSDC Gauge Deposit"
+  },
+  "0xf652cdFC38E1D2fB48d6aC022AadFc2501fd437b": {
+    "approved_block": 24208981,
+    "lp_token": "0x4DE61e58f5f1E495e3BC58516268Bba25b5a57Fd",
+    "name": "Curve.fi sdsfrxrUSD Gauge Deposit"
+  },
+  "0xf69Fb60B79E463384b40dbFDFB633AB5a863C9A2": {
+    "approved_block": 18902442,
+    "lp_token": "0x625E92624Bc2D88619ACCc1788365A69767f6200",
+    "name": "Curve.fi PYcrvUSD Gauge Deposit"
+  },
+  "0xf6D7087D4Ae4dCf85956d743406E63cDA74D99AD": {
+    "approved_block": 15175858,
+    "lp_token": "0xe3c190c57b5959Ae62EfE3B6797058B76bA2f5eF",
+    "name": "Curve.fi SUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xf74175aCe638E612a0a3B09E6bE89795ff48E06D": {
+    "approved_block": 15522446,
+    "lp_token": "0x22e859Ee894c2068920858A60b51DC03ac5581c1",
+    "name": "Curve.fi agEURFRAXB-f Gauge Deposit"
+  },
+  "0xf792934842e86f964bDF19A439797a6e3c9fE17B": {
+    "approved_block": 20413898,
+    "lp_token": "0x17D964DA2bD337CfEaEd30a27c9Ab6580676E730",
+    "name": "Curve.fi ZUNPXETH Gauge Deposit"
+  },
+  "0xf7F9ef1Ce4F496413A490E3925AC4a5F3570503b": {
+    "approved_block": 24967660,
+    "lp_token": "0xcB3656043790bef7d240Ba82a63A52acBD3e7666",
+    "name": "Curve.fi srRYUSDC Gauge Deposit"
+  },
+  "0xf84657ca6Db485EA38c63ca96dc396c2b3c6fdcC": {
+    "approved_block": 22313153,
+    "lp_token": "0xb0ef04ACE97d350E24Efa5139d2590D26a61A8Dc",
+    "name": "Curve.fi reusdfxusd Gauge Deposit"
+  },
+  "0xf865FDd6a5F307F398a94Dc40687995Cfaa77BC9": {
+    "approved_block": 15175858,
+    "lp_token": "0x33baeDa08b8afACc4d3d07cf31d49FC1F1f3E893",
+    "name": "Curve.fi TUSDFRAXBP3CRV-f Gauge Deposit"
+  },
+  "0xf868B47717F4739EE142b3BE6EE0f84Da868E917": {
+    "approved_block": 20899017,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf8b31183E3DB3b109F37DB573121fDA13c216DD6": {
+    "approved_block": 18533102,
+    "lp_token": null,
+    "name": null
+  },
+  "0xf9CB3854A922655004022A84Ba1618B1100CBEEf": {
+    "approved_block": 19265309,
+    "lp_token": null,
+    "name": null
+  },
+  "0xfA30482CB759165a56Ccf4a992C85C847bE5a618": {
+    "approved_block": 17157118,
+    "lp_token": "0x596b330fA8AB2b449973309af6D6ddc002CaA52D",
+    "name": "Curve.fi WACMEFRXET-f Gauge Deposit"
+  },
+  "0xfB18127c1471131468a1AaD4785c19678e521D86": {
+    "approved_block": 16833612,
+    "lp_token": "0x971add32Ea87f10bD192671630be3BE8A11b8623",
+    "name": "Curve.fi cvxcrv-crv-f Gauge Deposit"
+  },
+  "0xfDb129ea4b6f557b07BcDCedE54F665b7b6Bc281": {
+    "approved_block": 12688980,
+    "lp_token": null,
+    "name": null
+  },
+  "0xfE1A3dD8b169fB5BF0D5dbFe813d956F39fF6310": {
+    "approved_block": 12603168,
+    "lp_token": null,
+    "name": null
+  },
+  "0xfE8d7Bc5957FCf18Ea18E7d4352699fc5fe0C339": {
+    "approved_block": 20098276,
+    "lp_token": null,
+    "name": null
+  },
+  "0xfb860600F1bE1f1c72A89B2eF5CAF345aff7D39d": {
+    "approved_block": 16988881,
+    "lp_token": "0xFC2838a17D8e8B1D5456E0a351B0708a09211147",
+    "name": "Curve.fi crvfraxUSDP Gauge Deposit"
+  },
+  "0xfbb5b8f2f9b7a4d21ff44dC724C1Fb7b531A6612": {
+    "approved_block": 14487388,
+    "lp_token": null,
+    "name": null
+  },
+  "0xfc31d6227E8b9341bDBf781b58C87C1ccFf7Ff2B": {
+    "approved_block": 22567036,
+    "lp_token": "0xFf771E92DD2400b4F2D3E0aC3AfAe3aE1885877E",
+    "name": "Curve.fi cvcrvUSD Gauge Deposit"
+  },
+  "0xfcAf4EC80a94a5409141Af16a1DcA950a6973a39": {
+    "approved_block": 17360052,
+    "lp_token": "0x34D655069F4cAc1547E4C8cA284FfFF5ad4A8db0",
+    "name": "Curve.fi crvUSDTUSD-f Gauge Deposit"
+  },
+  "0xfe2afBE02d800836d2c7081Eef2a4a8408F90488": {
+    "approved_block": 19533362,
+    "lp_token": null,
+    "name": null
+  }
+}
