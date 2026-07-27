@@ -8,7 +8,7 @@ import {ICurve} from "./interfaces/ICurve.sol";
 ///         from a trusted factory policy.
 contract GaugeValidator {
     uint256 public constant FACTORY_READ_GAS = 30_000;
-    uint256 public constant MODULE_CALL_GAS = 200_000;
+    uint256 public constant MODULE_CALL_GAS = 2_000_000;
 
     struct FactoryPolicy {
         address module;

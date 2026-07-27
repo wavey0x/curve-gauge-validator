@@ -131,7 +131,7 @@ All dependency calls are capped at 30,000 gas. Address responses must be
 exactly 32 bytes with zero upper bits. Boolean responses must be exactly 32
 bytes and equal to zero or one.
 
-The core caps each module call at 200,000 gas and requires an exact canonical
+The core caps each module call at 2,000,000 gas and requires an exact canonical
 address response. Policy modules should be immutable implementations; binding
 an upgradeable proxy deliberately transfers policy-change authority to that
 proxy's administrator.
@@ -192,9 +192,10 @@ the wrong target, noncanonical ABI words, recursive wrappers, and more than 64
 recognized gauges reject the entire analysis.
 
 Every recognized gauge is evaluated through the immutable gauge validator
-with a 300,000-gas cap and an exact canonical boolean return. A failed query
-makes that gauge invalid without changing a successfully parsed proposal to
-`UNAVAILABLE`.
+with a 2,100,000-gas cap and an exact canonical boolean return. The extra
+100,000 gas lets the core perform its factory read and still forward the full
+2,000,000-gas module budget under EIP-150. A failed query makes that gauge
+invalid without changing a successfully parsed proposal to `UNAVAILABLE`.
 
 `allValid` is true only when parsing completed, at least one gauge was
 recognized, and every recognized gauge is valid. `validateProposal` applies

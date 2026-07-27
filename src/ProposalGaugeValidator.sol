@@ -18,7 +18,8 @@ contract ProposalGaugeValidator {
 
     uint256 public constant MAX_GAUGES = 64;
     uint256 public constant DAO_CALL_GAS = 5_000_000;
-    uint256 public constant GAUGE_VALIDATION_GAS = 300_000;
+    /// @dev Leaves the core enough headroom to forward its full 2M module budget.
+    uint256 public constant GAUGE_VALIDATION_GAS = 2_100_000;
 
     ICurveDAO public immutable DAO;
     address public immutable AGENT;

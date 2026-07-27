@@ -6,7 +6,14 @@ import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
-import {ConfigurableDependency, MockCurveFactory, MockDAO, MockProtocolGauge, MockTarget} from "./helpers/Mocks.sol";
+import {
+    ConfigurableDependency,
+    GasFloorValidationModule,
+    MockCurveFactory,
+    MockDAO,
+    MockProtocolGauge,
+    MockTarget
+} from "./helpers/Mocks.sol";
 
 contract ProposalGaugeValidatorTest is Test {
     bytes4 private constant ADD_GAUGE_SELECTOR = 0x18dfe921;
@@ -52,6 +59,24 @@ contract ProposalGaugeValidatorTest is Test {
         assertEq(result.gauges[0].gauge, address(gauge));
         assertTrue(result.gauges[0].valid);
         assertTrue(proposalValidator.validateProposal(proposalId));
+    }
+
+    function test_ProposalAllowsNearTwoMillionGasModule() public {
+        GasFloorValidationModule expensiveModule = new GasFloorValidationModule(address(factory), 1_900_000);
+        GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
+        bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(expensiveModule), "GAS_FLOOR");
+        GaugeValidator expensiveValidator = new GaugeValidator(address(this), bindings);
+        ProposalGaugeValidator expensiveProposalValidator = new ProposalGaugeValidator(
+            ICurveDAO(address(dao)), address(agent), address(gaugeController), expensiveValidator
+        );
+        uint256 proposalId =
+            _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
+
+        ProposalGaugeValidator.ProposalAnalysis memory result = expensiveProposalValidator.analyzeProposal(proposalId);
+
+        _assertComplete(result);
+        assertTrue(result.allValid);
+        assertTrue(result.gauges[0].valid);
     }
 
     function test_AgentWrappedAdditionIsAuthenticated() public {

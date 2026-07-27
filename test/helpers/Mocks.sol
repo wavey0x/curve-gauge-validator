@@ -37,6 +37,20 @@ contract MockValidationModule {
     }
 }
 
+contract GasFloorValidationModule {
+    address public immutable FACTORY;
+    uint256 public immutable MINIMUM_GAS;
+
+    constructor(address factory_, uint256 minimumGas_) {
+        FACTORY = factory_;
+        MINIMUM_GAS = minimumGas_;
+    }
+
+    function factoryForGauge(address, bytes32) external view returns (address) {
+        return gasleft() >= MINIMUM_GAS ? FACTORY : address(0);
+    }
+}
+
 contract MockProtocolGauge {
     address public factory;
     // Protocol-compatible Vyper getter.
