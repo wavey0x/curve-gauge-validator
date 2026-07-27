@@ -20,9 +20,10 @@ Completed:
 - owner-only trust updates;
 - representative pinned-mainnet tests; and
 - a separate immutable proposal validator;
-- compact ordered `{gauge, valid}` proposal results;
+- one aggregate proposal boolean;
 - strict direct and Agent-wrapped `add_gauge` parsing;
-- explicit unavailable, rejected, and complete outcomes; and
+- support for both executable `add_gauge` encodings;
+- rejection of nonzero initial gauge weight; and
 - three-transaction deployment with exact readback.
 
 Removed:

@@ -26,7 +26,9 @@ proposalValidator.validateProposalGauges(proposalId); // true or false
 
 DAO read failures revert. Structurally non-executable callscripts and unrelated
 calls create no gauge risk; authenticated gauge additions return `false` when
-their calldata cannot be decoded safely or the gauge fails validation.
+their calldata cannot be decoded safely or the gauge fails validation. Both
+executable `add_gauge` encodings are recognized: omitted or explicit zero
+initial weight is accepted, while nonzero initial weight returns `false`.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the proof layouts and mainnet
 trust set.

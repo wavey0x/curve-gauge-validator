@@ -6,8 +6,8 @@ This repository separates two questions:
 
 > Was this gauge deployed by a trusted factory?
 
-> Do all authenticated gauge additions in this proposal currently pass that
-> predicate?
+> Do all authenticated gauge additions in this proposal use a standard zero
+> initial weight and currently pass that predicate?
 
 Keep `GaugeValidator` to one small pessimistic boolean core with O(1)
 factory-to-module dispatch. Keep proof implementations stateless and proposal
@@ -17,7 +17,8 @@ parsing in its separate immutable consumer.
 
 - `src/GaugeValidator.sol`: stable core and exact factory-policy bindings.
 - `src/GaugeValidationModuleV1.sol`: four current reciprocal proofs.
-- `src/ProposalGaugeValidator.sol`: strict proposal parsing and gauge results.
+- `src/ProposalGaugeValidator.sol`: strict proposal parsing and aggregate
+  boolean.
 - `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
 - `script/DeployGaugeValidator.s.sol`: three-contract deployment and readback.
 - `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
@@ -38,11 +39,14 @@ parsing in its separate immutable consumer.
   configured module.
 - Modules are trusted, governance-selected policy components that return a
   strict boolean.
-- External dependency failures return `false`.
+- Gauge and policy dependency failures return `false`; DAO proposal-read
+  failures revert.
 - Configuration failures revert.
 - External calls remain gas bounded and ABI strict.
 - The proposal validator has immutable dependencies and no governance policy.
 - Authenticated proposal targets and calldata must be parsed strictly.
+- Both executable `add_gauge` encodings are recognized. Omitted or explicit
+  zero initial weight is accepted; nonzero initial weight returns `false`.
 - Do not add proof implementations, proposal parsing, route scanning, module
   registries, historical exhaustiveness, or caller-supplied factory hints to
   `GaugeValidator`.

@@ -16,6 +16,7 @@ import {
 } from "./helpers/Mocks.sol";
 
 contract ProposalGaugeValidatorTest is Test {
+    bytes4 private constant ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR = bytes4(keccak256("add_gauge(address,int128)"));
     bytes4 private constant ADD_GAUGE_SELECTOR = 0x18dfe921;
     bytes4 private constant AGENT_EXECUTE_SELECTOR = 0xb61d27f6;
 
@@ -48,8 +49,7 @@ contract ProposalGaugeValidatorTest is Test {
     }
 
     function test_DirectAdditionReturnsSimpleGaugeBoolean() public {
-        uint256 proposalId =
-            _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
+        uint256 proposalId = _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 0))));
 
         assertTrue(proposalValidator.validateProposalGauges(proposalId));
     }
@@ -62,18 +62,60 @@ contract ProposalGaugeValidatorTest is Test {
         ProposalGaugeValidator expensiveProposalValidator = new ProposalGaugeValidator(
             ICurveDAO(address(dao)), address(agent), address(gaugeController), expensiveValidator
         );
-        uint256 proposalId =
-            _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
+        uint256 proposalId = _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 0))));
 
         assertTrue(expensiveProposalValidator.validateProposalGauges(proposalId));
     }
 
     function test_AgentWrappedAdditionIsAuthenticated() public {
-        bytes memory payload = _addGauge(address(gauge), 7, type(uint256).max);
+        bytes memory payload = _addGauge(address(gauge), 7, 0);
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(agent), _execute(address(gaugeController), 0, payload))));
 
         assertTrue(proposalValidator.validateProposalGauges(proposalId));
+    }
+
+    function test_DefaultWeightAdditionValidatesGauge() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+
+        assertTrue(
+            _validate(_callscript(_scriptCall(address(gaugeController), _addGaugeDefaultWeight(address(gauge), 0))))
+        );
+        assertFalse(
+            _validate(
+                _callscript(_scriptCall(address(gaugeController), _addGaugeDefaultWeight(address(invalidGauge), 0)))
+            )
+        );
+        assertTrue(
+            _validate(
+                _callscript(
+                    _scriptCall(
+                        address(agent), _execute(address(gaugeController), 0, _addGaugeDefaultWeight(address(gauge), 0))
+                    )
+                )
+            )
+        );
+        assertFalse(
+            _validate(
+                _callscript(
+                    _scriptCall(
+                        address(agent),
+                        _execute(address(gaugeController), 0, _addGaugeDefaultWeight(address(invalidGauge), 0))
+                    )
+                )
+            )
+        );
+    }
+
+    function test_NonzeroInitialWeightIsRejected() public {
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 1)))));
+        assertFalse(
+            _validate(
+                _callscript(
+                    _scriptCall(address(agent), _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 1)))
+                )
+            )
+        );
     }
 
     function test_UnrelatedCallsAreIgnoredAndAllAdditionsAreChecked() public {
@@ -82,9 +124,9 @@ contract ProposalGaugeValidatorTest is Test {
 
         bytes memory calls = bytes.concat(
             _scriptCall(address(unrelatedTarget), hex"12345678"),
-            _scriptCall(address(gaugeController), _addGauge(address(gauge), 1, 2)),
+            _scriptCall(address(gaugeController), _addGauge(address(gauge), 1, 0)),
             _scriptCall(address(unrelatedTarget), bytes.concat(hex"12345678", _addGauge(address(0xDEAD), 0, 0))),
-            _scriptCall(address(agent), _execute(address(gaugeController), 0, _addGauge(address(secondGauge), 3, 4)))
+            _scriptCall(address(agent), _execute(address(gaugeController), 0, _addGauge(address(secondGauge), 3, 0)))
         );
 
         assertTrue(proposalValidator.validateProposalGauges(_push(_callscript(calls))));
@@ -183,12 +225,23 @@ contract ProposalGaugeValidatorTest is Test {
         _storeWord(badAddress, 4, uint256(uint160(address(gauge))) | (uint256(1) << 160));
         assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badAddress))));
 
+        bytes memory badDefaultWeightAddress = _addGaugeDefaultWeight(address(gauge), 0);
+        _storeWord(badDefaultWeightAddress, 4, uint256(uint160(address(gauge))) | (uint256(1) << 160));
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badDefaultWeightAddress))));
+
         bytes memory badInt = _addGauge(address(gauge), 1, 0);
         _storeWord(badInt, 36, (uint256(1) << 128) | 1);
         assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badInt))));
 
+        bytes memory badDefaultWeightInt = _addGaugeDefaultWeight(address(gauge), 1);
+        _storeWord(badDefaultWeightInt, 36, (uint256(1) << 128) | 1);
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badDefaultWeightInt))));
+
         bytes memory badLength = bytes.concat(_addGauge(address(gauge), 0, 0), bytes32(0));
         assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badLength))));
+
+        bytes memory badDefaultWeightLength = bytes.concat(_addGaugeDefaultWeight(address(gauge), 0), bytes32(0));
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badDefaultWeightLength))));
     }
 
     function test_LaterStructuralFailureMakesWholeProposalNonExecutable() public {
@@ -238,7 +291,7 @@ contract ProposalGaugeValidatorTest is Test {
         bytes memory calls;
         int128 gaugeType;
         for (uint256 i; i < 65; ++i) {
-            calls = bytes.concat(calls, _scriptCall(address(gaugeController), _addGauge(address(gauge), gaugeType, i)));
+            calls = bytes.concat(calls, _scriptCall(address(gaugeController), _addGauge(address(gauge), gaugeType, 0)));
             ++gaugeType;
         }
 
@@ -263,6 +316,10 @@ contract ProposalGaugeValidatorTest is Test {
 
     function _addGauge(address gauge_, int128 gaugeType, uint256 initialWeight) private pure returns (bytes memory) {
         return abi.encodeWithSelector(ADD_GAUGE_SELECTOR, gauge_, gaugeType, initialWeight);
+    }
+
+    function _addGaugeDefaultWeight(address gauge_, int128 gaugeType) private pure returns (bytes memory) {
+        return abi.encodeWithSelector(ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR, gauge_, gaugeType);
     }
 
     function _execute(address target, uint256 value, bytes memory payload) private pure returns (bytes memory) {

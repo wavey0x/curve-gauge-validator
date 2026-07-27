@@ -9,10 +9,12 @@ import {ICurveDAO} from "./interfaces/ICurveDAO.sol";
 ///         and evaluates them with an immutable GaugeValidator.
 contract ProposalGaugeValidator {
     bytes4 private constant CALLSCRIPT_ID = 0x00000001;
+    bytes4 private constant ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR = bytes4(keccak256("add_gauge(address,int128)"));
 
     uint256 private constant CALLSCRIPT_HEADER_LENGTH = 4;
     uint256 private constant CALL_HEADER_LENGTH = 24;
-    uint256 private constant ADD_GAUGE_CALLDATA_LENGTH = 100;
+    uint256 private constant ADD_GAUGE_DEFAULT_WEIGHT_CALLDATA_LENGTH = 68;
+    uint256 private constant ADD_GAUGE_EXPLICIT_WEIGHT_CALLDATA_LENGTH = 100;
     uint256 private constant EXECUTE_PAYLOAD_OFFSET = 96;
     uint256 private constant EXECUTE_PAYLOAD_START = 132;
 
@@ -51,8 +53,9 @@ contract ProposalGaugeValidator {
         GAUGE_VALIDATOR = gaugeValidator_;
     }
 
-    /// @notice Returns false when an authenticated gauge addition fails validation
-    ///         or cannot be decoded safely. DAO read failures revert.
+    /// @notice Returns false when an authenticated gauge addition fails validation,
+    ///         uses a nonzero initial weight, or cannot be decoded safely.
+    ///         DAO read failures revert.
     function validateProposalGauges(uint256 proposalId) external view returns (bool) {
         (,,,,,,,,, bytes memory script) = DAO.getVote{gas: DAO_CALL_GAS}(proposalId);
         return _validateCallscript(script);
@@ -94,8 +97,8 @@ contract ProposalGaugeValidator {
     {
         bytes4 selector = length >= 4 ? _bytes4At(data, offset) : bytes4(0);
 
-        if (target == GAUGE_CONTROLLER && selector == ICurve.add_gauge.selector) {
-            return _parseAddGauge(data, offset, length);
+        if (target == GAUGE_CONTROLLER && _isAddGaugeSelector(selector)) {
+            return _parseAddGauge(data, offset, length, selector);
         }
 
         if (target == AGENT && selector == ICurve.execute.selector) {
@@ -133,20 +136,27 @@ contract ProposalGaugeValidator {
         bytes4 innerSelector = payloadLength >= 4 ? _bytes4At(data, payloadOffset) : bytes4(0);
         if (innerSelector == ICurve.execute.selector) return parsed;
 
-        if (innerSelector == ICurve.add_gauge.selector) {
+        if (_isAddGaugeSelector(innerSelector)) {
             if (innerTarget != GAUGE_CONTROLLER || value != 0) return _unrelatedCall();
-            return _parseAddGauge(data, payloadOffset, payloadLength);
+            return _parseAddGauge(data, payloadOffset, payloadLength, innerSelector);
         }
 
         return _unrelatedCall();
     }
 
-    function _parseAddGauge(bytes memory data, uint256 offset, uint256 length)
+    function _parseAddGauge(bytes memory data, uint256 offset, uint256 length, bytes4 selector)
         private
         pure
         returns (ParsedCall memory parsed)
     {
-        if (length != ADD_GAUGE_CALLDATA_LENGTH) return parsed;
+        if (selector == ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR) {
+            if (length != ADD_GAUGE_DEFAULT_WEIGHT_CALLDATA_LENGTH) return parsed;
+        } else if (
+            selector != ICurve.add_gauge.selector || length != ADD_GAUGE_EXPLICIT_WEIGHT_CALLDATA_LENGTH
+                || _wordAt(data, offset + 68) != 0
+        ) {
+            return parsed;
+        }
 
         (bool addressCanonical, address gauge) = _addressWordAt(data, offset + 4);
         if (!addressCanonical || !_int128WordIsCanonical(data, offset + 36)) return parsed;
@@ -154,6 +164,10 @@ contract ProposalGaugeValidator {
         parsed.valid = true;
         parsed.isGaugeAddition = true;
         parsed.gauge = gauge;
+    }
+
+    function _isAddGaugeSelector(bytes4 selector) private pure returns (bool) {
+        return selector == ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR || selector == ICurve.add_gauge.selector;
     }
 
     function _validateGauge(address gauge) private view returns (bool valid) {

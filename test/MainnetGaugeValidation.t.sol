@@ -41,6 +41,7 @@ contract MainnetGaugeValidationTest is Test {
     GaugeValidationModuleV1 private module;
     GaugeValidator private validator;
     ProposalGaugeValidator private proposalValidator;
+    ProposalGaugeValidator private untrustedProposalValidator;
 
     function setUp() public {
         vm.createSelectFork(vm.envOr("RPC_URL", string("http://wavey:8545")), FORK_BLOCK);
@@ -53,6 +54,15 @@ contract MainnetGaugeValidationTest is Test {
             MainnetGaugeConfiguration.OWNER,
             MainnetGaugeConfiguration.GAUGE_CONTROLLER,
             validator
+        );
+
+        GaugeValidator.FactoryBinding[] memory noBindings = new GaugeValidator.FactoryBinding[](0);
+        GaugeValidator untrustedValidator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, noBindings);
+        untrustedProposalValidator = new ProposalGaugeValidator(
+            ICurveDAO(MainnetGaugeConfiguration.DAO),
+            MainnetGaugeConfiguration.OWNER,
+            MainnetGaugeConfiguration.GAUGE_CONTROLLER,
+            untrustedValidator
         );
     }
 
@@ -136,10 +146,12 @@ contract MainnetGaugeValidationTest is Test {
 
     function test_Proposal1406ParsesAuthenticatedAgentWrapper() public view {
         assertTrue(proposalValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
+        assertFalse(untrustedProposalValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
     }
 
     function test_Proposal1461RecognizesLendV2VaultGauge() public view {
         assertTrue(proposalValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
+        assertFalse(untrustedProposalValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
     }
 
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {

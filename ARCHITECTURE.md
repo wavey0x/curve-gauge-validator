@@ -17,27 +17,45 @@ factory-policy mapping. Proposal validation is a separate immutable consumer.
 
 ```mermaid
 flowchart LR
-    Governance["Curve governance"] -->|"deploy / setFactoryPolicy"| Core["GaugeValidator"]
+    Governance(["Curve governance"]) -->|"deploy / setFactoryPolicy"| Core["GaugeValidator"]
 
-    GaugeCaller["Gauge caller"] -->|"validateGauge(gauge)"| Core
+    GaugeCaller(["Gauge caller"]) -->|"validateGauge(gauge)"| Core
     Core -->|"factory()"| Gauge["Gauge"]
-    Gauge -->|"factory"| Core
+    Gauge -.->|"factory"| Core
     Core -->|"policyForFactory[factory]"| Policy[("Packed factory policy")]
-    Policy -->|"{module, methodId}"| Core
-    Core -->|"validateGauge(gauge, factory, methodId)"| Module["GaugeValidationModuleV1 or future module"]
+    Policy -.->|"{module, methodId}"| Core
+    Core -->|"validateGauge(gauge, factory, methodId)"| Module["GaugeValidationModuleV1"]
     Module -->|"lp_token()"| Gauge
+    Gauge -.->|"LP token / vault"| Module
     Module -->|"optional minter()"| Token["LP token / pool"]
+    Token -.->|"pool"| Module
     Module -->|"get_gauge / gauge_for_vault / is_valid_gauge"| Factory["Configured Curve factory"]
-    Factory -->|"registry result"| Module
-    Module -->|"strict bool"| Core
-    Core -->|"strict bool"| GaugeCaller
+    Factory -.->|"registry result"| Module
+    Module -.->|"strict bool"| Core
+    Core -.->|"strict bool"| GaugeCaller
 
-    ProposalCaller["Proposal caller"] -->|"validateProposalGauges(id)"| Proposal["ProposalGaugeValidator"]
+    ProposalCaller(["Proposal caller"]) -->|"validateProposalGauges(id)"| Proposal["ProposalGaugeValidator"]
     Proposal -->|"getVote(id)"| DAO["Curve ownership DAO"]
-    DAO -->|"callscript"| Proposal
+    DAO -.->|"callscript"| Proposal
     Proposal -->|"validateGauge(gauge) for each recognized addition"| Core
-    Proposal -->|"strict bool"| ProposalCaller
+    Core -.->|"strict bool per gauge"| Proposal
+    Proposal -.->|"strict bool"| ProposalCaller
+
+    classDef repo fill:#3851ff,stroke:#9aa8ff,color:#ffffff,stroke-width:2px;
+    classDef external fill:#e5e7eb,stroke:#9ca3af,color:#111827,stroke-width:1.5px;
+    classDef actor fill:#ffffff,stroke:#9ca3af,color:#374151,stroke-width:1.5px,stroke-dasharray:4 3;
+    classDef storage fill:#dbeafe,stroke:#60a5fa,color:#1e3a8a,stroke-width:1.5px;
+
+    class Core,Module,Proposal repo;
+    class Gauge,Token,Factory,DAO external;
+    class Governance,GaugeCaller,ProposalCaller actor;
+    class Policy storage;
 ```
+
+Blue boxes are contracts in this repository. Light-gray boxes are external
+onchain contracts, pill shapes are callers or governance, and the cylinder is
+core storage. Solid arrows are calls or reads; dashed arrows are returned
+values.
 
 `ProposalGaugeValidator` does not call the ownership Agent or GaugeController.
 It authenticates their addresses and calldata inside the DAO callscript. Every
@@ -194,19 +212,27 @@ function validateProposalGauges(uint256 proposalId) external view returns (bool)
 
 The boolean answers:
 
-> Can this proposal execute an authenticated gauge addition that currently
-> fails the trusted-factory predicate?
+> Do all executable authenticated gauge additions use a standard zero initial
+> weight and currently pass the trusted-factory predicate?
 
-`true` means it cannot. `false` means at least one authenticated addition
-fails gauge validation, or a gauge-affecting call at an authenticated target
-cannot be decoded safely. A proposal with no gauge additions returns `true`
-because it creates no gauge risk.
+`true` means yes. `false` means at least one authenticated addition uses a
+nonzero initial weight, fails gauge validation, or cannot be decoded safely.
+A proposal with no gauge additions returns `true` because it creates no gauge
+risk.
 
-The validator recognizes only:
+The validator recognizes both executable GaugeController encodings:
 
-1. a direct canonical `GaugeController.add_gauge` call; or
-2. a canonical ownership-Agent `execute` call whose inner target is
-   GaugeController, value is zero, and payload is exactly `add_gauge`.
+- `add_gauge(address,int128)`, whose omitted initial weight defaults to zero;
+  and
+- `add_gauge(address,int128,uint256)`, only when the explicit initial weight
+  is zero.
+
+Each encoding is recognized only when it is either a direct canonical
+GaugeController call or the exact payload of a canonical ownership-Agent
+`execute` call whose inner target is GaugeController and value is zero.
+Nonzero initial weight deliberately returns `false`: registration remains a
+zero-weight operation, while any later weight allocation stays explicit and
+separate.
 
 Unrelated calls and gauge-shaped calls through any other target are ignored.
 An Agent wrapper aimed anywhere other than GaugeController, or carrying
@@ -287,11 +313,13 @@ Tests cover:
 - untrusted and spoofing cases;
 - reverting, malformed, gas-burning, and oversized return data;
 - owner-only trust changes;
-- direct and Agent-wrapped proposal additions;
-- unavailable, rejected, complete, empty, mixed-validity, and aggregate
-  proposal results;
+- direct and Agent-wrapped proposal additions using both executable
+  `add_gauge` encodings;
+- explicit zero weight, rejected nonzero weight, empty proposals, malformed
+  authenticated calls, and mixed-validity aggregate results;
 - representative live gauges for every configured factory family;
-- two representative mainnet proposals; and
+- two representative mainnet proposals with negative recognition controls;
+  and
 - exact three-contract deployment readback on a pinned mainnet fork.
 
 Exhaustive historical gauge or proposal coverage is not required.
