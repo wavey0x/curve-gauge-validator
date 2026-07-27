@@ -51,15 +51,7 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
-
-        _assertComplete(result);
-        assertTrue(result.allValid);
-        assertEq(result.gauges.length, 1);
-        assertEq(result.gauges[0].gauge, address(gauge));
-        assertTrue(result.gauges[0].valid);
-        assertTrue(proposalValidator.allRecognizedGaugeAdditionsCurrentlyValid(proposalId));
+        assertTrue(proposalValidator.validateProposalGauges(proposalId));
     }
 
     function test_ProposalAllowsNearTwoMillionGasModule() public {
@@ -73,12 +65,7 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            expensiveProposalValidator.analyzeProposalGaugeAdditions(proposalId);
-
-        _assertComplete(result);
-        assertTrue(result.allValid);
-        assertTrue(result.gauges[0].valid);
+        assertTrue(expensiveProposalValidator.validateProposalGauges(proposalId));
     }
 
     function test_AgentWrappedAdditionIsAuthenticated() public {
@@ -86,16 +73,10 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(agent), _execute(address(gaugeController), 0, payload))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
-
-        _assertComplete(result);
-        assertTrue(result.allValid);
-        assertEq(result.gauges.length, 1);
-        assertEq(result.gauges[0].gauge, address(gauge));
+        assertTrue(proposalValidator.validateProposalGauges(proposalId));
     }
 
-    function test_UnrelatedCallsAreIgnoredAndGaugeOrderIsPreserved() public {
+    function test_UnrelatedCallsAreIgnoredAndAllAdditionsAreChecked() public {
         MockProtocolGauge secondGauge = new MockProtocolGauge(address(factory), address(0));
         factory.setValidGauge(address(secondGauge), true);
 
@@ -106,76 +87,78 @@ contract ProposalGaugeValidatorTest is Test {
             _scriptCall(address(agent), _execute(address(gaugeController), 0, _addGauge(address(secondGauge), 3, 4)))
         );
 
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
-
-        _assertComplete(result);
-        assertTrue(result.allValid);
-        assertEq(result.gauges.length, 2);
-        assertEq(result.gauges[0].gauge, address(gauge));
-        assertEq(result.gauges[1].gauge, address(secondGauge));
+        assertTrue(proposalValidator.validateProposalGauges(_push(_callscript(calls))));
     }
 
-    function test_InvalidGaugeMakesOnlyTheAggregateFalse() public {
+    function test_OneInvalidGaugeMakesProposalFalse() public {
         MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
         bytes memory calls = bytes.concat(
             _scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)),
             _scriptCall(address(gaugeController), _addGauge(address(invalidGauge), 0, 0))
         );
 
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
-
-        _assertComplete(result);
-        assertFalse(result.allValid);
-        assertEq(result.gauges.length, 2);
-        assertTrue(result.gauges[0].valid);
-        assertFalse(result.gauges[1].valid);
+        assertFalse(proposalValidator.validateProposalGauges(_push(_callscript(calls))));
     }
 
-    function test_NoRecognizedGaugesIsCompleteButFalse() public {
+    function test_NoGaugeAdditionCreatesNoGaugeRisk() public {
         uint256 proposalId = _push(_callscript(_scriptCall(address(unrelatedTarget), hex"12345678")));
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
-
-        _assertComplete(result);
-        assertFalse(result.allValid);
-        assertEq(result.gauges.length, 0);
-        assertFalse(proposalValidator.allRecognizedGaugeAdditionsCurrentlyValid(proposalId));
+        assertTrue(proposalValidator.validateProposalGauges(proposalId));
     }
 
-    function test_WrongCallscriptIdTruncationAndTrailingDataAreRejected() public {
-        _assertRejected(hex"00000002");
-        _assertRejected(bytes.concat(hex"00000001", hex"01"));
+    function test_NonExecutableCallscriptsCreateNoGaugeRisk() public {
+        assertTrue(_validate(hex""));
+        assertTrue(_validate(bytes.concat(hex"00000001", hex"01")));
 
         bytes memory validScript = _callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)));
-        _assertRejected(bytes.concat(validScript, hex"01"));
-        _assertRejected(
-            bytes.concat(
-                hex"00000001", abi.encodePacked(address(gaugeController), uint32(101), _addGauge(address(gauge), 0, 0))
+        assertTrue(_validate(bytes.concat(validScript, hex"01")));
+        assertTrue(
+            _validate(
+                bytes.concat(
+                    hex"00000001",
+                    abi.encodePacked(address(gaugeController), uint32(101), _addGauge(address(gauge), 0, 0))
+                )
             )
         );
     }
 
-    function test_GaugeShapedCallThroughWrongTargetIsRejected() public {
-        _assertRejected(_callscript(_scriptCall(address(unrelatedTarget), _addGauge(address(gauge), 0, 0))));
+    function test_UnknownScriptExecutorIsPessimisticallyFalse() public {
+        assertFalse(_validate(hex"00000002"));
     }
 
-    function test_WrappedAdditionRequiresCanonicalOuterAndInnerTargetsAndZeroValue() public {
-        _assertRejected(
-            _callscript(
-                _scriptCall(address(agent), _execute(address(unrelatedTarget), 0, _addGauge(address(gauge), 0, 0)))
+    function test_GaugeShapedCallThroughWrongTargetIsIgnored() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+        assertTrue(
+            _validate(_callscript(_scriptCall(address(unrelatedTarget), _addGauge(address(invalidGauge), 0, 0))))
+        );
+    }
+
+    function test_UnauthenticatedOrRevertingWrappedAdditionsAreIgnored() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+        assertTrue(
+            _validate(
+                _callscript(
+                    _scriptCall(
+                        address(agent), _execute(address(unrelatedTarget), 0, _addGauge(address(invalidGauge), 0, 0))
+                    )
+                )
             )
         );
-        _assertRejected(
-            _callscript(
-                _scriptCall(address(agent), _execute(address(gaugeController), 1, _addGauge(address(gauge), 0, 0)))
+        assertTrue(
+            _validate(
+                _callscript(
+                    _scriptCall(
+                        address(agent), _execute(address(gaugeController), 1, _addGauge(address(invalidGauge), 0, 0))
+                    )
+                )
             )
         );
-        _assertRejected(
-            _callscript(
-                _scriptCall(
-                    address(unrelatedTarget), _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 0))
+        assertTrue(
+            _validate(
+                _callscript(
+                    _scriptCall(
+                        address(unrelatedTarget),
+                        _execute(address(gaugeController), 0, _addGauge(address(invalidGauge), 0, 0))
+                    )
                 )
             )
         );
@@ -184,63 +167,58 @@ contract ProposalGaugeValidatorTest is Test {
     function test_NoncanonicalAgentEncodingIsRejected() public {
         bytes memory badOffset = _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 0));
         _storeWord(badOffset, 68, 64);
-        _assertRejected(_callscript(_scriptCall(address(agent), badOffset)));
+        assertFalse(_validate(_callscript(_scriptCall(address(agent), badOffset))));
 
         bytes memory badAddress = _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 0));
         _storeWord(badAddress, 4, uint256(uint160(address(gaugeController))) | (uint256(1) << 160));
-        _assertRejected(_callscript(_scriptCall(address(agent), badAddress)));
+        assertFalse(_validate(_callscript(_scriptCall(address(agent), badAddress))));
 
         bytes memory badPadding = _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 0));
         badPadding[badPadding.length - 1] = bytes1(uint8(1));
-        _assertRejected(_callscript(_scriptCall(address(agent), badPadding)));
+        assertFalse(_validate(_callscript(_scriptCall(address(agent), badPadding))));
     }
 
     function test_NoncanonicalAddGaugeEncodingIsRejected() public {
         bytes memory badAddress = _addGauge(address(gauge), 0, 0);
         _storeWord(badAddress, 4, uint256(uint160(address(gauge))) | (uint256(1) << 160));
-        _assertRejected(_callscript(_scriptCall(address(gaugeController), badAddress)));
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badAddress))));
 
         bytes memory badInt = _addGauge(address(gauge), 1, 0);
         _storeWord(badInt, 36, (uint256(1) << 128) | 1);
-        _assertRejected(_callscript(_scriptCall(address(gaugeController), badInt)));
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badInt))));
 
         bytes memory badLength = bytes.concat(_addGauge(address(gauge), 0, 0), bytes32(0));
-        _assertRejected(_callscript(_scriptCall(address(gaugeController), badLength)));
+        assertFalse(_validate(_callscript(_scriptCall(address(gaugeController), badLength))));
     }
 
-    function test_LaterMalformedCallDiscardsEarlierGauge() public {
+    function test_LaterStructuralFailureMakesWholeProposalNonExecutable() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
         bytes memory calls = bytes.concat(
-            _scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)),
+            _scriptCall(address(gaugeController), _addGauge(address(invalidGauge), 0, 0)),
             abi.encodePacked(address(gaugeController), uint32(101), hex"1234")
         );
-        _assertRejected(_callscript(calls));
+        assertTrue(_validate(_callscript(calls)));
     }
 
-    function test_MalformedAgentCallIsRejectedButCanonicalUnrelatedPayloadIsIgnored() public {
+    function test_MalformedAgentCallIsFalseButCanonicalUnrelatedPayloadIsIgnored() public {
         bytes memory malformed = _execute(address(unrelatedTarget), 0, hex"12345678");
         _storeWord(malformed, 68, 64);
-        _assertRejected(_callscript(_scriptCall(address(agent), malformed)));
+        assertFalse(_validate(_callscript(_scriptCall(address(agent), malformed))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposalGaugeAdditions(
-            _push(_callscript(_scriptCall(address(agent), _execute(address(unrelatedTarget), 1, hex"12345678"))))
+        assertTrue(
+            _validate(_callscript(_scriptCall(address(agent), _execute(address(unrelatedTarget), 1, hex"12345678"))))
         );
-        _assertComplete(result);
-        assertFalse(result.allValid);
-        assertEq(result.gauges.length, 0);
     }
 
-    function test_RecursiveAgentExecuteIsRejected() public {
+    function test_RecursiveAgentExecuteIsPessimisticallyFalse() public {
         bytes memory inner = _execute(address(gaugeController), 0, _addGauge(address(gauge), 0, 0));
         bytes memory outer = _execute(address(agent), 0, inner);
-        _assertRejected(_callscript(_scriptCall(address(agent), outer)));
+        assertFalse(_validate(_callscript(_scriptCall(address(agent), outer))));
     }
 
-    function test_MissingProposalIsUnavailable() public view {
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposalGaugeAdditions(0);
-
-        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.UNAVAILABLE));
-        assertFalse(result.allValid);
-        assertEq(result.gauges.length, 0);
+    function test_MissingProposalReverts() public {
+        vm.expectRevert();
+        proposalValidator.validateProposalGauges(0);
     }
 
     function test_EveryValidatorFailureModeMakesGaugeInvalid() public {
@@ -252,29 +230,19 @@ contract ProposalGaugeValidatorTest is Test {
                 ICurveDAO(address(dao)), address(agent), address(gaugeController), GaugeValidator(address(dependency))
             );
 
-            ProposalGaugeValidator.ProposalAnalysis memory result = candidate.analyzeProposalGaugeAdditions(proposalId);
-            _assertComplete(result);
-            assertFalse(result.allValid);
-            assertFalse(result.gauges[0].valid);
+            assertFalse(candidate.validateProposalGauges(proposalId));
         }
     }
 
-    function test_RecognizedGaugeCapAcceptsSixtyFourAndRejectsSixtyFive() public {
+    function test_MoreThanSixtyFourGaugesHaveNoAnalyzerCap() public {
         bytes memory calls;
         int128 gaugeType;
-        for (uint256 i; i < proposalValidator.MAX_GAUGES(); ++i) {
+        for (uint256 i; i < 65; ++i) {
             calls = bytes.concat(calls, _scriptCall(address(gaugeController), _addGauge(address(gauge), gaugeType, i)));
             ++gaugeType;
         }
 
-        ProposalGaugeValidator.ProposalAnalysis memory atCap =
-            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
-        _assertComplete(atCap);
-        assertTrue(atCap.allValid);
-        assertEq(atCap.gauges.length, proposalValidator.MAX_GAUGES());
-
-        calls = bytes.concat(calls, _scriptCall(address(gaugeController), _addGauge(address(gauge), 64, 64)));
-        _assertRejected(_callscript(calls));
+        assertTrue(_validate(_callscript(calls)));
     }
 
     function test_ConstructorRequiresContractDependencies() public {
@@ -285,17 +253,8 @@ contract ProposalGaugeValidatorTest is Test {
         new ProposalGaugeValidator(ICurveDAO(address(dao)), address(0x1234), address(gaugeController), gaugeValidator);
     }
 
-    function _assertComplete(ProposalGaugeValidator.ProposalAnalysis memory result) private pure {
-        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
-    }
-
-    function _assertRejected(bytes memory script) private {
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(_push(script));
-
-        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.CALLSCRIPT_REJECTED));
-        assertFalse(result.allValid);
-        assertEq(result.gauges.length, 0);
+    function _validate(bytes memory script) private returns (bool) {
+        return proposalValidator.validateProposalGauges(_push(script));
     }
 
     function _push(bytes memory script) private returns (uint256) {

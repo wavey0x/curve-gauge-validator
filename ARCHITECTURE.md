@@ -32,11 +32,11 @@ flowchart LR
     Module -->|"strict bool"| Core
     Core -->|"strict bool"| GaugeCaller
 
-    ProposalCaller["Proposal caller"] -->|"analyzeProposalGaugeAdditions(id)"| Proposal["ProposalGaugeValidator"]
+    ProposalCaller["Proposal caller"] -->|"validateProposalGauges(id)"| Proposal["ProposalGaugeValidator"]
     Proposal -->|"getVote(id)"| DAO["Curve ownership DAO"]
     DAO -->|"callscript"| Proposal
     Proposal -->|"validateGauge(gauge) for each recognized addition"| Core
-    Proposal -->|"status, allValid, gauges[]"| ProposalCaller
+    Proposal -->|"strict bool"| ProposalCaller
 ```
 
 `ProposalGaugeValidator` does not call the ownership Agent or GaugeController.
@@ -189,76 +189,52 @@ transfers policy-change authority to that proxy's administrator.
 It exposes:
 
 ```solidity
-function analyzeProposalGaugeAdditions(uint256 proposalId)
-    external
-    view
-    returns (ProposalAnalysis memory);
-
-function allRecognizedGaugeAdditionsCurrentlyValid(uint256 proposalId)
-    external
-    view
-    returns (bool);
+function validateProposalGauges(uint256 proposalId) external view returns (bool);
 ```
 
-The compact result is:
+The boolean answers:
 
-```solidity
-enum AnalysisStatus {
-    UNAVAILABLE,
-    CALLSCRIPT_REJECTED,
-    COMPLETE
-}
+> Can this proposal execute an authenticated gauge addition that currently
+> fails the trusted-factory predicate?
 
-struct GaugeResult {
-    address gauge;
-    bool valid;
-}
+`true` means it cannot. `false` means at least one authenticated addition
+fails gauge validation, or a gauge-affecting call at an authenticated target
+cannot be decoded safely. A proposal with no gauge additions returns `true`
+because it creates no gauge risk.
 
-struct ProposalAnalysis {
-    AnalysisStatus status;
-    bool allValid;
-    GaugeResult[] gauges;
-}
-```
-
-The statuses have exact fail-closed meanings:
-
-- `UNAVAILABLE`: the analyzer could not produce a result. The gauge array is
-  empty and `allValid` is `false`.
-- `CALLSCRIPT_REJECTED`: the analyzer ran, but the callscript violated its
-  accepted grammar. The gauge array is empty and `allValid` is `false`.
-- `COMPLETE`: every recognized gauge addition was evaluated. An individual
-  gauge-route failure remains a non-match with `valid == false`; it does not
-  make an otherwise completed analysis unavailable.
-
-The analyzer recognizes only:
+The validator recognizes only:
 
 1. a direct canonical `GaugeController.add_gauge` call; or
 2. a canonical ownership-Agent `execute` call whose inner target is
    GaugeController, value is zero, and payload is exactly `add_gauge`.
 
-Unrelated calls are ignored. Malformed callscripts, gauge-shaped calls through
-the wrong target, noncanonical ABI words, recursive wrappers, and more than 64
-recognized gauges reject the entire analysis.
+Unrelated calls and gauge-shaped calls through any other target are ignored.
+An Agent wrapper aimed anywhere other than GaugeController, or carrying
+nonzero value, also cannot perform the authenticated zero-value addition and
+is ignored.
+
+Structural callscript failures such as a truncated script, a truncated call
+header, or an out-of-bounds call length make the entire proposal
+non-executable. They therefore return `true`, even if an earlier call would
+have failed gauge validation. An unknown script-executor ID returns `false`
+because another registered executor may be able to run it. Once the callscript
+is structurally executable, gauge-shaped calls at the authenticated targets
+must use canonical calldata. Noncanonical words, malformed authenticated
+wrappers, and recursive Agent execution return `false` pessimistically.
 
 Every recognized gauge is evaluated through the immutable gauge validator
 with a 2,100,000-gas cap and an exact canonical boolean return. The extra
 100,000 gas lets the core perform its factory read and still forward the full
 2,000,000-gas module budget under EIP-150. A failed query makes that gauge
-invalid without changing a successfully parsed proposal to `UNAVAILABLE`.
+invalid. There is no gauge-result allocation or arbitrary recognized-gauge
+cap; additions are validated as the callscript is traversed.
 
-`allValid` is true only when parsing completed, at least one gauge was
-recognized, and every recognized gauge is valid.
-`allRecognizedGaugeAdditionsCurrentlyValid` applies that exact rule.
+The DAO read is capped at 5,000,000 gas and failures revert the proposal
+validation call. RPC transport failures likewise fail the outer call rather
+than becoming an on-chain result.
 
 Gauge booleans reflect the current block. The proposal validator does not
 simulate state changes that earlier calls in the proposal would create.
-
-The deployed contract at
-`0xbEF66C2c0Cd93C00C545938Ff3f5b50b2D91ccc6` inspired the compact
-`{gauge, valid}` result and false-on-empty aggregate. This implementation does
-not copy its active-proposal scanning, permissive minimum-length parsing, or
-unbounded dependency calls.
 
 ## Mainnet trust set
 

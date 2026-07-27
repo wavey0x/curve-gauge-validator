@@ -18,10 +18,15 @@ Future methods can be deployed in new modules and bound to relevant factories
 without replacing the core.
 
 `ProposalGaugeValidator` separately extracts authenticated gauge additions
-from one Curve ownership proposal and returns ordered `{gauge, valid}` results
-plus a strict aggregate boolean through
-`analyzeProposalGaugeAdditions` and
-`allRecognizedGaugeAdditionsCurrentlyValid`.
+from one Curve ownership proposal and exposes one safety predicate:
+
+```solidity
+proposalValidator.validateProposalGauges(proposalId); // true or false
+```
+
+DAO read failures revert. Structurally non-executable callscripts and unrelated
+calls create no gauge risk; authenticated gauge additions return `false` when
+their calldata cannot be decoded safely or the gauge fails validation.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the proof layouts and mainnet
 trust set.

@@ -36,7 +36,6 @@ contract MainnetGaugeValidationTest is Test {
     address private constant LEND_V2_VAULT_GAUGE = 0xbe0451815b546F705ef3f398B8179aE3AADDA14e;
     uint256 private constant AGENT_WRAPPED_PROPOSAL = 1406;
     uint256 private constant LEND_V2_ACTIVATION_PROPOSAL = 1461;
-    address private constant PROPOSAL_1406_GAUGE = 0xA41eb3062FD68B6Fa9f11439C86503913806761D;
     address private constant LEGACY_EOA_DEPLOYED_GAUGE = 0x055be5DDB7A925BfEF3417FC157f53CA77cA7222;
 
     GaugeValidationModuleV1 private module;
@@ -136,25 +135,11 @@ contract MainnetGaugeValidationTest is Test {
     }
 
     function test_Proposal1406ParsesAuthenticatedAgentWrapper() public view {
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(AGENT_WRAPPED_PROPOSAL);
-
-        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
-        assertTrue(result.allValid);
-        assertEq(result.gauges.length, 1);
-        assertEq(result.gauges[0].gauge, PROPOSAL_1406_GAUGE);
-        assertTrue(result.gauges[0].valid);
+        assertTrue(proposalValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
     }
 
     function test_Proposal1461RecognizesLendV2VaultGauge() public view {
-        ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposalGaugeAdditions(LEND_V2_ACTIVATION_PROPOSAL);
-
-        assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
-        assertTrue(result.allValid);
-        assertEq(result.gauges.length, 1);
-        assertEq(result.gauges[0].gauge, LEND_V2_VAULT_GAUGE);
-        assertTrue(result.gauges[0].valid);
+        assertTrue(proposalValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
     }
 
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {

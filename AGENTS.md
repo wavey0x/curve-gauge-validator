@@ -23,7 +23,7 @@ parsing in its separate immutable consumer.
 - `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
 - `script/AnalyzeProposal.s.sol`: read-only proposal analysis.
 - `test/GaugeValidator.t.sol`: proof, failure, and authorization tests.
-- `test/ProposalGaugeValidator.t.sol`: parser and proposal-result tests.
+- `test/ProposalGaugeValidator.t.sol`: parser and proposal-boolean tests.
 - `test/MainnetGaugeValidation.t.sol`: pinned-fork representative gauges.
 - `test/Deployment.t.sol`: deployment/readback test.
 
