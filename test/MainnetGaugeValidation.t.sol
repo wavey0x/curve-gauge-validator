@@ -5,7 +5,7 @@ import {Test} from "forge-std/Test.sol";
 import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
-import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
+import {ProposalValidationModuleV1} from "../src/ProposalValidationModuleV1.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
 
 interface IFactoryAttestedGauge {
@@ -39,31 +39,27 @@ contract MainnetGaugeValidationTest is Test {
     address private constant LEGACY_EOA_DEPLOYED_GAUGE = 0x055be5DDB7A925BfEF3417FC157f53CA77cA7222;
 
     GaugeValidationModuleV1 private module;
+    ProposalValidationModuleV1 private proposalModule;
     GaugeValidator private validator;
-    ProposalGaugeValidator private proposalValidator;
-    ProposalGaugeValidator private untrustedProposalValidator;
+    GaugeValidator private untrustedValidator;
 
     function setUp() public {
         vm.createSelectFork(vm.envOr("RPC_URL", string("http://wavey:8545")), FORK_BLOCK);
 
         module = new GaugeValidationModuleV1();
-        validator =
-            new GaugeValidator(MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings(address(module)));
-        proposalValidator = new ProposalGaugeValidator(
+        proposalModule = new ProposalValidationModuleV1(
             ICurveDAO(MainnetGaugeConfiguration.DAO),
             MainnetGaugeConfiguration.OWNER,
-            MainnetGaugeConfiguration.GAUGE_CONTROLLER,
-            validator
+            MainnetGaugeConfiguration.GAUGE_CONTROLLER
+        );
+        validator = new GaugeValidator(
+            MainnetGaugeConfiguration.OWNER,
+            address(proposalModule),
+            MainnetGaugeConfiguration.bindings(address(module))
         );
 
         GaugeValidator.FactoryBinding[] memory noBindings = new GaugeValidator.FactoryBinding[](0);
-        GaugeValidator untrustedValidator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, noBindings);
-        untrustedProposalValidator = new ProposalGaugeValidator(
-            ICurveDAO(MainnetGaugeConfiguration.DAO),
-            MainnetGaugeConfiguration.OWNER,
-            MainnetGaugeConfiguration.GAUGE_CONTROLLER,
-            untrustedValidator
-        );
+        untrustedValidator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, address(proposalModule), noBindings);
     }
 
     function test_PinnedForkMetadata() public view {
@@ -145,13 +141,13 @@ contract MainnetGaugeValidationTest is Test {
     }
 
     function test_Proposal1406ParsesAuthenticatedAgentWrapper() public view {
-        assertTrue(proposalValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
-        assertFalse(untrustedProposalValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
+        assertTrue(validator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
+        assertFalse(untrustedValidator.validateProposalGauges(AGENT_WRAPPED_PROPOSAL));
     }
 
     function test_Proposal1461RecognizesLendV2VaultGauge() public view {
-        assertTrue(proposalValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
-        assertFalse(untrustedProposalValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
+        assertTrue(validator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
+        assertFalse(untrustedValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
     }
 
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {

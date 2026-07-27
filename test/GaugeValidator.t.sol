@@ -20,6 +20,7 @@ contract GaugeValidatorTest is Test {
     uint8 private constant FUTURE_METHOD = type(uint8).max;
 
     event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
+    event ProposalModuleSet(address indexed module);
 
     GaugeValidationModuleV1 private module;
 
@@ -212,7 +213,7 @@ contract GaugeValidatorTest is Test {
     function test_OwnerCanSetRemovePolicyAndTransferOwnership() public {
         MockCurveFactory factory = new MockCurveFactory();
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-        GaugeValidator validator = new GaugeValidator(address(this), bindings);
+        GaugeValidator validator = new GaugeValidator(address(this), address(0), bindings);
 
         vm.expectEmit(true, true, false, true, address(validator));
         emit FactoryPolicySet(address(factory), address(module), module.DIRECT_LP());
@@ -228,6 +229,21 @@ contract GaugeValidatorTest is Test {
         (configuredModule, configuredId) = validator.policyForFactory(address(factory));
         assertEq(configuredModule, address(0));
         assertEq(configuredId, 0);
+
+        vm.expectEmit(true, false, false, true, address(validator));
+        emit ProposalModuleSet(address(module));
+        validator.setProposalModule(address(module));
+        assertEq(validator.proposalModule(), address(module));
+
+        vm.expectEmit(true, false, false, true, address(validator));
+        emit ProposalModuleSet(address(0));
+        validator.setProposalModule(address(0));
+        assertEq(validator.proposalModule(), address(0));
+
+        vm.expectRevert(GaugeValidator.ProposalModuleUnavailable.selector);
+        validator.validateProposalGauges(0);
+        vm.expectRevert(GaugeValidator.ProposalModuleUnavailable.selector);
+        validator.analyzeProposalGauges(0);
 
         validator.transferOwnership(USER);
         assertEq(validator.owner(), USER);
@@ -261,9 +277,19 @@ contract GaugeValidatorTest is Test {
         vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
         validator.setFactoryPolicy(address(factory), address(0x1234), directLp);
 
+        vm.prank(USER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setProposalModule(address(module));
+
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
+        validator.setProposalModule(address(0x1234));
+
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
-        new GaugeValidator(address(0), bindings);
+        new GaugeValidator(address(0), address(0), bindings);
+
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
+        new GaugeValidator(address(this), address(0x1234), bindings);
     }
 
     function _assertFalseWithMethod(address gauge, address factory, uint8 methodId) private {
@@ -278,6 +304,6 @@ contract GaugeValidatorTest is Test {
     function _deploy(address factory, address policyModule, uint8 methodId) private returns (GaugeValidator) {
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(factory, policyModule, methodId);
-        return new GaugeValidator(address(this), bindings);
+        return new GaugeValidator(address(this), address(0), bindings);
     }
 }

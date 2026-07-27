@@ -4,10 +4,12 @@ pragma solidity 0.8.28;
 import {GaugeValidator} from "./GaugeValidator.sol";
 import {ICurve} from "./interfaces/ICurve.sol";
 import {ICurveDAO} from "./interfaces/ICurveDAO.sol";
+import {IProposalValidationModule} from "./interfaces/IProposalValidationModule.sol";
 
-/// @notice Extracts canonical gauge additions from one Curve ownership proposal
-///         and evaluates them with an immutable GaugeValidator.
-contract ProposalGaugeValidator {
+/// @notice Stateless parser for canonical gauge additions in one Curve
+///         ownership proposal.
+/// @dev The calling GaugeValidator is used to validate each decoded gauge.
+contract ProposalValidationModuleV1 is IProposalValidationModule {
     bytes4 private constant CALLSCRIPT_ID = 0x00000001;
     bytes4 private constant ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR = bytes4(keccak256("add_gauge(address,int128)"));
 
@@ -15,78 +17,109 @@ contract ProposalGaugeValidator {
     uint256 private constant CALL_HEADER_LENGTH = 24;
     uint256 private constant ADD_GAUGE_DEFAULT_WEIGHT_CALLDATA_LENGTH = 68;
     uint256 private constant ADD_GAUGE_EXPLICIT_WEIGHT_CALLDATA_LENGTH = 100;
+    uint256 private constant MIN_GAUGE_ADDITION_CALL_LENGTH =
+        CALL_HEADER_LENGTH + ADD_GAUGE_DEFAULT_WEIGHT_CALLDATA_LENGTH;
     uint256 private constant EXECUTE_PAYLOAD_OFFSET = 96;
     uint256 private constant EXECUTE_PAYLOAD_START = 132;
 
     uint256 public constant DAO_CALL_GAS = 5_000_000;
-    /// @dev Leaves the core enough headroom to forward its full 2M module budget.
+    /// @dev Leaves the core enough headroom to forward its full 2M gauge-module budget.
     uint256 public constant GAUGE_VALIDATION_GAS = 2_100_000;
 
     ICurveDAO public immutable DAO;
     address public immutable AGENT;
     address public immutable GAUGE_CONTROLLER;
-    GaugeValidator public immutable GAUGE_VALIDATOR;
 
     struct ParsedCall {
-        bool valid;
+        bool wellFormed;
         bool isGaugeAddition;
+        bool standard;
         address gauge;
     }
 
     error ZeroAddress();
     error MissingCode(address target);
 
-    constructor(ICurveDAO dao_, address agent_, address gaugeController_, GaugeValidator gaugeValidator_) {
-        if (
-            address(dao_) == address(0) || agent_ == address(0) || gaugeController_ == address(0)
-                || address(gaugeValidator_) == address(0)
-        ) revert ZeroAddress();
+    constructor(ICurveDAO dao_, address agent_, address gaugeController_) {
+        if (address(dao_) == address(0) || agent_ == address(0) || gaugeController_ == address(0)) {
+            revert ZeroAddress();
+        }
 
         _requireCode(address(dao_));
         _requireCode(agent_);
         _requireCode(gaugeController_);
-        _requireCode(address(gaugeValidator_));
 
         DAO = dao_;
         AGENT = agent_;
         GAUGE_CONTROLLER = gaugeController_;
-        GAUGE_VALIDATOR = gaugeValidator_;
     }
 
-    /// @notice Returns false when an authenticated gauge addition fails validation,
-    ///         uses a nonzero initial weight, or cannot be decoded safely.
-    ///         DAO read failures revert.
-    function validateProposalGauges(uint256 proposalId) external view returns (bool) {
+    /// @inheritdoc IProposalValidationModule
+    function validateProposalGauges(uint256 proposalId) external view returns (bool allValid) {
+        (allValid,) = _analyzeProposalGauges(proposalId, msg.sender);
+    }
+
+    /// @inheritdoc IProposalValidationModule
+    function analyzeProposalGauges(uint256 proposalId)
+        external
+        view
+        returns (bool allValid, GaugeResult[] memory results)
+    {
+        return _analyzeProposalGauges(proposalId, msg.sender);
+    }
+
+    function _analyzeProposalGauges(uint256 proposalId, address validator)
+        private
+        view
+        returns (bool allValid, GaugeResult[] memory results)
+    {
         (,,,,,,,,, bytes memory script) = DAO.getVote{gas: DAO_CALL_GAS}(proposalId);
-        return _validateCallscript(script);
+        return _analyzeCallscript(script, validator);
     }
 
-    function _validateCallscript(bytes memory script) private view returns (bool valid) {
+    function _analyzeCallscript(bytes memory script, address validator)
+        private
+        view
+        returns (bool allValid, GaugeResult[] memory results)
+    {
         // A truncated callscript cannot execute. An unknown script executor may.
-        if (script.length < CALLSCRIPT_HEADER_LENGTH) return true;
-        if (_bytes4At(script, 0) != CALLSCRIPT_ID) return false;
+        if (script.length < CALLSCRIPT_HEADER_LENGTH) return (true, new GaugeResult[](0));
+        if (_bytes4At(script, 0) != CALLSCRIPT_ID) return (false, new GaugeResult[](0));
 
-        valid = true;
+        uint256 maximumResults = (script.length - CALLSCRIPT_HEADER_LENGTH) / MIN_GAUGE_ADDITION_CALL_LENGTH;
+        results = new GaugeResult[](maximumResults);
+        allValid = true;
+        uint256 resultCount;
         uint256 offset = CALLSCRIPT_HEADER_LENGTH;
 
         while (offset < script.length) {
             // Structural failure reverts the entire callscript, including any
             // earlier calls, so it creates no executable gauge risk.
             if (script.length - offset < CALL_HEADER_LENGTH) {
-                return true;
+                return (true, new GaugeResult[](0));
             }
 
             address target = _packedAddressAt(script, offset);
             uint256 callDataLength = _uint32At(script, offset + 20);
             uint256 callDataOffset = offset + CALL_HEADER_LENGTH;
             if (callDataLength > script.length - callDataOffset) {
-                return true;
+                return (true, new GaugeResult[](0));
             }
 
             ParsedCall memory parsed = _parseCall(script, target, callDataOffset, callDataLength);
-            if (!parsed.valid || (parsed.isGaugeAddition && !_validateGauge(parsed.gauge))) valid = false;
+            if (!parsed.wellFormed) allValid = false;
+
+            if (parsed.isGaugeAddition) {
+                bool valid = parsed.standard && _validateGauge(validator, parsed.gauge);
+                results[resultCount++] = GaugeResult({gauge: parsed.gauge, valid: valid});
+                if (!valid) allValid = false;
+            }
 
             offset = callDataOffset + callDataLength;
+        }
+
+        assembly ("memory-safe") {
+            mstore(results, resultCount)
         }
     }
 
@@ -149,20 +182,23 @@ contract ProposalGaugeValidator {
         pure
         returns (ParsedCall memory parsed)
     {
+        bool standard;
         if (selector == ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR) {
             if (length != ADD_GAUGE_DEFAULT_WEIGHT_CALLDATA_LENGTH) return parsed;
-        } else if (
-            selector != ICurve.add_gauge.selector || length != ADD_GAUGE_EXPLICIT_WEIGHT_CALLDATA_LENGTH
-                || _wordAt(data, offset + 68) != 0
-        ) {
-            return parsed;
+            standard = true;
+        } else {
+            if (selector != ICurve.add_gauge.selector || length != ADD_GAUGE_EXPLICIT_WEIGHT_CALLDATA_LENGTH) {
+                return parsed;
+            }
+            standard = _wordAt(data, offset + 68) == 0;
         }
 
         (bool addressCanonical, address gauge) = _addressWordAt(data, offset + 4);
         if (!addressCanonical || !_int128WordIsCanonical(data, offset + 36)) return parsed;
 
-        parsed.valid = true;
+        parsed.wellFormed = true;
         parsed.isGaugeAddition = true;
+        parsed.standard = standard;
         parsed.gauge = gauge;
     }
 
@@ -170,12 +206,11 @@ contract ProposalGaugeValidator {
         return selector == ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR || selector == ICurve.add_gauge.selector;
     }
 
-    function _validateGauge(address gauge) private view returns (bool valid) {
+    function _validateGauge(address validator, address gauge) private view returns (bool valid) {
         bytes4 selector = GaugeValidator.validateGauge.selector;
         uint256 word;
         uint256 returnSize;
         bool success;
-        address validator = address(GAUGE_VALIDATOR);
 
         assembly ("memory-safe") {
             let pointer := mload(0x40)
@@ -190,7 +225,7 @@ contract ProposalGaugeValidator {
     }
 
     function _unrelatedCall() private pure returns (ParsedCall memory parsed) {
-        parsed.valid = true;
+        parsed.wellFormed = true;
     }
 
     function _requireCode(address target) private view {

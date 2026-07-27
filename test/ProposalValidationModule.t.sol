@@ -4,8 +4,9 @@ pragma solidity 0.8.28;
 import {Test} from "forge-std/Test.sol";
 import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
-import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
+import {ProposalValidationModuleV1} from "../src/ProposalValidationModuleV1.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
+import {IProposalValidationModule} from "../src/interfaces/IProposalValidationModule.sol";
 import {
     ConfigurableDependency,
     GasFloorValidationModule,
@@ -15,7 +16,7 @@ import {
     MockTarget
 } from "./helpers/Mocks.sol";
 
-contract ProposalGaugeValidatorTest is Test {
+contract ProposalValidationModuleTest is Test {
     bytes4 private constant ADD_GAUGE_DEFAULT_WEIGHT_SELECTOR = bytes4(keccak256("add_gauge(address,int128)"));
     bytes4 private constant ADD_GAUGE_SELECTOR = 0x18dfe921;
     bytes4 private constant AGENT_EXECUTE_SELECTOR = 0xb61d27f6;
@@ -27,7 +28,7 @@ contract ProposalGaugeValidatorTest is Test {
     MockCurveFactory private factory;
     MockProtocolGauge private gauge;
     GaugeValidator private gaugeValidator;
-    ProposalGaugeValidator private proposalValidator;
+    ProposalValidationModuleV1 private proposalModule;
 
     function setUp() public {
         dao = new MockDAO();
@@ -37,34 +38,29 @@ contract ProposalGaugeValidatorTest is Test {
         factory = new MockCurveFactory();
         gauge = new MockProtocolGauge(address(factory), address(0));
         GaugeValidationModuleV1 module = new GaugeValidationModuleV1();
+        proposalModule =
+            new ProposalValidationModuleV1(ICurveDAO(address(dao)), address(agent), address(gaugeController));
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(module), module.FACTORY_IS_VALID_GAUGE());
-        gaugeValidator = new GaugeValidator(address(this), bindings);
+        gaugeValidator = new GaugeValidator(address(this), address(proposalModule), bindings);
         factory.setValidGauge(address(gauge), true);
-
-        proposalValidator = new ProposalGaugeValidator(
-            ICurveDAO(address(dao)), address(agent), address(gaugeController), gaugeValidator
-        );
     }
 
     function test_DirectAdditionReturnsSimpleGaugeBoolean() public {
         uint256 proposalId = _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 0))));
 
-        assertTrue(proposalValidator.validateProposalGauges(proposalId));
+        assertTrue(gaugeValidator.validateProposalGauges(proposalId));
     }
 
     function test_ProposalAllowsNearTwoMillionGasModule() public {
         GasFloorValidationModule expensiveModule = new GasFloorValidationModule(address(factory), 1_900_000);
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(expensiveModule), 1);
-        GaugeValidator expensiveValidator = new GaugeValidator(address(this), bindings);
-        ProposalGaugeValidator expensiveProposalValidator = new ProposalGaugeValidator(
-            ICurveDAO(address(dao)), address(agent), address(gaugeController), expensiveValidator
-        );
+        GaugeValidator expensiveValidator = new GaugeValidator(address(this), address(proposalModule), bindings);
         uint256 proposalId = _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 0))));
 
-        assertTrue(expensiveProposalValidator.validateProposalGauges(proposalId));
+        assertTrue(expensiveValidator.validateProposalGauges(proposalId));
     }
 
     function test_AgentWrappedAdditionIsAuthenticated() public {
@@ -72,7 +68,7 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(agent), _execute(address(gaugeController), 0, payload))));
 
-        assertTrue(proposalValidator.validateProposalGauges(proposalId));
+        assertTrue(gaugeValidator.validateProposalGauges(proposalId));
     }
 
     function test_DefaultWeightAdditionValidatesGauge() public {
@@ -129,7 +125,7 @@ contract ProposalGaugeValidatorTest is Test {
             _scriptCall(address(agent), _execute(address(gaugeController), 0, _addGauge(address(secondGauge), 3, 0)))
         );
 
-        assertTrue(proposalValidator.validateProposalGauges(_push(_callscript(calls))));
+        assertTrue(gaugeValidator.validateProposalGauges(_push(_callscript(calls))));
     }
 
     function test_OneInvalidGaugeMakesProposalFalse() public {
@@ -139,12 +135,104 @@ contract ProposalGaugeValidatorTest is Test {
             _scriptCall(address(gaugeController), _addGauge(address(invalidGauge), 0, 0))
         );
 
-        assertFalse(proposalValidator.validateProposalGauges(_push(_callscript(calls))));
+        assertFalse(gaugeValidator.validateProposalGauges(_push(_callscript(calls))));
+    }
+
+    function test_DetailedAnalysisReturnsTwoOfThreeOrderedGaugeResults() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+        MockProtocolGauge secondValidGauge = new MockProtocolGauge(address(factory), address(0));
+        factory.setValidGauge(address(secondValidGauge), true);
+
+        bytes memory calls = bytes.concat(
+            _scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)),
+            _scriptCall(address(gaugeController), _addGaugeDefaultWeight(address(invalidGauge), 1)),
+            _scriptCall(
+                address(agent), _execute(address(gaugeController), 0, _addGauge(address(secondValidGauge), 2, 0))
+            )
+        );
+
+        (bool allValid, IProposalValidationModule.GaugeResult[] memory results) = _analyze(_callscript(calls));
+
+        assertFalse(allValid);
+        assertEq(results.length, 3);
+        assertEq(results[0].gauge, address(gauge));
+        assertTrue(results[0].valid);
+        assertEq(results[1].gauge, address(invalidGauge));
+        assertFalse(results[1].valid);
+        assertEq(results[2].gauge, address(secondValidGauge));
+        assertTrue(results[2].valid);
+    }
+
+    function test_DetailedAnalysisAttributesNonzeroWeightToDecodedGauge() public {
+        (bool allValid, IProposalValidationModule.GaugeResult[] memory results) = _analyze(
+            _callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, type(uint256).max)))
+        );
+
+        assertFalse(allValid);
+        assertEq(results.length, 1);
+        assertEq(results[0].gauge, address(gauge));
+        assertFalse(results[0].valid);
+    }
+
+    function test_DetailedAnalysisDoesNotInventGaugeForUnattributableFailure() public {
+        bytes memory badAddress = _addGauge(address(gauge), 0, 0);
+        _storeWord(badAddress, 4, uint256(uint160(address(gauge))) | (uint256(1) << 160));
+
+        (bool allValid, IProposalValidationModule.GaugeResult[] memory results) =
+            _analyze(_callscript(_scriptCall(address(gaugeController), badAddress)));
+
+        assertFalse(allValid);
+        assertEq(results.length, 0);
+    }
+
+    function test_DetailedAnalysisReturnsEmptyWhenNoGaugeCanExecute() public {
+        (bool noGaugeRisk, IProposalValidationModule.GaugeResult[] memory noGaugeResults) =
+            _analyze(_callscript(_scriptCall(address(unrelatedTarget), hex"12345678")));
+        assertTrue(noGaugeRisk);
+        assertEq(noGaugeResults.length, 0);
+
+        (bool unknownExecutor, IProposalValidationModule.GaugeResult[] memory unknownResults) = _analyze(hex"00000002");
+        assertFalse(unknownExecutor);
+        assertEq(unknownResults.length, 0);
+
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+        bytes memory structurallyInvalid = _callscript(
+            bytes.concat(
+                _scriptCall(address(gaugeController), _addGauge(address(invalidGauge), 0, 0)),
+                abi.encodePacked(address(gaugeController), uint32(101), hex"1234")
+            )
+        );
+        (bool executableRisk, IProposalValidationModule.GaugeResult[] memory discardedResults) =
+            _analyze(structurallyInvalid);
+        assertTrue(executableRisk);
+        assertEq(discardedResults.length, 0);
+    }
+
+    function test_ProposalModuleCanBeReplacedWithoutChangingEntrypoint() public {
+        MockProtocolGauge invalidGauge = new MockProtocolGauge(address(factory), address(0));
+        uint256 oldProposalId =
+            _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(invalidGauge), 0, 0))));
+        assertFalse(gaugeValidator.validateProposalGauges(oldProposalId));
+
+        MockDAO replacementDao = new MockDAO();
+        uint256 replacementProposalId =
+            replacementDao.pushVote(_callscript(_scriptCall(address(unrelatedTarget), hex"12345678")));
+        ProposalValidationModuleV1 replacement = new ProposalValidationModuleV1(
+            ICurveDAO(address(replacementDao)), address(agent), address(gaugeController)
+        );
+
+        address entrypoint = address(gaugeValidator);
+        gaugeValidator.setProposalModule(address(replacement));
+
+        assertEq(address(gaugeValidator), entrypoint);
+        assertEq(gaugeValidator.proposalModule(), address(replacement));
+        assertTrue(gaugeValidator.validateProposalGauges(replacementProposalId));
+        assertTrue(gaugeValidator.validateGauge(address(gauge)));
     }
 
     function test_NoGaugeAdditionCreatesNoGaugeRisk() public {
         uint256 proposalId = _push(_callscript(_scriptCall(address(unrelatedTarget), hex"12345678")));
-        assertTrue(proposalValidator.validateProposalGauges(proposalId));
+        assertTrue(gaugeValidator.validateProposalGauges(proposalId));
     }
 
     function test_NonExecutableCallscriptsCreateNoGaugeRisk() public {
@@ -271,7 +359,7 @@ contract ProposalGaugeValidatorTest is Test {
 
     function test_MissingProposalReverts() public {
         vm.expectRevert();
-        proposalValidator.validateProposalGauges(0);
+        gaugeValidator.validateProposalGauges(0);
     }
 
     function test_EveryValidatorFailureModeMakesGaugeInvalid() public {
@@ -279,9 +367,9 @@ contract ProposalGaugeValidatorTest is Test {
 
         for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
             ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
-            ProposalGaugeValidator candidate = new ProposalGaugeValidator(
-                ICurveDAO(address(dao)), address(agent), address(gaugeController), GaugeValidator(address(dependency))
-            );
+            GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
+            bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(dependency), 1);
+            GaugeValidator candidate = new GaugeValidator(address(this), address(proposalModule), bindings);
 
             assertFalse(candidate.validateProposalGauges(proposalId));
         }
@@ -295,19 +383,32 @@ contract ProposalGaugeValidatorTest is Test {
             ++gaugeType;
         }
 
-        assertTrue(_validate(_callscript(calls)));
+        (bool allValid, IProposalValidationModule.GaugeResult[] memory results) = _analyze(_callscript(calls));
+        assertTrue(allValid);
+        assertEq(results.length, 65);
+        assertEq(results[0].gauge, address(gauge));
+        assertEq(results[64].gauge, address(gauge));
+        assertTrue(results[0].valid);
+        assertTrue(results[64].valid);
     }
 
     function test_ConstructorRequiresContractDependencies() public {
-        vm.expectRevert(ProposalGaugeValidator.ZeroAddress.selector);
-        new ProposalGaugeValidator(ICurveDAO(address(0)), address(agent), address(gaugeController), gaugeValidator);
+        vm.expectRevert(ProposalValidationModuleV1.ZeroAddress.selector);
+        new ProposalValidationModuleV1(ICurveDAO(address(0)), address(agent), address(gaugeController));
 
-        vm.expectRevert(abi.encodeWithSelector(ProposalGaugeValidator.MissingCode.selector, address(0x1234)));
-        new ProposalGaugeValidator(ICurveDAO(address(dao)), address(0x1234), address(gaugeController), gaugeValidator);
+        vm.expectRevert(abi.encodeWithSelector(ProposalValidationModuleV1.MissingCode.selector, address(0x1234)));
+        new ProposalValidationModuleV1(ICurveDAO(address(dao)), address(0x1234), address(gaugeController));
     }
 
     function _validate(bytes memory script) private returns (bool) {
-        return proposalValidator.validateProposalGauges(_push(script));
+        return gaugeValidator.validateProposalGauges(_push(script));
+    }
+
+    function _analyze(bytes memory script)
+        private
+        returns (bool allValid, IProposalValidationModule.GaugeResult[] memory results)
+    {
+        return gaugeValidator.analyzeProposalGauges(_push(script));
     }
 
     function _push(bytes memory script) private returns (uint256) {

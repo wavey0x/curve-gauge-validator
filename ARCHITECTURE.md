@@ -1,23 +1,32 @@
 # Curve Gauge Validator Architecture
 
-## Question
+## Questions
 
-The validator answers one pessimistic question:
+One stable `GaugeValidator` address answers:
 
 > Was this gauge deployed by a trusted factory?
 
+> Do all authenticated gauge additions in this proposal use a standard zero
+> initial weight and currently pass that predicate?
+
 ```solidity
 function validateGauge(address gauge) external view returns (bool);
+function validateProposalGauges(uint256 proposalId) external view returns (bool);
+function analyzeProposalGauges(uint256 proposalId)
+    external
+    view
+    returns (bool allValid, GaugeResult[] memory results);
 ```
 
-`GaugeValidator` has one boolean validation entrypoint and one O(1)
-factory-policy mapping. Proposal validation is a separate immutable consumer.
+`GaugeValidator` keeps one O(1) factory-policy mapping and one replaceable
+proposal-module pointer. Proof logic and proposal parsing remain outside the
+entry point.
 
 ## Contract call flows
 
 ```mermaid
 flowchart LR
-    Governance(["Curve governance"]) -->|"deploy / setFactoryPolicy"| Core["GaugeValidator"]
+    Governance(["Curve governance"]) -->|"setFactoryPolicy / setProposalModule"| Core["GaugeValidator"]
 
     GaugeCaller(["Gauge caller"]) -->|"validateGauge(gauge)"| Core
     Core -->|"factory()"| Gauge["Gauge"]
@@ -34,12 +43,16 @@ flowchart LR
     Module -.->|"strict bool"| Core
     Core -.->|"strict bool"| GaugeCaller
 
-    ProposalCaller(["Proposal caller"]) -->|"validateProposalGauges(id)"| Proposal["ProposalGaugeValidator"]
+    ProposalCaller(["Proposal caller"]) -->|"validate / analyze proposal"| Core
+    Core -->|"proposalModule"| ProposalPolicy[("Proposal policy")]
+    ProposalPolicy -.->|"module"| Core
+    Core -->|"validate / analyze id"| Proposal["ProposalValidationModuleV1"]
     Proposal -->|"getVote(id)"| DAO["Curve ownership DAO"]
     DAO -.->|"callscript"| Proposal
     Proposal -->|"validateGauge(gauge) for each recognized addition"| Core
     Core -.->|"strict bool per gauge"| Proposal
-    Proposal -.->|"strict bool"| ProposalCaller
+    Proposal -.->|"aggregate + ordered results"| Core
+    Core -.->|"strict bool / ordered results"| ProposalCaller
 
     classDef repo fill:#3851ff,stroke:#9aa8ff,color:#ffffff,stroke-width:2px;
     classDef external fill:#e5e7eb,stroke:#9ca3af,color:#111827,stroke-width:1.5px;
@@ -49,7 +62,7 @@ flowchart LR
     class Core,Module,Proposal repo;
     class Gauge,Token,Factory,DAO external;
     class Governance,GaugeCaller,ProposalCaller actor;
-    class Policy storage;
+    class Policy,ProposalPolicy storage;
 ```
 
 Blue boxes are contracts in this repository. Light-gray boxes are external
@@ -57,10 +70,11 @@ onchain contracts, pill shapes are callers or governance, and the cylinder is
 core storage. Solid arrows are calls or reads; dashed arrows are returned
 values.
 
-`ProposalGaugeValidator` does not call the ownership Agent or GaugeController.
-It authenticates their addresses and calldata inside the DAO callscript. Every
-recognized gauge addition then enters the same `GaugeValidator` path shown
-above.
+`ProposalValidationModuleV1` does not call the ownership Agent or
+GaugeController. It authenticates their addresses and calldata inside the DAO
+callscript. The stable entry point calls the configured proposal module, and
+the module calls that same entry point's `validateGauge` method for every
+recognized addition.
 
 ## Rule
 
@@ -98,10 +112,11 @@ provenance.
 `GaugeValidator` contains:
 
 - `mapping(address factory => FactoryPolicy) policyForFactory`;
+- one owner-replaceable `proposalModule`;
 - a bounded, strict `gauge.factory()` read;
 - a bounded, strict policy-module call;
 - governance ownership; and
-- `validateGauge(address) returns (bool)`.
+- stable gauge, aggregate-proposal, and detailed-proposal entry points.
 
 The binding is:
 
@@ -133,8 +148,16 @@ setFactoryPolicy(address factory, address module, uint8 methodId);
 Each update emits only the resulting `FactoryPolicySet(factory, module,
 methodId)` policy. A zero module and zero method ID record removal.
 
-This lets a future validation method live in a new module without replacing
-the core or its immutable proposal consumer.
+Governance may separately replace or disable the proposal parser:
+
+```solidity
+setProposalModule(address module);
+```
+
+Each update emits `ProposalModuleSet(module)`. A zero module disables proposal
+validation, whose entry points then revert with `ProposalModuleUnavailable`.
+This lets future factory proofs and proposal parsers change without replacing
+the stable public entry point.
 
 ## Current policy module
 
@@ -194,20 +217,29 @@ make the validator revert or exhaust the caller's gas. Policy modules should
 be immutable implementations; binding an upgradeable proxy deliberately
 transfers policy-change authority to that proxy's administrator.
 
-## Proposal contract
+## Proposal module
 
-`ProposalGaugeValidator` is a separate, immutable consumer of
-`GaugeValidator`. It stores only:
+`ProposalValidationModuleV1` is a separate stateless policy module. It stores
+only:
 
 - the Curve ownership DAO;
 - the ownership Agent;
-- GaugeController; and
-- the gauge validator.
+- GaugeController.
 
-It exposes:
+The stable `GaugeValidator` entry point exposes:
 
 ```solidity
 function validateProposalGauges(uint256 proposalId) external view returns (bool);
+
+struct GaugeResult {
+    address gauge;
+    bool valid;
+}
+
+function analyzeProposalGauges(uint256 proposalId)
+    external
+    view
+    returns (bool allValid, GaugeResult[] memory results);
 ```
 
 The boolean answers:
@@ -219,6 +251,14 @@ The boolean answers:
 nonzero initial weight, fails gauge validation, or cannot be decoded safely.
 A proposal with no gauge additions returns `true` because it creates no gauge
 risk.
+
+The detailed method returns one result for every safely decoded authenticated
+gauge addition, preserving proposal order and duplicates. Each item answers
+whether that specific addition uses standard zero weight and its gauge
+currently passes `validateGauge`. A canonical nonzero-weight addition includes
+its decoded gauge with `valid == false`. An authenticated call that is too
+malformed to identify a gauge safely makes `allValid == false` without
+inventing a result address.
 
 The validator recognizes both executable GaugeController encodings:
 
@@ -242,25 +282,28 @@ is ignored.
 Structural callscript failures such as a truncated script, a truncated call
 header, or an out-of-bounds call length make the entire proposal
 non-executable. They therefore return `true`, even if an earlier call would
-have failed gauge validation. An unknown script-executor ID returns `false`
-because another registered executor may be able to run it. Once the callscript
-is structurally executable, gauge-shaped calls at the authenticated targets
-must use canonical calldata. Noncanonical words, malformed authenticated
-wrappers, and recursive Agent execution return `false` pessimistically.
+have failed gauge validation; detailed analysis returns an empty result array.
+An unknown script-executor ID returns `false` with an empty array because
+another registered executor may be able to run it. Once the callscript is
+structurally executable, gauge-shaped calls at the authenticated targets must
+use canonical calldata. Noncanonical words, malformed authenticated wrappers,
+and recursive Agent execution return `false` pessimistically.
 
-Every recognized gauge is evaluated through the immutable gauge validator
-with a 2,100,000-gas cap and an exact canonical boolean return. The extra
-100,000 gas lets the core perform its factory read and still forward the full
-2,000,000-gas module budget under EIP-150. A failed query makes that gauge
-invalid. There is no gauge-result allocation or arbitrary recognized-gauge
-cap; additions are validated as the callscript is traversed.
+The proposal module treats its caller as the validator. In normal use that
+caller is the configured stable `GaugeValidator`, so there is no circular
+deployment dependency or validator address embedded in the module. Every
+recognized gauge is evaluated through that caller with a 2,100,000-gas cap and
+an exact canonical boolean return. The extra 100,000 gas lets the entry point
+perform its factory read and still forward the full 2,000,000-gas gauge-module
+budget under EIP-150. A failed query makes that gauge invalid. There is no
+arbitrary recognized-gauge cap.
 
 The DAO read is capped at 5,000,000 gas and failures revert the proposal
 validation call. RPC transport failures likewise fail the outer call rather
 than becoming an on-chain result.
 
-Gauge booleans reflect the current block. The proposal validator does not
-simulate state changes that earlier calls in the proposal would create.
+Gauge booleans reflect the current block. The proposal module does not simulate
+state changes that earlier calls in the proposal would create.
 
 ## Mainnet trust set
 
@@ -297,13 +340,14 @@ Deployment is three transactions:
 
 ```text
 new GaugeValidationModuleV1()
-new GaugeValidator(governance, factoryPolicies)
-new ProposalGaugeValidator(dao, agent, gaugeController, gaugeValidator)
+new ProposalValidationModuleV1(dao, agent, gaugeController)
+new GaugeValidator(governance, proposalModule, factoryPolicies)
 ```
 
-The proposal contract is immutable and has no owner or policy configuration.
-The deployment script reads back every immutable dependency, the gauge owner,
-and each factory's exact module and method ID.
+Both modules are stateless and have no owner or policy configuration. The
+deployment script reads back every immutable proposal dependency, the stable
+entry point's owner and proposal module, and each factory's exact module and
+method ID.
 
 Tests cover:
 
@@ -313,13 +357,18 @@ Tests cover:
 - untrusted and spoofing cases;
 - reverting, malformed, gas-burning, and oversized return data;
 - owner-only trust changes;
+- replacing and disabling the proposal module without changing the entry
+  point;
 - direct and Agent-wrapped proposal additions using both executable
   `add_gauge` encodings;
 - explicit zero weight, rejected nonzero weight, empty proposals, malformed
   authenticated calls, and mixed-validity aggregate results;
+- ordered 2-of-3 results, duplicate preservation, nonzero-weight attribution,
+  and more than 64 detailed results;
 - representative live gauges for every configured factory family;
 - two representative mainnet proposals with negative recognition controls;
   and
-- exact three-contract deployment readback on a pinned mainnet fork.
+- exact three-contract deployment and stable-entrypoint readback on a pinned
+  mainnet fork.
 
 Exhaustive historical gauge or proposal coverage is not required.

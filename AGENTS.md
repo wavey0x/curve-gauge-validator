@@ -9,22 +9,24 @@ This repository separates two questions:
 > Do all authenticated gauge additions in this proposal use a standard zero
 > initial weight and currently pass that predicate?
 
-Keep `GaugeValidator` to one small pessimistic boolean core with O(1)
-factory-to-module dispatch. Keep proof implementations stateless and proposal
-parsing in its separate immutable consumer.
+Keep `GaugeValidator` as the stable public entry point with O(1)
+factory-to-module dispatch and one replaceable proposal-module pointer. Keep
+proof implementations and proposal parsing in separate stateless modules.
 
 ## Layout
 
-- `src/GaugeValidator.sol`: stable core and exact factory-policy bindings.
+- `src/GaugeValidator.sol`: stable entry point and exact module bindings.
 - `src/GaugeValidationModuleV1.sol`: four current reciprocal proofs.
-- `src/ProposalGaugeValidator.sol`: strict proposal parsing and aggregate
-  boolean.
+- `src/ProposalValidationModuleV1.sol`: strict proposal parsing, aggregate
+  boolean, and ordered gauge results.
+- `src/interfaces/IProposalValidationModule.sol`: stable proposal-module ABI.
 - `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
 - `script/DeployGaugeValidator.s.sol`: three-contract deployment and readback.
 - `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
 - `script/AnalyzeProposal.s.sol`: read-only proposal analysis.
 - `test/GaugeValidator.t.sol`: proof, failure, and authorization tests.
-- `test/ProposalGaugeValidator.t.sol`: parser and proposal-boolean tests.
+- `test/ProposalValidationModule.t.sol`: parser, aggregate, and detailed-result
+  tests.
 - `test/MainnetGaugeValidation.t.sol`: pinned-fork representative gauges.
 - `test/Deployment.t.sol`: deployment/readback test.
 
@@ -39,17 +41,23 @@ parsing in its separate immutable consumer.
   configured module.
 - Modules are trusted, governance-selected policy components that return a
   strict boolean.
+- The entry point exposes gauge validation, aggregate proposal validation, and
+  ordered per-addition proposal results at one address.
+- Governance can replace or disable the proposal module without changing the
+  entry point. Disabled proposal validation reverts.
 - Gauge and policy dependency failures return `false`; DAO proposal-read
   failures revert.
 - Configuration failures revert.
-- External calls remain gas bounded and ABI strict.
-- The proposal validator has immutable dependencies and no governance policy.
+- Untrusted dependency and gauge-policy calls remain gas bounded and ABI
+  strict. Proposal-module failures revert.
+- The proposal module has immutable DAO, Agent, and GaugeController
+  dependencies and uses the calling entry point for gauge validation.
 - Authenticated proposal targets and calldata must be parsed strictly.
 - Both executable `add_gauge` encodings are recognized. Omitted or explicit
   zero initial weight is accepted; nonzero initial weight returns `false`.
 - Do not add proof implementations, proposal parsing, route scanning, module
-  registries, historical exhaustiveness, or caller-supplied factory hints to
-  `GaugeValidator`.
+  registries, status enums, historical exhaustiveness, or caller-supplied
+  factory hints to `GaugeValidator`.
 
 ## Verification
 

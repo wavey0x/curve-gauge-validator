@@ -2,10 +2,11 @@
 pragma solidity 0.8.28;
 
 import {IGaugeValidationModule} from "./interfaces/IGaugeValidationModule.sol";
+import {IProposalValidationModule} from "./interfaces/IProposalValidationModule.sol";
 import {ICurve} from "./interfaces/ICurve.sol";
 
-/// @notice Pessimistically answers whether a gauge passes its trusted factory
-///         policy.
+/// @notice Stable entry point for trusted-factory gauge validation and
+///         replaceable proposal validation.
 contract GaugeValidator {
     uint256 public constant FACTORY_READ_GAS = 30_000;
     uint256 public constant MODULE_CALL_GAS = 2_000_000;
@@ -22,17 +23,20 @@ contract GaugeValidator {
     }
 
     address public owner;
+    address public proposalModule;
 
     /// @notice Exact policy for each trusted factory. A zero module means untrusted.
     mapping(address factory => FactoryPolicy policy) public policyForFactory;
 
     event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
+    event ProposalModuleSet(address indexed module);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     error NotOwner(address caller);
     error ZeroAddress();
     error InvalidPolicy();
     error MissingCode(address target);
+    error ProposalModuleUnavailable();
 
     modifier onlyOwner() {
         _checkOwner();
@@ -43,11 +47,12 @@ contract GaugeValidator {
         if (msg.sender != owner) revert NotOwner(msg.sender);
     }
 
-    constructor(address owner_, FactoryBinding[] memory initialBindings) {
+    constructor(address owner_, address proposalModule_, FactoryBinding[] memory initialBindings) {
         if (owner_ == address(0)) revert ZeroAddress();
 
         owner = owner_;
         emit OwnershipTransferred(address(0), owner_);
+        _setProposalModule(proposalModule_);
 
         for (uint256 i; i < initialBindings.length; ++i) {
             FactoryBinding memory binding = initialBindings[i];
@@ -58,6 +63,12 @@ contract GaugeValidator {
     /// @notice Sets one factory's policy. A zero module removes trust.
     function setFactoryPolicy(address factory, address module, uint8 methodId) external onlyOwner {
         _setFactoryPolicy(factory, module, methodId);
+    }
+
+    /// @notice Replaces the proposal parser used by this stable entry point.
+    ///         A zero address disables proposal validation.
+    function setProposalModule(address module) external onlyOwner {
+        _setProposalModule(module);
     }
 
     function transferOwnership(address newOwner) external onlyOwner {
@@ -83,6 +94,26 @@ contract GaugeValidator {
         return moduleCall && valid;
     }
 
+    /// @notice Returns whether all authenticated gauge additions in one
+    ///         proposal are standard and currently valid.
+    /// @dev Proposal module and DAO read failures revert.
+    function validateProposalGauges(uint256 proposalId) external view returns (bool) {
+        address module = _proposalModule();
+        return IProposalValidationModule(module).validateProposalGauges(proposalId);
+    }
+
+    /// @notice Returns the aggregate result and one ordered result for every
+    ///         safely decoded authenticated gauge addition.
+    /// @dev Proposal module and DAO read failures revert.
+    function analyzeProposalGauges(uint256 proposalId)
+        external
+        view
+        returns (bool allValid, IProposalValidationModule.GaugeResult[] memory results)
+    {
+        address module = _proposalModule();
+        return IProposalValidationModule(module).analyzeProposalGauges(proposalId);
+    }
+
     function _setFactoryPolicy(address factory, address module, uint8 methodId) private {
         if (factory == address(0)) revert ZeroAddress();
         if (module == address(0)) {
@@ -96,6 +127,17 @@ contract GaugeValidator {
         }
 
         emit FactoryPolicySet(factory, module, methodId);
+    }
+
+    function _setProposalModule(address module) private {
+        if (module != address(0)) _requireCode(module);
+        proposalModule = module;
+        emit ProposalModuleSet(module);
+    }
+
+    function _proposalModule() private view returns (address module) {
+        module = proposalModule;
+        if (module == address(0)) revert ProposalModuleUnavailable();
     }
 
     function _readAddress(address target, bytes4 selector) private view returns (bool success, address value) {

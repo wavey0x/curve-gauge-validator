@@ -4,7 +4,7 @@ pragma solidity 0.8.28;
 import {Script, console2} from "forge-std/Script.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
-import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
+import {ProposalValidationModuleV1} from "../src/ProposalValidationModuleV1.sol";
 
 /// @notice Reads the deployed validator configuration without mutating state.
 contract InspectGaugeValidator is Script {
@@ -19,19 +19,18 @@ contract InspectGaugeValidator is Script {
 
         address validatorAddress = vm.envAddress("VALIDATOR");
         address gaugeModuleAddress = vm.envAddress("GAUGE_MODULE");
-        address proposalValidatorAddress = vm.envAddress("PROPOSAL_VALIDATOR");
+        address proposalModuleAddress = vm.envAddress("PROPOSAL_MODULE");
         if (validatorAddress.code.length == 0) revert MissingCode(validatorAddress);
         if (gaugeModuleAddress.code.length == 0) revert MissingCode(gaugeModuleAddress);
-        if (proposalValidatorAddress.code.length == 0) revert MissingCode(proposalValidatorAddress);
+        if (proposalModuleAddress.code.length == 0) revert MissingCode(proposalModuleAddress);
 
         GaugeValidator validator = GaugeValidator(validatorAddress);
-        ProposalGaugeValidator proposalValidator = ProposalGaugeValidator(proposalValidatorAddress);
+        ProposalValidationModuleV1 proposalModule = ProposalValidationModuleV1(proposalModuleAddress);
         if (
-            validator.owner() != MainnetGaugeConfiguration.OWNER
-                || address(proposalValidator.DAO()) != MainnetGaugeConfiguration.DAO
-                || proposalValidator.AGENT() != MainnetGaugeConfiguration.OWNER
-                || proposalValidator.GAUGE_CONTROLLER() != MainnetGaugeConfiguration.GAUGE_CONTROLLER
-                || address(proposalValidator.GAUGE_VALIDATOR()) != validatorAddress
+            validator.owner() != MainnetGaugeConfiguration.OWNER || validator.proposalModule() != proposalModuleAddress
+                || address(proposalModule.DAO()) != MainnetGaugeConfiguration.DAO
+                || proposalModule.AGENT() != MainnetGaugeConfiguration.OWNER
+                || proposalModule.GAUGE_CONTROLLER() != MainnetGaugeConfiguration.GAUGE_CONTROLLER
         ) revert ConfigurationMismatch();
 
         GaugeValidator.FactoryBinding[] memory expectedBindings = MainnetGaugeConfiguration.bindings(gaugeModuleAddress);
@@ -45,7 +44,7 @@ contract InspectGaugeValidator is Script {
 
         console2.log("validator", validatorAddress);
         console2.log("gauge module", gaugeModuleAddress);
-        console2.log("proposal validator", proposalValidatorAddress);
+        console2.log("proposal module", proposalModuleAddress);
         console2.log("owner", validator.owner());
         for (uint256 i; i < expectedBindings.length; ++i) {
             console2.log("factory", expectedBindings[i].factory);

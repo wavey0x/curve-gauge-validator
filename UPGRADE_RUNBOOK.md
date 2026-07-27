@@ -3,33 +3,34 @@
 ## Purpose
 
 `GaugeValidator` is a stable, non-proxy entry point. Normal upgrades replace
-factory policy, not the core:
+factory or proposal policy, not the core:
 
 ```text
 factory -> {module, methodId}
+proposalModule -> stateless proposal parser
 ```
 
 Governance can deploy a new stateless validation module and rebind selected
 factories with `setFactoryPolicy`. The core address and its
-`validateGauge(address)` entry point remain unchanged. The immutable
-`ProposalGaugeValidator` also continues to use the same core and therefore
-sees the new policy immediately.
+gauge and proposal entry points remain unchanged. Governance can independently
+replace the proposal parser with `setProposalModule`.
 
 ## What can change in place
 
-| Change | Core address | Proposal validator address | Required action |
+| Change | Entry point address | Module address | Required action |
 | --- | --- | --- | --- |
 | Add a trusted factory | unchanged | unchanged | Bind it to a module and nonzero method ID |
-| Replace proof logic | unchanged | unchanged | Deploy a module and rebind affected factories |
+| Replace proof logic | unchanged | changes | Deploy a module and rebind affected factories |
 | Disable a factory | unchanged | unchanged | Set its policy to `{address(0), 0}` |
 | Roll back proof logic | unchanged | unchanged | Restore the previous module and method ID |
-| Change proposal parsing | unchanged | changes | Deploy a new proposal consumer and migrate callers |
-| Change core behavior | changes | changes | Deploy and migrate the full system |
+| Change proposal parsing | unchanged | changes | Deploy a module and call `setProposalModule` |
+| Disable proposal parsing | unchanged | cleared | Call `setProposalModule(address(0))` |
+| Change entry point behavior | changes | changes | Deploy and migrate the full system |
 
 The core deliberately has no proxy or implementation upgrade mechanism. A
 core change is a migration, not a policy upgrade.
 
-## Policy upgrade procedure
+## Factory-policy upgrade procedure
 
 ### 1. Define the change
 
@@ -70,9 +71,9 @@ On a recent pinned fork:
    failures; and
 6. rerun the full repository test suite.
 
-Test the final governance calldata, not only equivalent direct calls. The
-proposal validator reads current state and does not simulate policy changes
-that an earlier call in the same proposal would make.
+Test the final governance calldata, not only equivalent direct calls. Proposal
+validation reads current state and does not simulate policy changes that an
+earlier call in the same proposal would make.
 
 ### 4. Submit the governance proposal
 
@@ -104,6 +105,29 @@ the repository's expected configuration; they do not update an existing
 deployment. Update the expected manifest and inspection tooling when an
 upgrade creates a new or mixed-module configuration.
 
+## Proposal-module upgrade procedure
+
+1. Record the current proposal module for rollback.
+2. Deploy a stateless `IProposalValidationModule` implementation with the
+   intended immutable DAO, Agent, and GaugeController.
+3. On a pinned fork, test the aggregate and detailed entry points through the
+   stable `GaugeValidator` address. Include valid, invalid, mixed, malformed,
+   empty, direct, and Agent-wrapped proposals.
+4. Confirm detailed results preserve proposal order and attribute nonzero
+   weight to the decoded gauge as `false`.
+5. Submit and independently review:
+
+```solidity
+validator.setProposalModule(newProposalModule);
+```
+
+6. After execution, read back `proposalModule`, rerun representative proposal
+checks, and confirm the `ProposalModuleSet` event.
+
+Rollback by restoring the previous module. Setting the module to
+`address(0)` disables both proposal entry points; calls then revert instead of
+returning an ambiguous result. Gauge validation remains available.
+
 ## Rollback and emergency disable
 
 Keep the previous stateless module address and method ID in the change record.
@@ -132,5 +156,5 @@ after the replacement policy has passed the same fork tests and readback.
 - [ ] Exact post-execution policies read back.
 - [ ] Representative positive and negative gauges checked.
 - [ ] Configuration events monitored.
+- [ ] Proposal-module aggregate and detailed results checked when applicable.
 - [ ] Repository manifest and inspection tooling synchronized.
-
