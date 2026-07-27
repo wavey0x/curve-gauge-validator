@@ -31,6 +31,17 @@ proof implementations and proposal parsing in separate stateless modules.
 - `test/MainnetGaugeValidation.t.sol`: pinned-fork representative gauges.
 - `test/Deployment.t.sol`: deployment/readback test.
 
+## Mainnet deployed addresses
+
+| Component | Address |
+| --- | --- |
+| `GaugeValidator` | `0x999901cd8568Caafeb8888F18C1F5B870B58b7F2` |
+| `GaugeValidationModuleV1` | `0x999902533033Cc63c8128C501e307477932B742E` |
+| `ProposalValidationModuleV1` | `0x9999032142B45AE92e11a5E10A45F49f58b67773` |
+
+These are the frozen Ethereum CreateX deployment addresses. A different core
+address is a migration, not an in-place upgrade.
+
 ## Invariants
 
 - A self-reported factory address is never enough.

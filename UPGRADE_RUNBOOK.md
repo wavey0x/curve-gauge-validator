@@ -15,6 +15,17 @@ factories with `setFactoryPolicy`. The core address and its
 gauge and proposal entry points remain unchanged. Governance can independently
 replace proposal discovery and parsing with `setProposalModule`.
 
+## Mainnet deployed addresses
+
+| Component | Address |
+| --- | --- |
+| `GaugeValidator` | `0x999901cd8568Caafeb8888F18C1F5B870B58b7F2` |
+| `GaugeValidationModuleV1` | `0x999902533033Cc63c8128C501e307477932B742E` |
+| `ProposalValidationModuleV1` | `0x9999032142B45AE92e11a5E10A45F49f58b67773` |
+
+Use `GaugeValidator` as the stable integration address. Factory and proposal
+module replacements preserve it; changing it requires a full migration.
+
 ## What can change in place
 
 | Change | Entry point address | Module address | Required action |
