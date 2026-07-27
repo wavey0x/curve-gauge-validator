@@ -1,5 +1,12 @@
 # Curve Gauge and Proposal Validator
 
+> **Trustless execution, stable integration.** Validation runs entirely
+> onchain from contract state and bounded static calls—no API, indexer,
+> backend, offchain allowlist, or caller-supplied proof is involved.
+> Integrators call one stable core address. Curve governance manages the trust
+> policy and can add, replace, or remove verifier modules without changing that
+> address or requiring integrations to call modules directly.
+
 A single stable entry point provides fail-closed answers for gauges and Curve
 ownership proposals:
 
