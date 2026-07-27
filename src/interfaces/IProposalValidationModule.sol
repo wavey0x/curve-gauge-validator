@@ -7,6 +7,10 @@ interface IProposalValidationModule {
         bool valid;
     }
 
+    /// @notice Returns every currently open proposal in the configured DAO,
+    ///         preserving proposal order.
+    function getActiveProposals() external view returns (uint256[] memory proposalIds);
+
     /// @notice Returns whether every safely decoded gauge addition is standard
     ///         and currently passes the calling validator's gauge policy.
     function validateProposalGauges(uint256 proposalId) external view returns (bool);

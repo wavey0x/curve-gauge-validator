@@ -150,6 +150,17 @@ contract MainnetGaugeValidationTest is Test {
         assertFalse(untrustedValidator.validateProposalGauges(LEND_V2_ACTIVATION_PROPOSAL));
     }
 
+    function test_ActiveProposalDiscoveryIncludesEveryOpenOwnershipVote() public view {
+        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+
+        assertEq(proposalIds.length, 7);
+        for (uint256 i; i < proposalIds.length; ++i) {
+            assertEq(proposalIds[i], 1455 + i);
+            (bool open,,,,,,,,,) = ICurveDAO(MainnetGaugeConfiguration.DAO).getVote(proposalIds[i]);
+            assertTrue(open);
+        }
+    }
+
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {
         IFactoryAttestedGauge gauge = IFactoryAttestedGauge(LEND_V2_VAULT_GAUGE);
         IFactoryGaugeRegistry factory = IFactoryGaugeRegistry(LEND_V2_GAUGE_FACTORY);

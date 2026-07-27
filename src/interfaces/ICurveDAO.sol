@@ -2,6 +2,10 @@
 pragma solidity 0.8.28;
 
 interface ICurveDAO {
+    function votesLength() external view returns (uint256);
+
+    function voteTime() external view returns (uint64);
+
     function getVote(uint256 voteId)
         external
         view

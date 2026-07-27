@@ -6,8 +6,8 @@ import {ICurve} from "./interfaces/ICurve.sol";
 import {ICurveDAO} from "./interfaces/ICurveDAO.sol";
 import {IProposalValidationModule} from "./interfaces/IProposalValidationModule.sol";
 
-/// @notice Stateless parser for canonical gauge additions in one Curve
-///         ownership proposal.
+/// @notice Read-only discovery and canonical gauge-addition analysis for Curve
+///         ownership proposals.
 /// @dev The calling GaugeValidator is used to validate each decoded gauge.
 contract ProposalValidationModuleV1 is IProposalValidationModule {
     bytes4 private constant CALLSCRIPT_ID = 0x00000001;
@@ -52,6 +52,32 @@ contract ProposalValidationModuleV1 is IProposalValidationModule {
         DAO = dao_;
         AGENT = agent_;
         GAUGE_CONTROLLER = gaugeController_;
+    }
+
+    /// @inheritdoc IProposalValidationModule
+    function getActiveProposals() external view returns (uint256[] memory proposalIds) {
+        uint256 voteCount = DAO.votesLength{gas: DAO_CALL_GAS}();
+        if (voteCount == 0) return new uint256[](0);
+
+        uint256 duration = DAO.voteTime{gas: DAO_CALL_GAS}();
+        uint256 firstCandidate = voteCount;
+        uint256 activeCount;
+
+        // Curve ownership proposal IDs are chronological. Bound discovery to
+        // the current voting window without allocating for historical votes.
+        while (firstCandidate != 0) {
+            (bool open,, uint64 startDate,,,,,,,) = DAO.getVote{gas: DAO_CALL_GAS}(firstCandidate - 1);
+            if (uint256(startDate) + duration <= block.timestamp) break;
+            if (open) ++activeCount;
+            --firstCandidate;
+        }
+
+        proposalIds = new uint256[](activeCount);
+        uint256 resultIndex;
+        for (uint256 proposalId = firstCandidate; proposalId < voteCount; ++proposalId) {
+            (bool open,,,,,,,,,) = DAO.getVote{gas: DAO_CALL_GAS}(proposalId);
+            if (open) proposalIds[resultIndex++] = proposalId;
+        }
     }
 
     /// @inheritdoc IProposalValidationModule

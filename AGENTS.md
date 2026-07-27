@@ -17,8 +17,8 @@ proof implementations and proposal parsing in separate stateless modules.
 
 - `src/GaugeValidator.sol`: stable entry point and exact module bindings.
 - `src/GaugeValidationModuleV1.sol`: four current reciprocal proofs.
-- `src/ProposalValidationModuleV1.sol`: strict proposal parsing, aggregate
-  boolean, and ordered gauge results.
+- `src/ProposalValidationModuleV1.sol`: active-proposal discovery, strict
+  proposal parsing, aggregate boolean, and ordered gauge results.
 - `src/interfaces/IProposalValidationModule.sol`: stable proposal-module ABI.
 - `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
 - `script/DeployGaugeValidator.s.sol`: deterministic CreateX deployment and
@@ -53,6 +53,8 @@ proof implementations and proposal parsing in separate stateless modules.
   strict. Proposal-module failures revert.
 - The proposal module has immutable DAO, Agent, and GaugeController
   dependencies and uses the calling entry point for gauge validation.
+- Active-proposal discovery returns every open ownership vote and never
+  filters by callscript contents.
 - Authenticated proposal targets and calldata must be parsed strictly.
 - Both executable `add_gauge` encodings are recognized. Omitted or explicit
   zero initial weight is accepted; nonzero initial weight returns `false`.

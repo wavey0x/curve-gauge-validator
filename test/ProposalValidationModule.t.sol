@@ -53,6 +53,68 @@ contract ProposalValidationModuleTest is Test {
         assertTrue(gaugeValidator.validateProposalGauges(proposalId));
     }
 
+    function test_ActiveProposalsReturnsEveryOpenProposalRegardlessOfActions() public {
+        vm.warp(1_000_000);
+        dao.setVoteTime(1 weeks);
+
+        dao.pushVoteState(true, false, uint64(block.timestamp - 1 weeks), hex"");
+        uint256 unrelatedProposal = dao.pushVoteState(true, false, uint64(block.timestamp - 3 days), _callscript(hex""));
+        dao.pushVoteState(false, true, uint64(block.timestamp - 2 days), _callscript(hex""));
+        uint256 gaugeProposal = dao.pushVoteState(
+            true,
+            false,
+            uint64(block.timestamp - 1 days),
+            _callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)))
+        );
+
+        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+
+        assertEq(proposalIds.length, 2);
+        assertEq(proposalIds[0], unrelatedProposal);
+        assertEq(proposalIds[1], gaugeProposal);
+    }
+
+    function test_ActiveProposalsReturnsEmptyForNoVotes() public view {
+        assertEq(proposalModule.getActiveProposals().length, 0);
+    }
+
+    function test_ActiveProposalDiscoveryRevertsOnDAOReadFailure() public {
+        ProposalValidationModuleV1 brokenModule = new ProposalValidationModuleV1(
+            ICurveDAO(address(unrelatedTarget)), address(agent), address(gaugeController)
+        );
+
+        vm.expectRevert();
+        brokenModule.getActiveProposals();
+    }
+
+    function test_ExecutedRecentProposalDoesNotHideEarlierOpenProposal() public {
+        vm.warp(1_000_000);
+        dao.setVoteTime(1 weeks);
+
+        uint256 openProposal = dao.pushVoteState(true, false, uint64(block.timestamp - 2 days), _callscript(hex""));
+        dao.pushVoteState(false, true, uint64(block.timestamp - 1 days), _callscript(hex""));
+
+        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+
+        assertEq(proposalIds.length, 1);
+        assertEq(proposalIds[0], openProposal);
+    }
+
+    function test_ExpiredBoundaryStopsActiveProposalScan() public {
+        vm.warp(1_000_000);
+        dao.setVoteTime(1 weeks);
+
+        dao.pushVoteState(true, false, uint64(block.timestamp - 1 weeks - 1), _callscript(hex""));
+        dao.pushVoteState(true, false, uint64(block.timestamp - 1 weeks), _callscript(hex""));
+        uint256 activeProposal =
+            dao.pushVoteState(true, false, uint64(block.timestamp - 1 weeks + 1), _callscript(hex""));
+
+        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+
+        assertEq(proposalIds.length, 1);
+        assertEq(proposalIds[0], activeProposal);
+    }
+
     function test_ProposalAllowsNearTwoMillionGasModule() public {
         GasFloorValidationModule expensiveModule = new GasFloorValidationModule(address(factory), 1_900_000);
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);

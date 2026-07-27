@@ -20,7 +20,8 @@ function analyzeProposalGauges(uint256 proposalId)
 
 `GaugeValidator` keeps one O(1) factory-policy mapping and one replaceable
 proposal-module pointer. Proof logic and proposal parsing remain outside the
-entry point.
+entry point. The proposal module separately enumerates every currently open
+ownership proposal without filtering by callscript contents.
 
 ## Contract call flows
 
@@ -44,6 +45,10 @@ flowchart LR
     Core -.->|"strict bool"| GaugeCaller
 
     ProposalCaller(["Proposal caller"]) -->|"validate / analyze proposal"| Core
+    ProposalCaller -->|"getActiveProposals()"| Proposal
+    Proposal -->|"votesLength / voteTime / getVote"| DAO
+    DAO -.->|"all open proposal IDs"| Proposal
+    Proposal -.->|"ascending IDs"| ProposalCaller
     Core -->|"proposalModule"| ProposalPolicy[("Proposal policy")]
     ProposalPolicy -.->|"module"| Core
     Core -->|"validate / analyze id"| Proposal["ProposalValidationModuleV1"]
@@ -72,9 +77,10 @@ values.
 
 `ProposalValidationModuleV1` does not call the ownership Agent or
 GaugeController. It authenticates their addresses and calldata inside the DAO
-callscript. The stable entry point calls the configured proposal module, and
-the module calls that same entry point's `validateGauge` method for every
-recognized addition.
+callscript. Active-proposal discovery calls the module directly after reading
+its address from `GaugeValidator.proposalModule()`. The stable entry point calls
+the configured proposal module for analysis, and the module calls that same
+entry point's `validateGauge` method for every recognized addition.
 
 ## Rule
 
@@ -226,6 +232,25 @@ only:
 - the ownership Agent;
 - GaugeController.
 
+The proposal module itself exposes:
+
+```solidity
+function getActiveProposals() external view returns (uint256[] memory proposalIds);
+```
+
+This returns every currently open ownership proposal in ascending ID order,
+including proposals with no gauge actions. Proposal IDs are chronological, so
+the module walks backward only until `startDate + voteTime <= block.timestamp`,
+then returns each `open` vote in that current window. Recently executed votes
+are skipped but do not terminate discovery. The callscript is never read to
+decide whether a proposal belongs in this list, and memory use is bounded by
+the current voting window rather than all historical proposals.
+
+At Ethereum block `25,619,622`
+(`0x3995ff2d82e9b602f8c36a4b408e13bcda78dfdebd79e3ff87c89044569ec059`,
+`2026-07-26T21:20:47Z`), the pinned-fork test returns every open ownership
+proposal: IDs `1455` through `1461`.
+
 The stable `GaugeValidator` entry point exposes:
 
 ```solidity
@@ -250,7 +275,22 @@ The boolean answers:
 `true` means yes. `false` means at least one authenticated addition uses a
 nonzero initial weight, fails gauge validation, or cannot be decoded safely.
 A proposal with no gauge additions returns `true` because it creates no gauge
-risk.
+risk. Consumers must pair that boolean with the result length: `(true, [])`
+means gauge validation is not applicable and does not endorse unrelated
+proposal actions.
+
+Off-chain consumers can derive presentation status without another on-chain
+enum:
+
+| `allValid` | Result length | Meaning |
+| --- | --- | --- |
+| `true` | nonzero | `valid` |
+| `false` | nonzero | `invalid` |
+| `true` | zero | `not_applicable` |
+| `false` | zero | `unsupported` |
+
+DAO or module reverts remain outer call failures rather than a manufactured
+status.
 
 The detailed method returns one result for every safely decoded authenticated
 gauge addition, preserving proposal order and duplicates. Each item answers
@@ -342,8 +382,8 @@ embedded in the core's constructor arguments:
 
 ```text
 0x999902533033Cc63c8128C501e307477932B742E  GaugeValidationModuleV1
-0x99990385f058c856C18a8FF7D7445ee6398C3E34  ProposalValidationModuleV1
-0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4  GaugeValidator
+0x9999032142B45AE92e11a5E10A45F49f58b67773  ProposalValidationModuleV1
+0x999901cd8568Caafeb8888F18C1F5B870B58b7F2  GaugeValidator
 ```
 
 Each raw salt is permissioned to the deployment account and protected for
@@ -373,12 +413,15 @@ Tests cover:
   point;
 - direct and Agent-wrapped proposal additions using both executable
   `add_gauge` encodings;
+- all open ownership proposals in ascending order, independent of their
+  callscript contents, with exact voting-window boundaries;
 - explicit zero weight, rejected nonzero weight, empty proposals, malformed
   authenticated calls, and mixed-validity aggregate results;
 - ordered 2-of-3 results, duplicate preservation, nonzero-weight attribution,
   and more than 64 detailed results;
 - representative live gauges for every configured factory family;
-- two representative mainnet proposals with negative recognition controls;
+- every open ownership proposal and two representative gauge proposals at a
+  pinned mainnet block;
   and
 - exact three-contract deployment and stable-entrypoint readback on a pinned
   mainnet fork.

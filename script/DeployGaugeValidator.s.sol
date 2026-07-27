@@ -31,26 +31,26 @@ contract DeployGaugeValidator is Script {
     // Mined with https://github.com/HrikB/createXcrunch. Re-mine with
     // `--caller DEPLOYER --crosschain 1` whenever an init-code hash changes.
     // Each salt is permissioned and Ethereum-specific (the 21st byte is 0x01).
-    bytes32 public constant VALIDATOR_SALT = 0x2c2dc95f8c8060a7e3b354c1b9540881aea1613c01a668c4227502b703d0de1c;
+    bytes32 public constant VALIDATOR_SALT = 0x2c2dc95f8c8060a7e3b354c1b9540881aea1613c01f43d3cfa0a2d4000561fbe;
     bytes32 public constant GAUGE_MODULE_SALT = 0x2c2dc95f8c8060a7e3b354c1b9540881aea1613c011cc0121e214409019d3a6b;
-    bytes32 public constant PROPOSAL_MODULE_SALT = 0x2c2dc95f8c8060a7e3b354c1b9540881aea1613c010b7e4b86d5fd5e01e20f1a;
+    bytes32 public constant PROPOSAL_MODULE_SALT = 0x2c2dc95f8c8060a7e3b354c1b9540881aea1613c012d0bdba43f734d02d6de78;
 
-    address public constant VALIDATOR_ADDRESS = 0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4;
+    address public constant VALIDATOR_ADDRESS = 0x999901cd8568Caafeb8888F18C1F5B870B58b7F2;
     address public constant GAUGE_MODULE_ADDRESS = 0x999902533033Cc63c8128C501e307477932B742E;
-    address public constant PROPOSAL_MODULE_ADDRESS = 0x99990385f058c856C18a8FF7D7445ee6398C3E34;
+    address public constant PROPOSAL_MODULE_ADDRESS = 0x9999032142B45AE92e11a5E10A45F49f58b67773;
 
     bytes32 public constant VALIDATOR_INIT_CODE_HASH =
-        0x8504db01a62ec40da7417891455f81cb892a875c30211e3f0470e61fa5e36570;
+        0x9bf642c270680a42db39f3b2d0ead80f8c6042582f16548639a043d3ca6108ff;
     bytes32 public constant GAUGE_MODULE_INIT_CODE_HASH =
         0x2a944782183c12811b036aa32e9bf7e1c982816bd72c160bcf88a1ed2dc8cbaf;
     bytes32 public constant PROPOSAL_MODULE_INIT_CODE_HASH =
-        0x875c4e4d1b08b8b81b92899f012980f449dbc2aff23626427b0e668cd46db3f3;
+        0x493b287f9317c13740bf28ac500015f5c0872bb46db115c98ed7489459564b12;
 
-    bytes32 public constant VALIDATOR_RUNTIME_HASH = 0xa9febef816fbcc97236d734af3bd0b12d6020e4ce60cc35f46c255c931d49a9a;
+    bytes32 public constant VALIDATOR_RUNTIME_HASH = 0xe8e4a20207d33eecfc4751611432d207c3d3d7cdc8eb5598e4ce9e830ca4bec0;
     bytes32 public constant GAUGE_MODULE_RUNTIME_HASH =
         0xfc5562e86bbf44b97a41e6e1e1f578a396c0fd4a5aaac85805ef62630fca36ff;
     bytes32 public constant PROPOSAL_MODULE_RUNTIME_HASH =
-        0xa9e0c4707d8a7346fcd5e92637f725ff518a2cd412e0e9cb443d2ef478672373;
+        0x9d8da113c2b60b53fd7a94a2b364670a50fda7f2884dc351d822bf4fc9312621;
 
     error WrongChain(uint256 chainId);
     error InvalidSalt(bytes32 salt);

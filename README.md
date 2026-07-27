@@ -21,8 +21,14 @@ Future methods can be deployed in new modules and bound to relevant factories
 without replacing the core.
 
 `ProposalValidationModuleV1` separately extracts authenticated gauge additions
-from one Curve ownership proposal. Governance can replace that parser through
-the stable validator without migrating callers.
+from one Curve ownership proposal. It also exposes every currently open
+ownership proposal, without filtering by callscript contents. Governance can
+replace that parser and discovery policy through the stable validator without
+migrating the validator entry point.
+
+```solidity
+proposalModule.getActiveProposals(); // every open ownership proposal
+```
 
 DAO read failures revert. Structurally non-executable callscripts and unrelated
 calls create no gauge risk; authenticated gauge additions return `false` when
@@ -30,7 +36,9 @@ their calldata cannot be decoded safely or the gauge fails validation. Both
 executable `add_gauge` encodings are recognized: omitted or explicit zero
 initial weight is accepted, while nonzero initial weight returns `false`. The
 detailed method returns one ordered `{gauge, valid}` result for every safely
-decoded addition.
+decoded addition. A well-formed proposal without gauge additions returns
+`(true, [])`: it creates no gauge risk, but that result is not an endorsement
+of the proposal's unrelated actions.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the proof layouts and mainnet
 trust set. See [UPGRADE_RUNBOOK.md](./UPGRADE_RUNBOOK.md) for policy upgrades,
@@ -73,17 +81,17 @@ runtime, changed init code or constructor arguments, unexpected code at a
 target, and any computed-address mismatch. Its frozen Ethereum addresses are:
 
 ```text
-GaugeValidator              0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4
+GaugeValidator              0x999901cd8568Caafeb8888F18C1F5B870B58b7F2
 GaugeValidationModuleV1     0x999902533033Cc63c8128C501e307477932B742E
-ProposalValidationModuleV1  0x99990385f058c856C18a8FF7D7445ee6398C3E34
+ProposalValidationModuleV1  0x9999032142B45AE92e11a5E10A45F49f58b67773
 ```
 
 Inspect a deployed system:
 
 ```bash
 GAUGE_MODULE=0x999902533033Cc63c8128C501e307477932B742E \
-PROPOSAL_MODULE=0x99990385f058c856C18a8FF7D7445ee6398C3E34 \
-VALIDATOR=0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4 forge script \
+PROPOSAL_MODULE=0x9999032142B45AE92e11a5E10A45F49f58b67773 \
+VALIDATOR=0x999901cd8568Caafeb8888F18C1F5B870B58b7F2 forge script \
   script/InspectGaugeValidator.s.sol:InspectGaugeValidator \
   --rpc-url http://wavey:8545
 ```

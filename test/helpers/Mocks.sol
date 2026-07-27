@@ -5,14 +5,33 @@ contract MockTarget {}
 
 contract MockDAO {
     struct Vote {
+        bool open;
+        bool executed;
+        uint64 startDate;
         bytes script;
     }
 
     Vote[] private _votes;
+    uint64 public voteTime = 7 days;
 
     function pushVote(bytes memory script) external returns (uint256 voteId) {
+        return pushVoteState(true, false, uint64(block.timestamp), script);
+    }
+
+    function pushVoteState(bool open, bool executed, uint64 startDate, bytes memory script)
+        public
+        returns (uint256 voteId)
+    {
         voteId = _votes.length;
-        _votes.push(Vote({script: script}));
+        _votes.push(Vote({open: open, executed: executed, startDate: startDate, script: script}));
+    }
+
+    function setVoteTime(uint64 voteTime_) external {
+        voteTime = voteTime_;
+    }
+
+    function votesLength() external view returns (uint256) {
+        return _votes.length;
     }
 
     function getVote(uint256 voteId)
@@ -20,8 +39,8 @@ contract MockDAO {
         view
         returns (bool, bool, uint64, uint64, uint64, uint64, uint256, uint256, uint256, bytes memory script)
     {
-        script = _votes[voteId].script;
-        return (false, false, 0, 0, 0, 0, 0, 0, 0, script);
+        Vote storage vote = _votes[voteId];
+        return (vote.open, vote.executed, vote.startDate, 0, 0, 0, 0, 0, 0, vote.script);
     }
 }
 

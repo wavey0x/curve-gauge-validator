@@ -7,13 +7,13 @@ factory or proposal policy, not the core:
 
 ```text
 factory -> {module, methodId}
-proposalModule -> stateless proposal parser
+proposalModule -> stateless proposal discovery and parser
 ```
 
 Governance can deploy a new stateless validation module and rebind selected
 factories with `setFactoryPolicy`. The core address and its
 gauge and proposal entry points remain unchanged. Governance can independently
-replace the proposal parser with `setProposalModule`.
+replace proposal discovery and parsing with `setProposalModule`.
 
 ## What can change in place
 
@@ -23,8 +23,8 @@ replace the proposal parser with `setProposalModule`.
 | Replace proof logic | unchanged | changes | Deploy a module and rebind affected factories |
 | Disable a factory | unchanged | unchanged | Set its policy to `{address(0), 0}` |
 | Roll back proof logic | unchanged | unchanged | Restore the previous module and method ID |
-| Change proposal parsing | unchanged | changes | Deploy a module and call `setProposalModule` |
-| Disable proposal parsing | unchanged | cleared | Call `setProposalModule(address(0))` |
+| Change proposal discovery or parsing | unchanged | changes | Deploy a module and call `setProposalModule` |
+| Disable proposal discovery and parsing | unchanged | cleared | Call `setProposalModule(address(0))` |
 | Change entry point behavior | changes | changes | Deploy and migrate the full system |
 
 The core deliberately has no proxy or implementation upgrade mechanism. A
@@ -110,23 +110,26 @@ upgrade creates a new or mixed-module configuration.
 1. Record the current proposal module for rollback.
 2. Deploy a stateless `IProposalValidationModule` implementation with the
    intended immutable DAO, Agent, and GaugeController.
-3. On a pinned fork, test the aggregate and detailed entry points through the
-   stable `GaugeValidator` address. Include valid, invalid, mixed, malformed,
-   empty, direct, and Agent-wrapped proposals.
-4. Confirm detailed results preserve proposal order and attribute nonzero
+3. On a pinned fork, confirm `getActiveProposals()` returns every open ownership
+   proposal in ascending order, including proposals without gauge actions.
+4. Test the aggregate and detailed entry points through the stable
+   `GaugeValidator` address. Include valid, invalid, mixed, malformed, empty,
+   direct, and Agent-wrapped proposals.
+5. Confirm detailed results preserve proposal order and attribute nonzero
    weight to the decoded gauge as `false`.
-5. Submit and independently review:
+6. Submit and independently review:
 
 ```solidity
 validator.setProposalModule(newProposalModule);
 ```
 
-6. After execution, read back `proposalModule`, rerun representative proposal
+7. After execution, read back `proposalModule`, rerun representative proposal
 checks, and confirm the `ProposalModuleSet` event.
 
 Rollback by restoring the previous module. Setting the module to
-`address(0)` disables both proposal entry points; calls then revert instead of
-returning an ambiguous result. Gauge validation remains available.
+`address(0)` disables discovery through the configured module and both core
+proposal-analysis entry points; analysis calls then revert instead of returning
+an ambiguous result. Gauge validation remains available.
 
 ## Rollback and emergency disable
 
@@ -156,5 +159,6 @@ after the replacement policy has passed the same fork tests and readback.
 - [ ] Exact post-execution policies read back.
 - [ ] Representative positive and negative gauges checked.
 - [ ] Configuration events monitored.
+- [ ] Proposal-module active discovery checked when applicable.
 - [ ] Proposal-module aggregate and detailed results checked when applicable.
 - [ ] Repository manifest and inspection tooling synchronized.
