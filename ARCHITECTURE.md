@@ -13,6 +13,37 @@ function validateGauge(address gauge) external view returns (bool);
 `GaugeValidator` has one boolean validation entrypoint and one O(1)
 factory-policy mapping. Proposal validation is a separate immutable consumer.
 
+## Contract call flows
+
+```mermaid
+flowchart LR
+    Governance["Curve governance"] -->|"deploy / setFactoryPolicy"| Core["GaugeValidator"]
+
+    GaugeCaller["Gauge caller"] -->|"validateGauge(gauge)"| Core
+    Core -->|"factory()"| Gauge["Gauge"]
+    Gauge -->|"factory"| Core
+    Core -->|"policyForFactory[factory]"| Policy[("Packed factory policy")]
+    Policy -->|"{module, methodId}"| Core
+    Core -->|"validateGauge(gauge, factory, methodId)"| Module["GaugeValidationModuleV1 or future module"]
+    Module -->|"lp_token()"| Gauge
+    Module -->|"optional minter()"| Token["LP token / pool"]
+    Module -->|"get_gauge / gauge_for_vault / is_valid_gauge"| Factory["Configured Curve factory"]
+    Factory -->|"registry result"| Module
+    Module -->|"strict bool"| Core
+    Core -->|"strict bool"| GaugeCaller
+
+    ProposalCaller["Proposal caller"] -->|"analyzeProposalGaugeAdditions(id)"| Proposal["ProposalGaugeValidator"]
+    Proposal -->|"getVote(id)"| DAO["Curve ownership DAO"]
+    DAO -->|"callscript"| Proposal
+    Proposal -->|"validateGauge(gauge) for each recognized addition"| Core
+    Proposal -->|"status, allValid, gauges[]"| ProposalCaller
+```
+
+`ProposalGaugeValidator` does not call the ownership Agent or GaugeController.
+It authenticates their addresses and calldata inside the DAO callscript. Every
+recognized gauge addition then enters the same `GaugeValidator` path shown
+above.
+
 ## Rule
 
 `validateGauge(gauge)` returns `true` only when:
