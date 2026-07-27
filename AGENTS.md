@@ -9,15 +9,17 @@ This repository separates two questions:
 > Do all authenticated gauge additions in this proposal currently pass that
 > predicate?
 
-Keep gauge validation to one small pessimistic boolean contract. Keep proposal
+Keep `GaugeValidator` to one small pessimistic boolean core with O(1)
+factory-to-module dispatch. Keep proof implementations stateless and proposal
 parsing in its separate immutable consumer.
 
 ## Layout
 
-- `src/GaugeValidator.sol`: validation, reciprocal proofs, and factory trust.
+- `src/GaugeValidator.sol`: stable core and exact factory-policy bindings.
+- `src/GaugeValidationModuleV1.sol`: four current reciprocal proofs.
 - `src/ProposalGaugeValidator.sol`: strict proposal parsing and gauge results.
 - `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
-- `script/DeployGaugeValidator.s.sol`: two-contract deployment and readback.
+- `script/DeployGaugeValidator.s.sol`: three-contract deployment and readback.
 - `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
 - `script/AnalyzeProposal.s.sol`: read-only proposal analysis.
 - `test/GaugeValidator.t.sol`: proof, failure, and authorization tests.
@@ -28,15 +30,18 @@ parsing in its separate immutable consumer.
 ## Invariants
 
 - A self-reported factory address is never enough.
-- A factory is trusted only when `proofForFactory[factory] != Proof.NONE`.
-- The configured factory must reciprocally authenticate the gauge.
+- A factory is trusted only when `policyForFactory[factory].module != address(0)`.
+- One factory maps to exactly one `{module, validationId}` policy.
+- The module must reciprocally authenticate the same factory reported to the
+  core.
 - External dependency failures return `false`.
 - Configuration failures revert.
 - External calls remain gas bounded and ABI strict.
 - The proposal validator has immutable dependencies and no governance policy.
 - Authenticated proposal targets and calldata must be parsed strictly.
-- Do not add proposal parsing, policy modules, route scanning, historical
-  exhaustiveness, or caller-supplied factory hints to `GaugeValidator`.
+- Do not add proof implementations, proposal parsing, route scanning, module
+  registries, historical exhaustiveness, or caller-supplied factory hints to
+  `GaugeValidator`.
 
 ## Verification
 

@@ -1,31 +1,38 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
+import {IGaugeValidationModule} from "./interfaces/IGaugeValidationModule.sol";
 import {ICurve} from "./interfaces/ICurve.sol";
 
-/// @notice Pessimistically answers whether a gauge was deployed by a trusted factory.
+/// @notice Pessimistically answers whether a gauge has reciprocal provenance
+///         from a trusted factory policy.
 contract GaugeValidator {
-    uint256 public constant DEPENDENCY_CALL_GAS = 30_000;
+    uint256 public constant FACTORY_READ_GAS = 30_000;
+    uint256 public constant MODULE_CALL_GAS = 200_000;
 
-    enum Proof {
-        NONE,
-        DIRECT_LP,
-        DIRECT_OR_POOL_LP,
-        VAULT,
-        FACTORY_IS_VALID_GAUGE
+    struct FactoryPolicy {
+        address module;
+        bytes32 validationId;
     }
 
     struct FactoryBinding {
         address factory;
-        Proof proof;
+        address module;
+        bytes32 validationId;
     }
 
     address public owner;
 
-    /// @notice The reciprocal proof for a trusted factory. NONE means untrusted.
-    mapping(address factory => Proof proof) public proofForFactory;
+    /// @notice Exact policy for each trusted factory. A zero module means untrusted.
+    mapping(address factory => FactoryPolicy policy) public policyForFactory;
 
-    event FactoryTrustSet(address indexed factory, Proof previousProof, Proof newProof);
+    event FactoryPolicySet(
+        address indexed factory,
+        address indexed previousModule,
+        bytes32 previousValidationId,
+        address indexed newModule,
+        bytes32 newValidationId
+    );
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     error NotOwner(address caller);
@@ -49,13 +56,13 @@ contract GaugeValidator {
 
         for (uint256 i; i < initialBindings.length; ++i) {
             FactoryBinding memory binding = initialBindings[i];
-            _setFactoryTrust(binding.factory, binding.proof);
+            _setFactoryPolicy(binding.factory, binding.module, binding.validationId);
         }
     }
 
-    /// @notice Sets the reciprocal proof for a factory. NONE removes trust.
-    function setFactoryTrust(address factory, Proof proof) external onlyOwner {
-        _setFactoryTrust(factory, proof);
+    /// @notice Sets one factory's policy. A zero module removes trust.
+    function setFactoryPolicy(address factory, address module, bytes32 validationId) external onlyOwner {
+        _setFactoryPolicy(factory, module, validationId);
     }
 
     function transferOwnership(address newOwner) external onlyOwner {
@@ -66,70 +73,31 @@ contract GaugeValidator {
         emit OwnershipTransferred(previousOwner, newOwner);
     }
 
-    /// @notice Returns true only when a configured factory reciprocally authenticates the gauge.
+    /// @notice Returns true only when the gauge names a trusted factory and
+    ///         that factory's exact module policy reciprocally authenticates it.
     function validateGauge(address gauge) external view returns (bool) {
         if (gauge == address(0) || gauge.code.length == 0) return false;
 
         (bool success, address factory) = _readAddress(gauge, ICurve.factory.selector);
         if (!success || factory == address(0)) return false;
 
-        Proof proof = proofForFactory[factory];
-        if (proof == Proof.NONE) return false;
-        if (proof == Proof.DIRECT_LP) return _directLp(gauge, factory);
-        if (proof == Proof.DIRECT_OR_POOL_LP) return _directOrPoolLp(gauge, factory);
-        if (proof == Proof.VAULT) return _vault(gauge, factory);
-        if (proof == Proof.FACTORY_IS_VALID_GAUGE) return _factoryAttestation(gauge, factory);
+        FactoryPolicy memory policy = policyForFactory[factory];
+        if (policy.module == address(0)) return false;
 
-        return false;
+        (bool moduleCall, address authenticatedFactory) = _callModule(policy.module, gauge, policy.validationId);
+        return moduleCall && authenticatedFactory == factory;
     }
 
-    function _directLp(address gauge, address factory) private view returns (bool) {
-        (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || lpToken == address(0)) return false;
-
-        address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
-        return success && reverseGauge == gauge;
-    }
-
-    function _directOrPoolLp(address gauge, address factory) private view returns (bool) {
-        (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || lpToken == address(0)) return false;
-
-        address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
-        if (!success) return false;
-        if (reverseGauge != address(0)) return reverseGauge == gauge;
-
-        address pool;
-        (success, pool) = _readAddress(lpToken, ICurve.minter.selector);
-        if (!success || pool == address(0)) return false;
-
-        (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, pool);
-        return success && reverseGauge == gauge;
-    }
-
-    function _vault(address gauge, address factory) private view returns (bool) {
-        (bool success, address vault) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || vault == address(0)) return false;
-
-        address reverseGauge;
-        (success, reverseGauge) = _readAddress(factory, ICurve.gauge_for_vault.selector, vault);
-        return success && reverseGauge == gauge;
-    }
-
-    function _factoryAttestation(address gauge, address factory) private view returns (bool) {
-        (bool success, bool valid) = _readBool(factory, ICurve.is_valid_gauge.selector, gauge);
-        return success && valid;
-    }
-
-    function _setFactoryTrust(address factory, Proof proof) private {
+    function _setFactoryPolicy(address factory, address module, bytes32 validationId) private {
         if (factory == address(0)) revert ZeroAddress();
-        if (proof != Proof.NONE && factory.code.length == 0) revert MissingCode(factory);
+        if (module != address(0)) {
+            _requireCode(factory);
+            _requireCode(module);
+        }
 
-        Proof previousProof = proofForFactory[factory];
-        proofForFactory[factory] = proof;
-        emit FactoryTrustSet(factory, previousProof, proof);
+        FactoryPolicy memory previousPolicy = policyForFactory[factory];
+        policyForFactory[factory] = FactoryPolicy({module: module, validationId: validationId});
+        emit FactoryPolicySet(factory, previousPolicy.module, previousPolicy.validationId, module, validationId);
     }
 
     function _readAddress(address target, bytes4 selector) private view returns (bool success, address value) {
@@ -138,7 +106,7 @@ contract GaugeValidator {
 
         assembly ("memory-safe") {
             mstore(0x00, selector)
-            success := staticcall(DEPENDENCY_CALL_GAS, target, 0x00, 0x04, 0x00, 0x20)
+            success := staticcall(FACTORY_READ_GAS, target, 0x00, 0x04, 0x00, 0x20)
             returnSize := returndatasize()
             word := mload(0x00)
         }
@@ -150,46 +118,33 @@ contract GaugeValidator {
         value = address(uint160(word));
     }
 
-    function _readAddress(address target, bytes4 selector, address argument)
+    function _callModule(address module, address gauge, bytes32 validationId)
         private
         view
-        returns (bool success, address value)
+        returns (bool success, address factory)
     {
+        bytes4 selector = IGaugeValidationModule.factoryForGauge.selector;
         uint256 word;
         uint256 returnSize;
 
         assembly ("memory-safe") {
-            mstore(0x00, selector)
-            mstore(0x04, and(argument, 0xffffffffffffffffffffffffffffffffffffffff))
-            success := staticcall(DEPENDENCY_CALL_GAS, target, 0x00, 0x24, 0x00, 0x20)
+            let pointer := mload(0x40)
+            mstore(pointer, selector)
+            mstore(add(pointer, 0x04), and(gauge, 0xffffffffffffffffffffffffffffffffffffffff))
+            mstore(add(pointer, 0x24), validationId)
+            success := staticcall(MODULE_CALL_GAS, module, pointer, 0x44, pointer, 0x20)
             returnSize := returndatasize()
-            word := mload(0x00)
+            word := mload(pointer)
         }
 
         if (!success || returnSize != 32 || word >> 160 != 0) return (false, address(0));
 
         // The canonical-address check above proves the narrowing is lossless.
         // forge-lint: disable-next-line(unsafe-typecast)
-        value = address(uint160(word));
+        factory = address(uint160(word));
     }
 
-    function _readBool(address target, bytes4 selector, address argument)
-        private
-        view
-        returns (bool success, bool value)
-    {
-        uint256 word;
-        uint256 returnSize;
-
-        assembly ("memory-safe") {
-            mstore(0x00, selector)
-            mstore(0x04, and(argument, 0xffffffffffffffffffffffffffffffffffffffff))
-            success := staticcall(DEPENDENCY_CALL_GAS, target, 0x00, 0x24, 0x00, 0x20)
-            returnSize := returndatasize()
-            word := mload(0x00)
-        }
-
-        if (!success || returnSize != 32 || word > 1) return (false, false);
-        value = word == 1;
+    function _requireCode(address target) private view {
+        if (target.code.length == 0) revert MissingCode(target);
     }
 }

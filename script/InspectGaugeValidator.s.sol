@@ -18,8 +18,10 @@ contract InspectGaugeValidator is Script {
         if (block.chainid != MAINNET_CHAIN_ID) revert WrongChain(block.chainid);
 
         address validatorAddress = vm.envAddress("VALIDATOR");
+        address gaugeModuleAddress = vm.envAddress("GAUGE_MODULE");
         address proposalValidatorAddress = vm.envAddress("PROPOSAL_VALIDATOR");
         if (validatorAddress.code.length == 0) revert MissingCode(validatorAddress);
+        if (gaugeModuleAddress.code.length == 0) revert MissingCode(gaugeModuleAddress);
         if (proposalValidatorAddress.code.length == 0) revert MissingCode(proposalValidatorAddress);
 
         GaugeValidator validator = GaugeValidator(validatorAddress);
@@ -32,20 +34,22 @@ contract InspectGaugeValidator is Script {
                 || address(proposalValidator.GAUGE_VALIDATOR()) != validatorAddress
         ) revert ConfigurationMismatch();
 
-        GaugeValidator.FactoryBinding[] memory expectedBindings = MainnetGaugeConfiguration.bindings();
+        GaugeValidator.FactoryBinding[] memory expectedBindings = MainnetGaugeConfiguration.bindings(gaugeModuleAddress);
         for (uint256 i; i < expectedBindings.length; ++i) {
             GaugeValidator.FactoryBinding memory binding = expectedBindings[i];
-            if (binding.factory.code.length == 0 || validator.proofForFactory(binding.factory) != binding.proof) {
+            (address module, bytes32 validationId) = validator.policyForFactory(binding.factory);
+            if (binding.factory.code.length == 0 || module != binding.module || validationId != binding.validationId) {
                 revert ConfigurationMismatch();
             }
         }
 
         console2.log("validator", validatorAddress);
+        console2.log("gauge module", gaugeModuleAddress);
         console2.log("proposal validator", proposalValidatorAddress);
         console2.log("owner", validator.owner());
         for (uint256 i; i < expectedBindings.length; ++i) {
             console2.log("factory", expectedBindings[i].factory);
-            console2.log("proof", uint256(expectedBindings[i].proof));
+            console2.logBytes32(expectedBindings[i].validationId);
         }
     }
 }

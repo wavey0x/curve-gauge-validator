@@ -10,8 +10,8 @@ The validator answers one pessimistic question:
 function validateGauge(address gauge) external view returns (bool);
 ```
 
-`GaugeValidator` has one boolean validation entrypoint and one factory-trust
-mapping. Proposal validation is a separate immutable consumer.
+`GaugeValidator` has one boolean validation entrypoint and one O(1)
+factory-policy mapping. Proposal validation is a separate immutable consumer.
 
 ## Rule
 
@@ -19,9 +19,9 @@ mapping. Proposal validation is a separate immutable consumer.
 
 1. `gauge` is a contract;
 2. `gauge.factory()` returns a canonical nonzero address;
-3. that address is configured as a trusted factory; and
-4. the trusted factory reciprocally authenticates the gauge using its
-   configured proof.
+3. that address has an exact `{module, validationId}` policy; and
+4. the configured module reciprocally authenticates the gauge back to the same
+   factory.
 
 Every failed, reverting, malformed, gas-exhausting, contradictory, or
 unconfigured read returns `false`.
@@ -31,11 +31,13 @@ gauge
   |
   +-- no code or unreadable factory() ----------------------> false
   |
-  +-- factory not trusted ----------------------------------> false
+  +-- factory has no configured module ---------------------> false
   |
-  +-- reciprocal factory proof fails -----------------------> false
+  +-- bounded module call fails or is malformed ------------> false
   |
-  `-- reciprocal factory proof succeeds --------------------> true
+  +-- module authenticates a different factory -------------> false
+  |
+  `-- module authenticates the same factory ----------------> true
 ```
 
 Reading `gauge.factory()` alone is insufficient because any contract can
@@ -46,30 +48,51 @@ provenance.
 
 `GaugeValidator` contains:
 
-- `mapping(address factory => Proof proof) proofForFactory`;
-- the four small proof implementations;
-- bounded, strict ABI reads;
+- `mapping(address factory => FactoryPolicy) policyForFactory`;
+- a bounded, strict `gauge.factory()` read;
+- a bounded, strict policy-module call;
 - governance ownership; and
 - `validateGauge(address) returns (bool)`.
 
-There is no policy module, route scan, validation-ID lifecycle, ambiguity
-state, or caller-supplied factory hint.
-
-The proof enum is:
+The binding is:
 
 ```solidity
-enum Proof {
-    NONE,
-    DIRECT_LP,
-    DIRECT_OR_POOL_LP,
-    VAULT,
-    FACTORY_IS_VALID_GAUGE
+struct FactoryPolicy {
+    address module;
+    bytes32 validationId;
 }
 ```
 
-`NONE` means the factory is not trusted.
+A zero module means the factory is untrusted. There is no route scan, module
+registry, active-ID lifecycle, ambiguity state, or caller-supplied factory
+hint.
 
-## Reciprocal proofs
+The module returns an authenticated factory address rather than a bare
+boolean. The core returns `true` only when that address exactly equals the
+factory reported to the core by the gauge.
+
+Governance may bind, rebind, or revoke one factory:
+
+```solidity
+setFactoryPolicy(address factory, address module, bytes32 validationId);
+```
+
+This lets a future validation method live in a new module without replacing
+the core or its immutable proposal consumer.
+
+## Current policy module
+
+`GaugeValidationModuleV1` is immutable, stateless, and implements the four
+current reciprocal proof IDs:
+
+```text
+DIRECT_LP
+DIRECT_OR_POOL_LP
+VAULT
+FACTORY_IS_VALID_GAUGE
+```
+
+Unknown IDs and every failed dependency return the zero address.
 
 ### Direct LP
 
@@ -107,6 +130,11 @@ factory.is_valid_gauge(gauge) == true
 All dependency calls are capped at 30,000 gas. Address responses must be
 exactly 32 bytes with zero upper bits. Boolean responses must be exactly 32
 bytes and equal to zero or one.
+
+The core caps each module call at 200,000 gas and requires an exact canonical
+address response. Policy modules should be immutable implementations; binding
+an upgradeable proxy deliberately transfers policy-change authority to that
+proxy's administrator.
 
 ## Proposal contract
 
@@ -183,7 +211,9 @@ unbounded dependency calls.
 
 ## Mainnet trust set
 
-| Factory family | Factory | Proof |
+All initial bindings use `GaugeValidationModuleV1`.
+
+| Factory family | Factory | Validation ID |
 | --- | --- | --- |
 | Regular gauge factory | `0x6A8cbed756804B16E05E741eDaBd5cB544AE21bf` | `DIRECT_LP` |
 | crvUSD StableSwap factory | `0x4F8846Ae9380B90d2E71D5e3D042dff3E7ebb40d` | `DIRECT_LP` |
@@ -198,14 +228,6 @@ unbounded dependency calls.
 | Root gauge factory | `0x306A45a1478A000dC701A6e1f7a569afb8D9DCD6` | `FACTORY_IS_VALID_GAUGE` |
 | Generic factory used by LlamaLend v2 vault gauges | `0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6` | `FACTORY_IS_VALID_GAUGE` |
 
-Governance owns the validator. It can add, change, or remove a factory with:
-
-```solidity
-setFactoryTrust(address factory, Proof proof);
-```
-
-Setting `Proof.NONE` removes trust.
-
 ## LlamaLend v2 boundary
 
 At Ethereum block `25,619,622`,
@@ -219,28 +241,31 @@ different question and deliberately out of scope.
 
 ## Deployment and verification
 
-Deployment is two transactions:
+Deployment is three transactions:
 
 ```text
-new GaugeValidator(governance, trustedFactories)
+new GaugeValidationModuleV1()
+new GaugeValidator(governance, factoryPolicies)
 new ProposalGaugeValidator(dao, agent, gaugeController, gaugeValidator)
 ```
 
 The proposal contract is immutable and has no owner or policy configuration.
 The deployment script reads back every immutable dependency, the gauge owner,
-and every configured factory proof.
+and each factory's exact module and validation ID.
 
 Tests cover:
 
 - all four proof layouts;
+- rebinding a factory to a future module without replacing the core;
+- every module failure and malformed return;
 - untrusted and spoofing cases;
 - reverting, malformed, gas-burning, and oversized return data;
 - owner-only trust changes;
 - direct and Agent-wrapped proposal additions;
 - unavailable, rejected, complete, empty, mixed-validity, and aggregate
   proposal results;
-- representative live gauges for every configured factory family; and
+- representative live gauges for every configured factory family;
 - two representative mainnet proposals; and
-- exact two-contract deployment readback on a pinned mainnet fork.
+- exact three-contract deployment readback on a pinned mainnet fork.
 
 Exhaustive historical gauge or proposal coverage is not required.

@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
+import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {
     ConfigurableDependency,
@@ -9,18 +10,26 @@ import {
     MockPoolToken,
     MockProtocolGauge,
     MockTarget,
+    MockValidationModule,
     NoncanonicalBoolFactory,
     NoncanonicalFactoryGauge
 } from "./helpers/Mocks.sol";
 
 contract GaugeValidatorTest is Test {
     address private constant USER = address(0xB0B);
+    bytes32 private constant FUTURE_METHOD = "FUTURE_METHOD";
+
+    GaugeValidationModuleV1 private module;
+
+    function setUp() public {
+        module = new GaugeValidationModuleV1();
+    }
 
     function test_DirectLpRequiresReciprocalFactoryLookup() public {
         MockCurveFactory factory = new MockCurveFactory();
         MockTarget lpToken = new MockTarget();
         MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(lpToken));
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        GaugeValidator validator = _deploy(address(factory), module.DIRECT_LP());
 
         assertFalse(validator.validateGauge(address(gauge)));
 
@@ -36,7 +45,7 @@ contract GaugeValidatorTest is Test {
         MockTarget pool = new MockTarget();
         MockPoolToken lpToken = new MockPoolToken(address(pool));
         MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(lpToken));
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
+        GaugeValidator validator = _deploy(address(factory), module.DIRECT_OR_POOL_LP());
 
         factory.setGauge(address(lpToken), address(gauge));
         assertTrue(validator.validateGauge(address(gauge)));
@@ -63,7 +72,7 @@ contract GaugeValidatorTest is Test {
         MockCurveFactory factory = new MockCurveFactory();
         MockTarget vault = new MockTarget();
         MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(vault));
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.VAULT);
+        GaugeValidator validator = _deploy(address(factory), module.VAULT());
 
         assertFalse(validator.validateGauge(address(gauge)));
 
@@ -74,7 +83,7 @@ contract GaugeValidatorTest is Test {
     function test_FactoryAttestationRequiresCanonicalTrue() public {
         MockCurveFactory factory = new MockCurveFactory();
         MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(0));
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+        GaugeValidator validator = _deploy(address(factory), module.FACTORY_IS_VALID_GAUGE());
 
         assertFalse(validator.validateGauge(address(gauge)));
         factory.setValidGauge(address(gauge), true);
@@ -82,7 +91,36 @@ contract GaugeValidatorTest is Test {
 
         NoncanonicalBoolFactory malformedFactory = new NoncanonicalBoolFactory();
         gauge.setFactory(address(malformedFactory));
-        validator.setFactoryTrust(address(malformedFactory), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+        validator.setFactoryPolicy(address(malformedFactory), address(module), module.FACTORY_IS_VALID_GAUGE());
+        assertFalse(validator.validateGauge(address(gauge)));
+    }
+
+    function test_FactoryCanRebindToFutureModuleWithoutReplacingCore() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockCurveFactory wrongFactory = new MockCurveFactory();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(0));
+        GaugeValidator validator = _deploy(address(factory), module.FACTORY_IS_VALID_GAUGE());
+        MockValidationModule futureModule = new MockValidationModule();
+
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        validator.setFactoryPolicy(address(factory), address(futureModule), FUTURE_METHOD);
+        futureModule.setFactory(address(gauge), FUTURE_METHOD, address(wrongFactory));
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        futureModule.setFactory(address(gauge), FUTURE_METHOD, address(factory));
+        assertTrue(validator.validateGauge(address(gauge)));
+
+        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(address(factory));
+        assertEq(configuredModule, address(futureModule));
+        assertEq(configuredId, FUTURE_METHOD);
+    }
+
+    function test_UnknownCurrentModuleMethodReturnsFalse() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(0));
+        GaugeValidator validator = _deploy(address(factory), FUTURE_METHOD);
+
         assertFalse(validator.validateGauge(address(gauge)));
     }
 
@@ -91,7 +129,7 @@ contract GaugeValidatorTest is Test {
         MockCurveFactory untrustedFactory = new MockCurveFactory();
         MockTarget token = new MockTarget();
         MockProtocolGauge gauge = new MockProtocolGauge(address(untrustedFactory), address(token));
-        GaugeValidator validator = _deploy(address(trustedFactory), GaugeValidator.Proof.DIRECT_LP);
+        GaugeValidator validator = _deploy(address(trustedFactory), module.DIRECT_LP());
 
         untrustedFactory.setGauge(address(token), address(gauge));
         assertFalse(validator.validateGauge(address(gauge)));
@@ -102,7 +140,7 @@ contract GaugeValidatorTest is Test {
 
     function test_ZeroCodeLessAndMalformedGaugeReturnFalse() public {
         MockCurveFactory factory = new MockCurveFactory();
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        GaugeValidator validator = _deploy(address(factory), module.DIRECT_LP());
 
         assertFalse(validator.validateGauge(address(0)));
         assertFalse(validator.validateGauge(address(0x1234)));
@@ -116,17 +154,28 @@ contract GaugeValidatorTest is Test {
         }
     }
 
-    function test_EveryFactoryDependencyFailureReturnsFalseForEveryProof() public {
+    function test_EveryModuleFailureAndMalformedReturnReturnsFalse() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(0));
+
+        for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
+            ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
+            GaugeValidator validator = _deploy(address(factory), address(dependency), FUTURE_METHOD);
+            assertFalse(validator.validateGauge(address(gauge)));
+        }
+    }
+
+    function test_EveryFactoryDependencyFailureReturnsFalseForEveryMethod() public {
         MockTarget token = new MockTarget();
 
         for (uint256 mode; mode <= uint256(ConfigurableDependency.Mode.RETURN_DATA_BOMB); ++mode) {
             ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
             MockProtocolGauge gauge = new MockProtocolGauge(address(dependency), address(token));
 
-            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.DIRECT_LP);
-            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
-            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.VAULT);
-            _assertFalseWithProof(address(gauge), address(dependency), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+            _assertFalseWithMethod(address(gauge), address(dependency), module.DIRECT_LP());
+            _assertFalseWithMethod(address(gauge), address(dependency), module.DIRECT_OR_POOL_LP());
+            _assertFalseWithMethod(address(gauge), address(dependency), module.VAULT());
+            _assertFalseWithMethod(address(gauge), address(dependency), module.FACTORY_IS_VALID_GAUGE());
         }
     }
 
@@ -137,15 +186,15 @@ contract GaugeValidatorTest is Test {
             ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
             MockProtocolGauge candidateGauge = new MockProtocolGauge(address(factory), address(dependency));
 
-            _assertFalseWithProof(address(candidateGauge), address(factory), GaugeValidator.Proof.DIRECT_OR_POOL_LP);
-            _assertFalseWithProof(address(candidateGauge), address(factory), GaugeValidator.Proof.VAULT);
+            _assertFalseWithMethod(address(candidateGauge), address(factory), module.DIRECT_OR_POOL_LP());
+            _assertFalseWithMethod(address(candidateGauge), address(factory), module.VAULT());
         }
 
         MockTarget token = new MockTarget();
         MockProtocolGauge gauge = new MockProtocolGauge(address(factory), address(token));
         bytes memory callData = abi.encodeWithSignature("lp_token()");
 
-        GaugeValidator direct = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        GaugeValidator direct = _deploy(address(factory), module.DIRECT_LP());
         vm.mockCallRevert(address(gauge), callData, bytes("failure"));
         assertFalse(direct.validateGauge(address(gauge)));
         vm.clearMockedCalls();
@@ -158,16 +207,20 @@ contract GaugeValidatorTest is Test {
         assertFalse(direct.validateGauge(address(gauge)));
     }
 
-    function test_OwnerCanSetRemoveTrustAndTransferOwnership() public {
+    function test_OwnerCanSetRemovePolicyAndTransferOwnership() public {
         MockCurveFactory factory = new MockCurveFactory();
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
         GaugeValidator validator = new GaugeValidator(address(this), bindings);
 
-        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.DIRECT_LP);
-        assertEq(uint256(validator.proofForFactory(address(factory))), uint256(GaugeValidator.Proof.DIRECT_LP));
+        validator.setFactoryPolicy(address(factory), address(module), module.DIRECT_LP());
+        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(address(factory));
+        assertEq(configuredModule, address(module));
+        assertEq(configuredId, module.DIRECT_LP());
 
-        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.NONE);
-        assertEq(uint256(validator.proofForFactory(address(factory))), uint256(GaugeValidator.Proof.NONE));
+        validator.setFactoryPolicy(address(factory), address(0), bytes32(0));
+        (configuredModule, configuredId) = validator.policyForFactory(address(factory));
+        assertEq(configuredModule, address(0));
+        assertEq(configuredId, bytes32(0));
 
         validator.transferOwnership(USER);
         assertEq(validator.owner(), USER);
@@ -179,31 +232,39 @@ contract GaugeValidatorTest is Test {
 
     function test_InvalidOrUnauthorizedConfigurationReverts() public {
         MockCurveFactory factory = new MockCurveFactory();
-        GaugeValidator validator = _deploy(address(factory), GaugeValidator.Proof.DIRECT_LP);
+        bytes32 directLp = module.DIRECT_LP();
+        GaugeValidator validator = _deploy(address(factory), directLp);
 
         vm.prank(USER);
         vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
-        validator.setFactoryTrust(address(factory), GaugeValidator.Proof.NONE);
+        validator.setFactoryPolicy(address(factory), address(0), bytes32(0));
 
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
-        validator.setFactoryTrust(address(0), GaugeValidator.Proof.DIRECT_LP);
+        validator.setFactoryPolicy(address(0), address(module), directLp);
 
         vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        validator.setFactoryTrust(address(0x1234), GaugeValidator.Proof.DIRECT_LP);
+        validator.setFactoryPolicy(address(0x1234), address(module), directLp);
+
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
+        validator.setFactoryPolicy(address(factory), address(0x1234), directLp);
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
         new GaugeValidator(address(0), bindings);
     }
 
-    function _assertFalseWithProof(address gauge, address factory, GaugeValidator.Proof proof) private {
-        GaugeValidator validator = _deploy(factory, proof);
+    function _assertFalseWithMethod(address gauge, address factory, bytes32 validationId) private {
+        GaugeValidator validator = _deploy(factory, validationId);
         assertFalse(validator.validateGauge(gauge));
     }
 
-    function _deploy(address factory, GaugeValidator.Proof proof) private returns (GaugeValidator) {
+    function _deploy(address factory, bytes32 validationId) private returns (GaugeValidator) {
+        return _deploy(factory, address(module), validationId);
+    }
+
+    function _deploy(address factory, address policyModule, bytes32 validationId) private returns (GaugeValidator) {
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(factory, proof);
+        bindings[0] = GaugeValidator.FactoryBinding(factory, policyModule, validationId);
         return new GaugeValidator(address(this), bindings);
     }
 }

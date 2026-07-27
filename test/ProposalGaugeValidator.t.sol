@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
+import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
@@ -27,9 +28,10 @@ contract ProposalGaugeValidatorTest is Test {
         unrelatedTarget = new MockTarget();
         factory = new MockCurveFactory();
         gauge = new MockProtocolGauge(address(factory), address(0));
+        GaugeValidationModuleV1 module = new GaugeValidationModuleV1();
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(address(factory), GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+        bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(module), module.FACTORY_IS_VALID_GAUGE());
         gaugeValidator = new GaugeValidator(address(this), bindings);
         factory.setValidGauge(address(gauge), true);
 

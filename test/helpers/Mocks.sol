@@ -25,6 +25,18 @@ contract MockDAO {
     }
 }
 
+contract MockValidationModule {
+    mapping(bytes32 validationId => mapping(address gauge => address factory)) public factories;
+
+    function setFactory(address gauge, bytes32 validationId, address factory) external {
+        factories[validationId][gauge] = factory;
+    }
+
+    function factoryForGauge(address gauge, bytes32 validationId) external view returns (address) {
+        return factories[validationId][gauge];
+    }
+}
+
 contract MockProtocolGauge {
     address public factory;
     // Protocol-compatible Vyper getter.

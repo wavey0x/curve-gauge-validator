@@ -1,6 +1,6 @@
 # Curve Gauge and Proposal Validator
 
-A single-contract, fail-closed answer to:
+A small, stable core provides a fail-closed answer to:
 
 > Was this gauge deployed by a trusted factory?
 
@@ -8,9 +8,14 @@ A single-contract, fail-closed answer to:
 validator.validateGauge(gauge); // true or false
 ```
 
-The validator reads `gauge.factory()`, checks that factory against the
-governance trust mapping, and requires a reciprocal factory lookup. Any
-missing, malformed, reverting, or contradictory dependency returns `false`.
+The core reads `gauge.factory()`, performs one exact
+`factory -> {module, validationId}` lookup, and requires that module to
+reciprocally authenticate the same factory. Any missing, malformed, reverting,
+or contradictory dependency returns `false`.
+
+`GaugeValidationModuleV1` contains the four current stateless proof methods.
+Future methods can be deployed in new modules and bound to relevant factories
+without replacing the core.
 
 `ProposalGaugeValidator` separately extracts authenticated gauge additions
 from one Curve ownership proposal and returns ordered `{gauge, valid}` results
@@ -28,7 +33,7 @@ forge lint
 RPC_URL=<ethereum-rpc> forge test -vv
 ```
 
-Simulate the two-transaction deployment:
+Simulate the three-transaction deployment:
 
 ```bash
 forge script script/DeployGaugeValidator.s.sol:DeployGaugeValidator \
@@ -37,10 +42,10 @@ forge script script/DeployGaugeValidator.s.sol:DeployGaugeValidator \
   -vvvv
 ```
 
-Inspect a deployed pair:
+Inspect a deployed system:
 
 ```bash
-VALIDATOR=<address> PROPOSAL_VALIDATOR=<address> forge script \
+GAUGE_MODULE=<address> VALIDATOR=<address> PROPOSAL_VALIDATOR=<address> forge script \
   script/InspectGaugeValidator.s.sol:InspectGaugeValidator \
   --rpc-url <ethereum-rpc>
 ```

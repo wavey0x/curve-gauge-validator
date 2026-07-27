@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
+import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
 import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
@@ -17,7 +18,8 @@ contract DeploymentTest is Test {
 
     function test_DeploymentCreatesFullyConfiguredGovernanceOwnedCore() public {
         DeployGaugeValidator deployment = new DeployGaugeValidator();
-        (GaugeValidator validator, ProposalGaugeValidator proposalValidator) = deployment.run();
+        (GaugeValidationModuleV1 gaugeModule, GaugeValidator validator, ProposalGaugeValidator proposalValidator) =
+            deployment.run();
 
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
         assertNotEq(validator.owner(), address(deployment));
@@ -26,14 +28,18 @@ contract DeploymentTest is Test {
         assertEq(proposalValidator.GAUGE_CONTROLLER(), MainnetGaugeConfiguration.GAUGE_CONTROLLER);
         assertEq(address(proposalValidator.GAUGE_VALIDATOR()), address(validator));
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(gaugeModule));
         for (uint256 i; i < bindings.length; ++i) {
-            assertEq(uint256(validator.proofForFactory(bindings[i].factory)), uint256(bindings[i].proof));
+            (address configuredModule, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
+            assertEq(configuredModule, address(gaugeModule));
+            assertEq(validationId, bindings[i].validationId);
         }
 
         // Test-local environment used only by the read-only inspection script.
         // forge-lint: disable-next-line(unsafe-cheatcode)
         vm.setEnv("VALIDATOR", vm.toString(address(validator)));
+        // forge-lint: disable-next-line(unsafe-cheatcode)
+        vm.setEnv("GAUGE_MODULE", vm.toString(address(gaugeModule)));
         // forge-lint: disable-next-line(unsafe-cheatcode)
         vm.setEnv("PROPOSAL_VALIDATOR", vm.toString(address(proposalValidator)));
         new InspectGaugeValidator().run();

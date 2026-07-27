@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 import {Test} from "forge-std/Test.sol";
+import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
 import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
@@ -38,13 +39,16 @@ contract MainnetGaugeValidationTest is Test {
     address private constant PROPOSAL_1406_GAUGE = 0xA41eb3062FD68B6Fa9f11439C86503913806761D;
     address private constant LEGACY_EOA_DEPLOYED_GAUGE = 0x055be5DDB7A925BfEF3417FC157f53CA77cA7222;
 
+    GaugeValidationModuleV1 private module;
     GaugeValidator private validator;
     ProposalGaugeValidator private proposalValidator;
 
     function setUp() public {
         vm.createSelectFork(vm.envOr("RPC_URL", string("http://wavey:8545")), FORK_BLOCK);
 
-        validator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings());
+        module = new GaugeValidationModuleV1();
+        validator =
+            new GaugeValidator(MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings(address(module)));
         proposalValidator = new ProposalGaugeValidator(
             ICurveDAO(MainnetGaugeConfiguration.DAO),
             MainnetGaugeConfiguration.OWNER,
@@ -62,72 +66,68 @@ contract MainnetGaugeValidationTest is Test {
     function test_TrustedFactoriesAndProofs() public view {
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(module));
         assertEq(bindings.length, 12);
 
         for (uint256 i; i < bindings.length; ++i) {
             assertGt(bindings[i].factory.code.length, 0);
-            assertEq(uint256(validator.proofForFactory(bindings[i].factory)), uint256(bindings[i].proof));
+            (address configuredModule, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
+            assertEq(configuredModule, address(module));
+            assertEq(validationId, bindings[i].validationId);
         }
 
-        assertEq(_factoryCount(bindings, GaugeValidator.Proof.DIRECT_LP), 2);
-        assertEq(_factoryCount(bindings, GaugeValidator.Proof.DIRECT_OR_POOL_LP), 5);
-        assertEq(_factoryCount(bindings, GaugeValidator.Proof.VAULT), 1);
-        assertEq(_factoryCount(bindings, GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE), 4);
+        assertEq(_factoryCount(bindings, module.DIRECT_LP()), 2);
+        assertEq(_factoryCount(bindings, module.DIRECT_OR_POOL_LP()), 5);
+        assertEq(_factoryCount(bindings, module.VAULT()), 1);
+        assertEq(_factoryCount(bindings, module.FACTORY_IS_VALID_GAUGE()), 4);
     }
 
     function test_RepresentativeLiveFactoryGauges() public view {
         _assertGauge(
-            0x004b865973CAbce8691CD0b9f5910246203a9eb4,
-            0x6A8cbed756804B16E05E741eDaBd5cB544AE21bf,
-            GaugeValidator.Proof.DIRECT_LP
+            0x004b865973CAbce8691CD0b9f5910246203a9eb4, 0x6A8cbed756804B16E05E741eDaBd5cB544AE21bf, module.DIRECT_LP()
         );
         _assertGauge(
-            0x0e5bdb5afe132D1c6A6C67f6D8eB6133dD607e36,
-            0x4F8846Ae9380B90d2E71D5e3D042dff3E7ebb40d,
-            GaugeValidator.Proof.DIRECT_LP
+            0x0e5bdb5afe132D1c6A6C67f6D8eB6133dD607e36, 0x4F8846Ae9380B90d2E71D5e3D042dff3E7ebb40d, module.DIRECT_LP()
         );
         _assertGauge(
             0x016831ace15582D81b50927D2755a4487aCf8082,
             0x98EE851a00abeE0d95D08cF4CA2BdCE32aeaAF7F,
-            GaugeValidator.Proof.DIRECT_OR_POOL_LP
+            module.DIRECT_OR_POOL_LP()
         );
         _assertGauge(
             0x009aCD89535DAbC270C93F9b39D3232105Fef453,
             0xF18056Bbd320E96A48e3Fbf8bC061322531aac99,
-            GaugeValidator.Proof.DIRECT_OR_POOL_LP
+            module.DIRECT_OR_POOL_LP()
         );
         _assertGauge(
             0x0060E266c2AF65bfc4fd51b04c93d952DF805630,
             0xB9fC157394Af804a3578134A6585C0dc9cc990d4,
-            GaugeValidator.Proof.DIRECT_OR_POOL_LP
+            module.DIRECT_OR_POOL_LP()
         );
         _assertGauge(
             0x1E4B83f6bFE9dbeB6d5b92a5237E5c18a44176f4,
             0x0c0e5f2fF0ff18a3be9b835635039256dC4B4963,
-            GaugeValidator.Proof.DIRECT_OR_POOL_LP
+            module.DIRECT_OR_POOL_LP()
         );
         _assertGauge(
-            0x0621982CdA4fD4041964e91AF4080583C5F099e1,
-            0xeA6876DDE9e3467564acBeE1Ed5bac88783205E0,
-            GaugeValidator.Proof.VAULT
+            0x0621982CdA4fD4041964e91AF4080583C5F099e1, 0xeA6876DDE9e3467564acBeE1Ed5bac88783205E0, module.VAULT()
         );
         _assertGauge(
             0x00F7d467ef51E44f11f52a0c0Bef2E56C271b264,
             0xabC000d88f23Bb45525E447528DBF656A9D55bf5,
-            GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE
+            module.FACTORY_IS_VALID_GAUGE()
         );
         _assertGauge(
             0x070EBC9F46d0a6A523D31eb4aE7901C56AD97ae2,
             0xeF672bD94913CB6f1d2812a6e18c1fFdEd8eFf5c,
-            GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE
+            module.FACTORY_IS_VALID_GAUGE()
         );
         _assertGauge(
             0x077999E08cbb3990b05d23F6ED7890D34b337771,
             0x306A45a1478A000dC701A6e1f7a569afb8D9DCD6,
-            GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE
+            module.FACTORY_IS_VALID_GAUGE()
         );
-        _assertGauge(LEND_V2_VAULT_GAUGE, LEND_V2_GAUGE_FACTORY, GaugeValidator.Proof.FACTORY_IS_VALID_GAUGE);
+        _assertGauge(LEND_V2_VAULT_GAUGE, LEND_V2_GAUGE_FACTORY, module.FACTORY_IS_VALID_GAUGE());
     }
 
     function test_LegacyEoaDeployedGaugeIsExplicitlyOutOfScope() public view {
@@ -165,7 +165,8 @@ contract MainnetGaugeValidationTest is Test {
         assertTrue(factory.is_valid_gauge(LEND_V2_VAULT_GAUGE));
         assertEq(factory.owner(), MainnetGaugeConfiguration.OWNER);
         assertEq(ILendVaultV2(gauge.lp_token()).factory(), LEND_FACTORY);
-        assertEq(uint256(validator.proofForFactory(LEND_FACTORY)), uint256(GaugeValidator.Proof.NONE));
+        (address configuredModule,) = validator.policyForFactory(LEND_FACTORY);
+        assertEq(configuredModule, address(0));
     }
 
     function test_ValidationGasHeadroomForEveryLiveMethod() public view {
@@ -176,10 +177,12 @@ contract MainnetGaugeValidationTest is Test {
         _assertValidationGas(LEND_V2_VAULT_GAUGE, 300_000);
     }
 
-    function _assertGauge(address gauge, address factory, GaugeValidator.Proof proof) private view {
+    function _assertGauge(address gauge, address factory, bytes32 validationId) private view {
         assertTrue(validator.validateGauge(gauge));
         assertEq(IFactoryAttestedGauge(gauge).factory(), factory);
-        assertEq(uint256(validator.proofForFactory(factory)), uint256(proof));
+        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(factory);
+        assertEq(configuredModule, address(module));
+        assertEq(configuredId, validationId);
     }
 
     function _assertValidationGas(address gauge, uint256 maximum) private view {
@@ -190,13 +193,13 @@ contract MainnetGaugeValidationTest is Test {
         assertLt(gasUsed, maximum);
     }
 
-    function _factoryCount(GaugeValidator.FactoryBinding[] memory bindings, GaugeValidator.Proof proof)
+    function _factoryCount(GaugeValidator.FactoryBinding[] memory bindings, bytes32 validationId)
         private
         pure
         returns (uint256 count)
     {
         for (uint256 i; i < bindings.length; ++i) {
-            if (bindings[i].proof == proof) ++count;
+            if (bindings[i].validationId == validationId) ++count;
         }
     }
 }

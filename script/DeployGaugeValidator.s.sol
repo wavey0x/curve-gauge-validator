@@ -2,23 +2,36 @@
 pragma solidity 0.8.28;
 
 import {Script} from "forge-std/Script.sol";
+import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
 import {ProposalGaugeValidator} from "../src/ProposalGaugeValidator.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
 
-/// @notice Deploys the gauge predicate and its proposal consumer in two transactions.
+/// @notice Deploys the current gauge module, stable core, and proposal consumer.
 contract DeployGaugeValidator is Script {
     uint256 public constant MAINNET_CHAIN_ID = 1;
 
     error WrongChain(uint256 chainId);
     error DeploymentInvariantFailed();
 
-    function run() external returns (GaugeValidator validator, ProposalGaugeValidator proposalValidator) {
-        if (block.chainid != MAINNET_CHAIN_ID) revert WrongChain(block.chainid);
+    function run()
+        external
+        returns (
+            GaugeValidationModuleV1 gaugeModule,
+            GaugeValidator validator,
+            ProposalGaugeValidator proposalValidator
+        )
+    {
+        if (block.chainid != MAINNET_CHAIN_ID) {
+            revert WrongChain(block.chainid);
+        }
 
         vm.startBroadcast();
-        validator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings());
+        gaugeModule = new GaugeValidationModuleV1();
+        validator = new GaugeValidator(
+            MainnetGaugeConfiguration.OWNER, MainnetGaugeConfiguration.bindings(address(gaugeModule))
+        );
         proposalValidator = new ProposalGaugeValidator(
             ICurveDAO(MainnetGaugeConfiguration.DAO),
             MainnetGaugeConfiguration.OWNER,
@@ -27,10 +40,14 @@ contract DeployGaugeValidator is Script {
         );
         vm.stopBroadcast();
 
-        _assertDeployment(validator, proposalValidator);
+        _assertDeployment(gaugeModule, validator, proposalValidator);
     }
 
-    function _assertDeployment(GaugeValidator validator, ProposalGaugeValidator proposalValidator) private view {
+    function _assertDeployment(
+        GaugeValidationModuleV1 gaugeModule,
+        GaugeValidator validator,
+        ProposalGaugeValidator proposalValidator
+    ) private view {
         if (
             validator.owner() != MainnetGaugeConfiguration.OWNER
                 || address(proposalValidator.DAO()) != MainnetGaugeConfiguration.DAO
@@ -39,9 +56,10 @@ contract DeployGaugeValidator is Script {
                 || address(proposalValidator.GAUGE_VALIDATOR()) != address(validator)
         ) revert DeploymentInvariantFailed();
 
-        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings();
+        GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(gaugeModule));
         for (uint256 i; i < bindings.length; ++i) {
-            if (validator.proofForFactory(bindings[i].factory) != bindings[i].proof) {
+            (address module, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
+            if (module != bindings[i].module || validationId != bindings[i].validationId) {
                 revert DeploymentInvariantFailed();
             }
         }
