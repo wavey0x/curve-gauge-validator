@@ -1,22 +1,17 @@
 # Curve Gauge and Proposal Validator
 
-> **Trustless execution, stable integration.** Validation runs entirely
-> onchain from contract state and bounded static calls—no API, indexer,
-> backend, offchain allowlist, or caller-supplied proof is involved.
-> Integrators call one stable core address. Curve governance manages the trust
-> policy and can add, replace, or remove verifier modules without changing that
-> address or requiring integrations to call modules directly.
+- Validation executes fully onchain.
+- Integrations use one stable core address.
+- Governance can replace verifier modules without changing that address.
 
-A single stable entry point provides fail-closed answers for gauges and Curve
-ownership proposals:
-
-> Was this gauge deployed by a trusted factory?
+**Core:** [`0x999901076BB47Ae96d135C567610270d006B8684`](https://etherscan.io/address/0x999901076BB47Ae96d135C567610270d006B8684#code)
 
 ```solidity
-validator.validateGauge(gauge); // true or false
-validator.getActiveProposals(); // every open ownership proposal
-validator.validateProposalGauges(proposalId); // aggregate true or false
-validator.analyzeProposalGauges(proposalId); // aggregate plus ordered gauge results
+function validateGauge(address gauge) external view returns (bool);
+function getActiveProposals() external view returns (uint256[] memory);
+function validateProposalGauges(uint256 proposalId) external view returns (bool);
+function analyzeProposalGauges(uint256 proposalId)
+    external view returns (bool allValid, GaugeResult[] memory results);
 ```
 
 The core reads `gauge.factory()`, performs one exact
