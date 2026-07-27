@@ -11,6 +11,7 @@ One stable `GaugeValidator` address answers:
 
 ```solidity
 function validateGauge(address gauge) external view returns (bool);
+function getActiveProposals() external view returns (uint256[] memory proposalIds);
 function validateProposalGauges(uint256 proposalId) external view returns (bool);
 function analyzeProposalGauges(uint256 proposalId)
     external
@@ -44,20 +45,16 @@ flowchart LR
     Module -.->|"strict bool"| Core
     Core -.->|"strict bool"| GaugeCaller
 
-    ProposalCaller(["Proposal caller"]) -->|"validate / analyze proposal"| Core
-    ProposalCaller -->|"getActiveProposals()"| Proposal
-    Proposal -->|"votesLength / voteTime / getVote"| DAO
-    DAO -.->|"all open proposal IDs"| Proposal
-    Proposal -.->|"ascending IDs"| ProposalCaller
+    ProposalCaller(["Proposal caller"]) -->|"discover / validate / analyze proposal"| Core
     Core -->|"proposalModule"| ProposalPolicy[("Proposal policy")]
     ProposalPolicy -.->|"module"| Core
-    Core -->|"validate / analyze id"| Proposal["ProposalValidationModuleV1"]
-    Proposal -->|"getVote(id)"| DAO["Curve ownership DAO"]
-    DAO -.->|"callscript"| Proposal
+    Core -->|"getActiveProposals / validate / analyze"| Proposal["ProposalValidationModuleV1"]
+    Proposal -->|"votesLength / voteTime / getVote"| DAO["Curve ownership DAO"]
+    DAO -.->|"open votes / callscript"| Proposal
     Proposal -->|"validateGauge(gauge) for each recognized addition"| Core
     Core -.->|"strict bool per gauge"| Proposal
-    Proposal -.->|"aggregate + ordered results"| Core
-    Core -.->|"strict bool / ordered results"| ProposalCaller
+    Proposal -.->|"IDs / aggregate / ordered results"| Core
+    Core -.->|"IDs / strict bool / ordered results"| ProposalCaller
 
     classDef repo fill:#3851ff,stroke:#9aa8ff,color:#ffffff,stroke-width:2px;
     classDef external fill:#e5e7eb,stroke:#9ca3af,color:#111827,stroke-width:1.5px;
@@ -77,10 +74,10 @@ values.
 
 `ProposalValidationModuleV1` does not call the ownership Agent or
 GaugeController. It authenticates their addresses and calldata inside the DAO
-callscript. Active-proposal discovery calls the module directly after reading
-its address from `GaugeValidator.proposalModule()`. The stable entry point calls
-the configured proposal module for analysis, and the module calls that same
-entry point's `validateGauge` method for every recognized addition.
+callscript. The stable entry point forwards discovery and analysis to the
+configured proposal module, and the module calls that same entry point's
+`validateGauge` method for every recognized addition. External integrations
+therefore use only the stable `GaugeValidator` address and ABI.
 
 ## Rule
 
@@ -232,28 +229,10 @@ only:
 - the ownership Agent;
 - GaugeController.
 
-The proposal module itself exposes:
-
-```solidity
-function getActiveProposals() external view returns (uint256[] memory proposalIds);
-```
-
-This returns every currently open ownership proposal in ascending ID order,
-including proposals with no gauge actions. Proposal IDs are chronological, so
-the module walks backward only until `startDate + voteTime <= block.timestamp`,
-then returns each `open` vote in that current window. Recently executed votes
-are skipped but do not terminate discovery. The callscript is never read to
-decide whether a proposal belongs in this list, and memory use is bounded by
-the current voting window rather than all historical proposals.
-
-At Ethereum block `25,619,622`
-(`0x3995ff2d82e9b602f8c36a4b408e13bcda78dfdebd79e3ff87c89044569ec059`,
-`2026-07-26T21:20:47Z`), the pinned-fork test returns every open ownership
-proposal: IDs `1455` through `1461`.
-
 The stable `GaugeValidator` entry point exposes:
 
 ```solidity
+function getActiveProposals() external view returns (uint256[] memory proposalIds);
 function validateProposalGauges(uint256 proposalId) external view returns (bool);
 
 struct GaugeResult {
@@ -266,6 +245,20 @@ function analyzeProposalGauges(uint256 proposalId)
     view
     returns (bool allValid, GaugeResult[] memory results);
 ```
+
+`getActiveProposals()` returns every currently open ownership proposal in
+ascending ID order, including proposals with no gauge actions. Proposal IDs
+are chronological, so the module walks backward only until
+`startDate + voteTime <= block.timestamp`, then returns each `open` vote in
+that current window. Recently executed votes are skipped but do not terminate
+discovery. The callscript is never read to decide whether a proposal belongs
+in this list, and memory use is bounded by the current voting window rather
+than all historical proposals.
+
+At Ethereum block `25,619,622`
+(`0x3995ff2d82e9b602f8c36a4b408e13bcda78dfdebd79e3ff87c89044569ec059`,
+`2026-07-26T21:20:47Z`), the pinned-fork test returns every open ownership
+proposal: IDs `1455` through `1461`.
 
 The boolean answers:
 
@@ -382,8 +375,8 @@ embedded in the core's constructor arguments:
 
 ```text
 0x999902533033Cc63c8128C501e307477932B742E  GaugeValidationModuleV1
-0x9999032142B45AE92e11a5E10A45F49f58b67773  ProposalValidationModuleV1
-0x999901cd8568Caafeb8888F18C1F5B870B58b7F2  GaugeValidator
+0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7  ProposalValidationModuleV1
+0x999901076BB47Ae96d135C567610270d006B8684  GaugeValidator
 ```
 
 Each raw salt is permissioned to the deployment account and protected for

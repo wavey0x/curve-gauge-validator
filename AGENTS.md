@@ -35,9 +35,9 @@ proof implementations and proposal parsing in separate stateless modules.
 
 | Component | Address |
 | --- | --- |
-| `GaugeValidator` | `0x999901cd8568Caafeb8888F18C1F5B870B58b7F2` |
+| `GaugeValidator` | `0x999901076BB47Ae96d135C567610270d006B8684` |
 | `GaugeValidationModuleV1` | `0x999902533033Cc63c8128C501e307477932B742E` |
-| `ProposalValidationModuleV1` | `0x9999032142B45AE92e11a5E10A45F49f58b67773` |
+| `ProposalValidationModuleV1` | `0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7` |
 
 These are the frozen Ethereum CreateX deployment addresses. A different core
 address is a migration, not an in-place upgrade.
@@ -53,8 +53,9 @@ address is a migration, not an in-place upgrade.
   configured module.
 - Modules are trusted, governance-selected policy components that return a
   strict boolean.
-- The entry point exposes gauge validation, aggregate proposal validation, and
-  ordered per-addition proposal results at one address.
+- The entry point exposes gauge validation, active-proposal discovery,
+  aggregate proposal validation, and ordered per-addition proposal results at
+  one address. External integrations do not call modules directly.
 - Governance can replace or disable the proposal module without changing the
   entry point. Disabled proposal validation reverts.
 - Gauge and policy dependency failures return `false`; DAO proposal-read

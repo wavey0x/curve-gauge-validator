@@ -7,6 +7,7 @@ ownership proposals:
 
 ```solidity
 validator.validateGauge(gauge); // true or false
+validator.getActiveProposals(); // every open ownership proposal
 validator.validateProposalGauges(proposalId); // aggregate true or false
 validator.analyzeProposalGauges(proposalId); // aggregate plus ordered gauge results
 ```
@@ -26,9 +27,8 @@ ownership proposal, without filtering by callscript contents. Governance can
 replace that parser and discovery policy through the stable validator without
 migrating the validator entry point.
 
-```solidity
-proposalModule.getActiveProposals(); // every open ownership proposal
-```
+The validator forwards discovery and analysis to its current proposal module,
+so integrations need only the stable core address and ABI.
 
 DAO read failures revert. Structurally non-executable callscripts and unrelated
 calls create no gauge risk; authenticated gauge additions return `false` when
@@ -81,17 +81,17 @@ runtime, changed init code or constructor arguments, unexpected code at a
 target, and any computed-address mismatch. Its frozen Ethereum addresses are:
 
 ```text
-GaugeValidator              0x999901cd8568Caafeb8888F18C1F5B870B58b7F2
+GaugeValidator              0x999901076BB47Ae96d135C567610270d006B8684
 GaugeValidationModuleV1     0x999902533033Cc63c8128C501e307477932B742E
-ProposalValidationModuleV1  0x9999032142B45AE92e11a5E10A45F49f58b67773
+ProposalValidationModuleV1  0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7
 ```
 
 Inspect a deployed system:
 
 ```bash
 GAUGE_MODULE=0x999902533033Cc63c8128C501e307477932B742E \
-PROPOSAL_MODULE=0x9999032142B45AE92e11a5E10A45F49f58b67773 \
-VALIDATOR=0x999901cd8568Caafeb8888F18C1F5B870B58b7F2 forge script \
+PROPOSAL_MODULE=0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7 \
+VALIDATOR=0x999901076BB47Ae96d135C567610270d006B8684 forge script \
   script/InspectGaugeValidator.s.sol:InspectGaugeValidator \
   --rpc-url http://wavey:8545
 ```

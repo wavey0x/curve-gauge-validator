@@ -151,7 +151,7 @@ contract MainnetGaugeValidationTest is Test {
     }
 
     function test_ActiveProposalDiscoveryIncludesEveryOpenOwnershipVote() public view {
-        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+        uint256[] memory proposalIds = validator.getActiveProposals();
 
         assertEq(proposalIds.length, 7);
         for (uint256 i; i < proposalIds.length; ++i) {

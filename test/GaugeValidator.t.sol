@@ -241,6 +241,8 @@ contract GaugeValidatorTest is Test {
         assertEq(validator.proposalModule(), address(0));
 
         vm.expectRevert(GaugeValidator.ProposalModuleUnavailable.selector);
+        validator.getActiveProposals();
+        vm.expectRevert(GaugeValidator.ProposalModuleUnavailable.selector);
         validator.validateProposalGauges(0);
         vm.expectRevert(GaugeValidator.ProposalModuleUnavailable.selector);
         validator.analyzeProposalGauges(0);

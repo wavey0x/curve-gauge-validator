@@ -19,9 +19,9 @@ replace proposal discovery and parsing with `setProposalModule`.
 
 | Component | Address |
 | --- | --- |
-| `GaugeValidator` | `0x999901cd8568Caafeb8888F18C1F5B870B58b7F2` |
+| `GaugeValidator` | `0x999901076BB47Ae96d135C567610270d006B8684` |
 | `GaugeValidationModuleV1` | `0x999902533033Cc63c8128C501e307477932B742E` |
-| `ProposalValidationModuleV1` | `0x9999032142B45AE92e11a5E10A45F49f58b67773` |
+| `ProposalValidationModuleV1` | `0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7` |
 
 Use `GaugeValidator` as the stable integration address. Factory and proposal
 module replacements preserve it; changing it requires a full migration.
@@ -121,8 +121,9 @@ upgrade creates a new or mixed-module configuration.
 1. Record the current proposal module for rollback.
 2. Deploy a stateless `IProposalValidationModule` implementation with the
    intended immutable DAO, Agent, and GaugeController.
-3. On a pinned fork, confirm `getActiveProposals()` returns every open ownership
-   proposal in ascending order, including proposals without gauge actions.
+3. On a pinned fork, confirm `getActiveProposals()` through the stable
+   `GaugeValidator` returns every open ownership proposal in ascending order,
+   including proposals without gauge actions.
 4. Test the aggregate and detailed entry points through the stable
    `GaugeValidator` address. Include valid, invalid, mixed, malformed, empty,
    direct, and Agent-wrapped proposals.

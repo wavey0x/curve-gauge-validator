@@ -94,6 +94,14 @@ contract GaugeValidator {
         return moduleCall && valid;
     }
 
+    /// @notice Returns every currently open proposal in the configured DAO,
+    ///         preserving proposal order.
+    /// @dev Proposal module and DAO read failures revert.
+    function getActiveProposals() external view returns (uint256[] memory proposalIds) {
+        address module = _proposalModule();
+        return IProposalValidationModule(module).getActiveProposals();
+    }
+
     /// @notice Returns whether all authenticated gauge additions in one
     ///         proposal are standard and currently valid.
     /// @dev Proposal module and DAO read failures revert.

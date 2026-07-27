@@ -67,7 +67,7 @@ contract ProposalValidationModuleTest is Test {
             _callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), 0, 0)))
         );
 
-        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+        uint256[] memory proposalIds = gaugeValidator.getActiveProposals();
 
         assertEq(proposalIds.length, 2);
         assertEq(proposalIds[0], unrelatedProposal);
@@ -75,7 +75,7 @@ contract ProposalValidationModuleTest is Test {
     }
 
     function test_ActiveProposalsReturnsEmptyForNoVotes() public view {
-        assertEq(proposalModule.getActiveProposals().length, 0);
+        assertEq(gaugeValidator.getActiveProposals().length, 0);
     }
 
     function test_ActiveProposalDiscoveryRevertsOnDAOReadFailure() public {
@@ -94,7 +94,7 @@ contract ProposalValidationModuleTest is Test {
         uint256 openProposal = dao.pushVoteState(true, false, uint64(block.timestamp - 2 days), _callscript(hex""));
         dao.pushVoteState(false, true, uint64(block.timestamp - 1 days), _callscript(hex""));
 
-        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+        uint256[] memory proposalIds = gaugeValidator.getActiveProposals();
 
         assertEq(proposalIds.length, 1);
         assertEq(proposalIds[0], openProposal);
@@ -109,7 +109,7 @@ contract ProposalValidationModuleTest is Test {
         uint256 activeProposal =
             dao.pushVoteState(true, false, uint64(block.timestamp - 1 weeks + 1), _callscript(hex""));
 
-        uint256[] memory proposalIds = proposalModule.getActiveProposals();
+        uint256[] memory proposalIds = gaugeValidator.getActiveProposals();
 
         assertEq(proposalIds.length, 1);
         assertEq(proposalIds[0], activeProposal);
@@ -288,6 +288,9 @@ contract ProposalValidationModuleTest is Test {
 
         assertEq(address(gaugeValidator), entrypoint);
         assertEq(gaugeValidator.proposalModule(), address(replacement));
+        uint256[] memory activeProposals = gaugeValidator.getActiveProposals();
+        assertEq(activeProposals.length, 1);
+        assertEq(activeProposals[0], replacementProposalId);
         assertTrue(gaugeValidator.validateProposalGauges(replacementProposalId));
         assertTrue(gaugeValidator.validateGauge(address(gauge)));
     }
