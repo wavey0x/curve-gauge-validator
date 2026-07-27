@@ -4,8 +4,8 @@ pragma solidity 0.8.28;
 import {IGaugeValidationModule} from "./interfaces/IGaugeValidationModule.sol";
 import {ICurve} from "./interfaces/ICurve.sol";
 
-/// @notice Pessimistically answers whether a gauge has reciprocal provenance
-///         from a trusted factory policy.
+/// @notice Pessimistically answers whether a gauge passes its trusted factory
+///         policy.
 contract GaugeValidator {
     uint256 public constant FACTORY_READ_GAS = 30_000;
     uint256 public constant MODULE_CALL_GAS = 2_000_000;
@@ -74,7 +74,7 @@ contract GaugeValidator {
     }
 
     /// @notice Returns true only when the gauge names a trusted factory and
-    ///         that factory's exact module policy reciprocally authenticates it.
+    ///         passes that factory's exact module policy.
     function validateGauge(address gauge) external view returns (bool) {
         if (gauge == address(0) || gauge.code.length == 0) return false;
 
@@ -84,8 +84,8 @@ contract GaugeValidator {
         FactoryPolicy memory policy = policyForFactory[factory];
         if (policy.module == address(0)) return false;
 
-        (bool moduleCall, address authenticatedFactory) = _callModule(policy.module, gauge, policy.validationId);
-        return moduleCall && authenticatedFactory == factory;
+        (bool moduleCall, bool valid) = _callModule(policy.module, gauge, factory, policy.validationId);
+        return moduleCall && valid;
     }
 
     function _setFactoryPolicy(address factory, address module, bytes32 validationId) private {
@@ -118,12 +118,12 @@ contract GaugeValidator {
         value = address(uint160(word));
     }
 
-    function _callModule(address module, address gauge, bytes32 validationId)
+    function _callModule(address module, address gauge, address factory, bytes32 validationId)
         private
         view
-        returns (bool success, address factory)
+        returns (bool success, bool valid)
     {
-        bytes4 selector = IGaugeValidationModule.factoryForGauge.selector;
+        bytes4 selector = IGaugeValidationModule.validateGauge.selector;
         uint256 word;
         uint256 returnSize;
 
@@ -131,17 +131,15 @@ contract GaugeValidator {
             let pointer := mload(0x40)
             mstore(pointer, selector)
             mstore(add(pointer, 0x04), and(gauge, 0xffffffffffffffffffffffffffffffffffffffff))
-            mstore(add(pointer, 0x24), validationId)
-            success := staticcall(MODULE_CALL_GAS, module, pointer, 0x44, pointer, 0x20)
+            mstore(add(pointer, 0x24), and(factory, 0xffffffffffffffffffffffffffffffffffffffff))
+            mstore(add(pointer, 0x44), validationId)
+            success := staticcall(MODULE_CALL_GAS, module, pointer, 0x64, pointer, 0x20)
             returnSize := returndatasize()
             word := mload(pointer)
         }
 
-        if (!success || returnSize != 32 || word >> 160 != 0) return (false, address(0));
-
-        // The canonical-address check above proves the narrowing is lossless.
-        // forge-lint: disable-next-line(unsafe-typecast)
-        factory = address(uint160(word));
+        if (!success || returnSize != 32 || word > 1) return (false, false);
+        valid = word == 1;
     }
 
     function _requireCode(address target) private view {

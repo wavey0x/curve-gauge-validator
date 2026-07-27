@@ -67,7 +67,7 @@ contract MainnetGaugeValidationTest is Test {
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
 
         GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(module));
-        assertEq(bindings.length, 12);
+        assertEq(bindings.length, 11);
 
         for (uint256 i; i < bindings.length; ++i) {
             assertGt(bindings[i].factory.code.length, 0);
@@ -77,7 +77,7 @@ contract MainnetGaugeValidationTest is Test {
         }
 
         assertEq(_factoryCount(bindings, module.DIRECT_LP()), 2);
-        assertEq(_factoryCount(bindings, module.DIRECT_OR_POOL_LP()), 5);
+        assertEq(_factoryCount(bindings, module.DIRECT_OR_POOL_LP()), 4);
         assertEq(_factoryCount(bindings, module.VAULT()), 1);
         assertEq(_factoryCount(bindings, module.FACTORY_IS_VALID_GAUGE()), 4);
     }
@@ -137,7 +137,7 @@ contract MainnetGaugeValidationTest is Test {
 
     function test_Proposal1406ParsesAuthenticatedAgentWrapper() public view {
         ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposal(AGENT_WRAPPED_PROPOSAL);
+            proposalValidator.analyzeProposalGaugeAdditions(AGENT_WRAPPED_PROPOSAL);
 
         assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
         assertTrue(result.allValid);
@@ -148,7 +148,7 @@ contract MainnetGaugeValidationTest is Test {
 
     function test_Proposal1461RecognizesLendV2VaultGauge() public view {
         ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposal(LEND_V2_ACTIVATION_PROPOSAL);
+            proposalValidator.analyzeProposalGaugeAdditions(LEND_V2_ACTIVATION_PROPOSAL);
 
         assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.COMPLETE));
         assertTrue(result.allValid);

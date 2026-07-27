@@ -32,8 +32,8 @@ contract MockValidationModule {
         factories[validationId][gauge] = factory;
     }
 
-    function factoryForGauge(address gauge, bytes32 validationId) external view returns (address) {
-        return factories[validationId][gauge];
+    function validateGauge(address gauge, address factory, bytes32 validationId) external view returns (bool) {
+        return factories[validationId][gauge] == factory;
     }
 }
 
@@ -46,8 +46,8 @@ contract GasFloorValidationModule {
         MINIMUM_GAS = minimumGas_;
     }
 
-    function factoryForGauge(address, bytes32) external view returns (address) {
-        return gasleft() >= MINIMUM_GAS ? FACTORY : address(0);
+    function validateGauge(address, address factory, bytes32) external view returns (bool) {
+        return factory == FACTORY && gasleft() >= MINIMUM_GAS;
     }
 }
 

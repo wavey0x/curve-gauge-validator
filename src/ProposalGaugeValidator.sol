@@ -70,7 +70,7 @@ contract ProposalGaugeValidator {
     }
 
     /// @notice Returns parser status and one current-state boolean per gauge addition.
-    function analyzeProposal(uint256 proposalId) public view returns (ProposalAnalysis memory result) {
+    function analyzeProposalGaugeAdditions(uint256 proposalId) public view returns (ProposalAnalysis memory result) {
         bytes memory script;
         try DAO.getVote{gas: DAO_CALL_GAS}(proposalId) returns (
             bool, bool, uint64, uint64, uint64, uint64, uint256, uint256, uint256, bytes memory voteScript
@@ -83,10 +83,10 @@ contract ProposalGaugeValidator {
         return _analyzeCallscript(script);
     }
 
-    /// @notice Returns true only for a complete proposal containing at least one
-    ///         recognized gauge addition when every recognized gauge is valid.
-    function validateProposal(uint256 proposalId) external view returns (bool) {
-        ProposalAnalysis memory result = analyzeProposal(proposalId);
+    /// @notice Returns true only when analysis completes, recognizes at least one
+    ///         gauge addition, and every recognized gauge currently validates.
+    function allRecognizedGaugeAdditionsCurrentlyValid(uint256 proposalId) external view returns (bool) {
+        ProposalAnalysis memory result = analyzeProposalGaugeAdditions(proposalId);
         return result.status == AnalysisStatus.COMPLETE && result.allValid;
     }
 

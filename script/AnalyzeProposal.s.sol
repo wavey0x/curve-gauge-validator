@@ -14,7 +14,7 @@ contract AnalyzeProposal is Script {
         if (proposalValidatorAddress.code.length == 0) revert MissingCode(proposalValidatorAddress);
 
         ProposalGaugeValidator.ProposalAnalysis memory result =
-            ProposalGaugeValidator(proposalValidatorAddress).analyzeProposal(proposalId);
+            ProposalGaugeValidator(proposalValidatorAddress).analyzeProposalGaugeAdditions(proposalId);
 
         console2.log("proposal", proposalId);
         console2.log("status", uint256(result.status));

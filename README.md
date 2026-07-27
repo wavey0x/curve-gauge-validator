@@ -9,9 +9,9 @@ validator.validateGauge(gauge); // true or false
 ```
 
 The core reads `gauge.factory()`, performs one exact
-`factory -> {module, validationId}` lookup, and requires that module to
-reciprocally authenticate the same factory. Any missing, malformed, reverting,
-or contradictory dependency returns `false`.
+`factory -> {module, validationId}` lookup, and asks that trusted policy module
+to validate the gauge against the exact reported factory. Any missing,
+malformed, reverting, or contradictory dependency returns `false`.
 
 `GaugeValidationModuleV1` contains the four current stateless proof methods.
 Future methods can be deployed in new modules and bound to relevant factories
@@ -19,7 +19,9 @@ without replacing the core.
 
 `ProposalGaugeValidator` separately extracts authenticated gauge additions
 from one Curve ownership proposal and returns ordered `{gauge, valid}` results
-plus a strict aggregate boolean.
+plus a strict aggregate boolean through
+`analyzeProposalGaugeAdditions` and
+`allRecognizedGaugeAdditionsCurrentlyValid`.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the proof layouts and mainnet
 trust set.
@@ -30,7 +32,7 @@ trust set.
 forge fmt --check
 forge build --sizes
 forge lint
-RPC_URL=<ethereum-rpc> forge test -vv
+RPC_URL=http://wavey:8545 forge test -vv
 ```
 
 Simulate the three-transaction deployment:

@@ -32,8 +32,10 @@ parsing in its separate immutable consumer.
 - A self-reported factory address is never enough.
 - A factory is trusted only when `policyForFactory[factory].module != address(0)`.
 - One factory maps to exactly one `{module, validationId}` policy.
-- The module must reciprocally authenticate the same factory reported to the
-  core.
+- The core reads `gauge.factory()` once and passes that exact factory to the
+  configured module.
+- Modules are trusted, governance-selected policy components that return a
+  strict boolean.
 - External dependency failures return `false`.
 - Configuration failures revert.
 - External calls remain gas bounded and ABI strict.
@@ -51,5 +53,5 @@ Run:
 forge fmt --check
 forge build --sizes
 forge lint
-RPC_URL=<ethereum-rpc> forge test -vv
+RPC_URL=http://wavey:8545 forge test -vv
 ```

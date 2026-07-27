@@ -51,14 +51,15 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(proposalId);
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
 
         _assertComplete(result);
         assertTrue(result.allValid);
         assertEq(result.gauges.length, 1);
         assertEq(result.gauges[0].gauge, address(gauge));
         assertTrue(result.gauges[0].valid);
-        assertTrue(proposalValidator.validateProposal(proposalId));
+        assertTrue(proposalValidator.allRecognizedGaugeAdditionsCurrentlyValid(proposalId));
     }
 
     function test_ProposalAllowsNearTwoMillionGasModule() public {
@@ -72,7 +73,8 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 123))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result = expensiveProposalValidator.analyzeProposal(proposalId);
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            expensiveProposalValidator.analyzeProposalGaugeAdditions(proposalId);
 
         _assertComplete(result);
         assertTrue(result.allValid);
@@ -84,7 +86,8 @@ contract ProposalGaugeValidatorTest is Test {
         uint256 proposalId =
             _push(_callscript(_scriptCall(address(agent), _execute(address(gaugeController), 0, payload))));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(proposalId);
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
 
         _assertComplete(result);
         assertTrue(result.allValid);
@@ -104,7 +107,7 @@ contract ProposalGaugeValidatorTest is Test {
         );
 
         ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposal(_push(_callscript(calls)));
+            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
 
         _assertComplete(result);
         assertTrue(result.allValid);
@@ -121,7 +124,7 @@ contract ProposalGaugeValidatorTest is Test {
         );
 
         ProposalGaugeValidator.ProposalAnalysis memory result =
-            proposalValidator.analyzeProposal(_push(_callscript(calls)));
+            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
 
         _assertComplete(result);
         assertFalse(result.allValid);
@@ -132,12 +135,13 @@ contract ProposalGaugeValidatorTest is Test {
 
     function test_NoRecognizedGaugesIsCompleteButFalse() public {
         uint256 proposalId = _push(_callscript(_scriptCall(address(unrelatedTarget), hex"12345678")));
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(proposalId);
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposalGaugeAdditions(proposalId);
 
         _assertComplete(result);
         assertFalse(result.allValid);
         assertEq(result.gauges.length, 0);
-        assertFalse(proposalValidator.validateProposal(proposalId));
+        assertFalse(proposalValidator.allRecognizedGaugeAdditionsCurrentlyValid(proposalId));
     }
 
     function test_WrongCallscriptIdTruncationAndTrailingDataAreRejected() public {
@@ -217,7 +221,7 @@ contract ProposalGaugeValidatorTest is Test {
         _storeWord(malformed, 68, 64);
         _assertRejected(_callscript(_scriptCall(address(agent), malformed)));
 
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(
+        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposalGaugeAdditions(
             _push(_callscript(_scriptCall(address(agent), _execute(address(unrelatedTarget), 1, hex"12345678"))))
         );
         _assertComplete(result);
@@ -232,7 +236,7 @@ contract ProposalGaugeValidatorTest is Test {
     }
 
     function test_MissingProposalIsUnavailable() public view {
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(0);
+        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposalGaugeAdditions(0);
 
         assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.UNAVAILABLE));
         assertFalse(result.allValid);
@@ -248,7 +252,7 @@ contract ProposalGaugeValidatorTest is Test {
                 ICurveDAO(address(dao)), address(agent), address(gaugeController), GaugeValidator(address(dependency))
             );
 
-            ProposalGaugeValidator.ProposalAnalysis memory result = candidate.analyzeProposal(proposalId);
+            ProposalGaugeValidator.ProposalAnalysis memory result = candidate.analyzeProposalGaugeAdditions(proposalId);
             _assertComplete(result);
             assertFalse(result.allValid);
             assertFalse(result.gauges[0].valid);
@@ -264,7 +268,7 @@ contract ProposalGaugeValidatorTest is Test {
         }
 
         ProposalGaugeValidator.ProposalAnalysis memory atCap =
-            proposalValidator.analyzeProposal(_push(_callscript(calls)));
+            proposalValidator.analyzeProposalGaugeAdditions(_push(_callscript(calls)));
         _assertComplete(atCap);
         assertTrue(atCap.allValid);
         assertEq(atCap.gauges.length, proposalValidator.MAX_GAUGES());
@@ -286,7 +290,8 @@ contract ProposalGaugeValidatorTest is Test {
     }
 
     function _assertRejected(bytes memory script) private {
-        ProposalGaugeValidator.ProposalAnalysis memory result = proposalValidator.analyzeProposal(_push(script));
+        ProposalGaugeValidator.ProposalAnalysis memory result =
+            proposalValidator.analyzeProposalGaugeAdditions(_push(script));
 
         assertEq(uint256(result.status), uint256(ProposalGaugeValidator.AnalysisStatus.CALLSCRIPT_REJECTED));
         assertFalse(result.allValid);

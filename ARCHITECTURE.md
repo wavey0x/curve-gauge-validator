@@ -20,8 +20,8 @@ factory-policy mapping. Proposal validation is a separate immutable consumer.
 1. `gauge` is a contract;
 2. `gauge.factory()` returns a canonical nonzero address;
 3. that address has an exact `{module, validationId}` policy; and
-4. the configured module reciprocally authenticates the gauge back to the same
-   factory.
+4. the configured module validates the gauge against that exact factory and
+   validation method.
 
 Every failed, reverting, malformed, gas-exhausting, contradictory, or
 unconfigured read returns `false`.
@@ -35,9 +35,9 @@ gauge
   |
   +-- bounded module call fails or is malformed ------------> false
   |
-  +-- module authenticates a different factory -------------> false
+  +-- module rejects the gauge/factory relationship --------> false
   |
-  `-- module authenticates the same factory ----------------> true
+  `-- module validates the gauge/factory relationship ------> true
 ```
 
 Reading `gauge.factory()` alone is insufficient because any contract can
@@ -67,9 +67,10 @@ A zero module means the factory is untrusted. There is no route scan, module
 registry, active-ID lifecycle, ambiguity state, or caller-supplied factory
 hint.
 
-The module returns an authenticated factory address rather than a bare
-boolean. The core returns `true` only when that address exactly equals the
-factory reported to the core by the gauge.
+The core reads `gauge.factory()` once, selects the exact factory policy, and
+passes the reported factory to the module. Because modules are
+governance-selected trusted policy components, the module returns a strict
+boolean. The core accepts only an exact ABI-encoded zero or one.
 
 Governance may bind, rebind, or revoke one factory:
 
@@ -92,7 +93,7 @@ VAULT
 FACTORY_IS_VALID_GAUGE
 ```
 
-Unknown IDs and every failed dependency return the zero address.
+Unknown IDs and every failed dependency return `false`.
 
 ### Direct LP
 
@@ -132,9 +133,11 @@ exactly 32 bytes with zero upper bits. Boolean responses must be exactly 32
 bytes and equal to zero or one.
 
 The core caps each module call at 2,000,000 gas and requires an exact canonical
-address response. Policy modules should be immutable implementations; binding
-an upgradeable proxy deliberately transfers policy-change authority to that
-proxy's administrator.
+boolean response. Policy modules are trusted, governance-selected policy
+components, but calls remain bounded and fail closed so a broken module cannot
+make the validator revert or exhaust the caller's gas. Policy modules should
+be immutable implementations; binding an upgradeable proxy deliberately
+transfers policy-change authority to that proxy's administrator.
 
 ## Proposal contract
 
@@ -149,12 +152,12 @@ proxy's administrator.
 It exposes:
 
 ```solidity
-function analyzeProposal(uint256 proposalId)
+function analyzeProposalGaugeAdditions(uint256 proposalId)
     external
     view
     returns (ProposalAnalysis memory);
 
-function validateProposal(uint256 proposalId)
+function allRecognizedGaugeAdditionsCurrentlyValid(uint256 proposalId)
     external
     view
     returns (bool);
@@ -181,6 +184,16 @@ struct ProposalAnalysis {
 }
 ```
 
+The statuses have exact fail-closed meanings:
+
+- `UNAVAILABLE`: the analyzer could not produce a result. The gauge array is
+  empty and `allValid` is `false`.
+- `CALLSCRIPT_REJECTED`: the analyzer ran, but the callscript violated its
+  accepted grammar. The gauge array is empty and `allValid` is `false`.
+- `COMPLETE`: every recognized gauge addition was evaluated. An individual
+  gauge-route failure remains a non-match with `valid == false`; it does not
+  make an otherwise completed analysis unavailable.
+
 The analyzer recognizes only:
 
 1. a direct canonical `GaugeController.add_gauge` call; or
@@ -198,8 +211,8 @@ with a 2,100,000-gas cap and an exact canonical boolean return. The extra
 invalid without changing a successfully parsed proposal to `UNAVAILABLE`.
 
 `allValid` is true only when parsing completed, at least one gauge was
-recognized, and every recognized gauge is valid. `validateProposal` applies
-that exact rule.
+recognized, and every recognized gauge is valid.
+`allRecognizedGaugeAdditionsCurrentlyValid` applies that exact rule.
 
 Gauge booleans reflect the current block. The proposal validator does not
 simulate state changes that earlier calls in the proposal would create.
@@ -221,7 +234,6 @@ All initial bindings use `GaugeValidationModuleV1`.
 | TwoCrypto NG factory | `0x98EE851a00abeE0d95D08cF4CA2BdCE32aeaAF7F` | `DIRECT_OR_POOL_LP` |
 | Legacy TwoCrypto factory | `0xF18056Bbd320E96A48e3Fbf8bC061322531aac99` | `DIRECT_OR_POOL_LP` |
 | Metapool factory | `0xB9fC157394Af804a3578134A6585C0dc9cc990d4` | `DIRECT_OR_POOL_LP` |
-| Stableswap proxy | `0x855cC906dA8271Dd53879929bd226711247D5f17` | `DIRECT_OR_POOL_LP` |
 | Tricrypto factory | `0x0c0e5f2fF0ff18a3be9b835635039256dC4B4963` | `DIRECT_OR_POOL_LP` |
 | Lending gauge factory | `0xeA6876DDE9e3467564acBeE1Ed5bac88783205E0` | `VAULT` |
 | Bridge gauge factory | `0xabC000d88f23Bb45525E447528DBF656A9D55bf5` | `FACTORY_IS_VALID_GAUGE` |

@@ -13,58 +13,55 @@ contract GaugeValidationModuleV1 is IGaugeValidationModule {
 
     uint256 public constant DEPENDENCY_CALL_GAS = 30_000;
 
-    function factoryForGauge(address gauge, bytes32 validationId) external view returns (address factory) {
-        if (gauge == address(0) || gauge.code.length == 0) return address(0);
+    function validateGauge(address gauge, address factory, bytes32 validationId) external view returns (bool) {
+        if (gauge == address(0) || gauge.code.length == 0 || factory == address(0)) return false;
 
-        (bool success, address candidateFactory) = _readAddress(gauge, ICurve.factory.selector);
-        if (!success || candidateFactory == address(0)) return address(0);
+        if (validationId == DIRECT_LP) return _directLp(gauge, factory);
+        if (validationId == DIRECT_OR_POOL_LP) return _directOrPoolLp(gauge, factory);
+        if (validationId == VAULT) return _vault(gauge, factory);
+        if (validationId == FACTORY_IS_VALID_GAUGE) return _factoryAttestation(gauge, factory);
 
-        if (validationId == DIRECT_LP) return _directLp(gauge, candidateFactory);
-        if (validationId == DIRECT_OR_POOL_LP) return _directOrPoolLp(gauge, candidateFactory);
-        if (validationId == VAULT) return _vault(gauge, candidateFactory);
-        if (validationId == FACTORY_IS_VALID_GAUGE) return _factoryAttestation(gauge, candidateFactory);
-
-        return address(0);
+        return false;
     }
 
-    function _directLp(address gauge, address factory) private view returns (address) {
+    function _directLp(address gauge, address factory) private view returns (bool) {
         (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || lpToken == address(0)) return address(0);
+        if (!success || lpToken == address(0)) return false;
 
         address reverseGauge;
         (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
-        return success && reverseGauge == gauge ? factory : address(0);
+        return success && reverseGauge == gauge;
     }
 
-    function _directOrPoolLp(address gauge, address factory) private view returns (address) {
+    function _directOrPoolLp(address gauge, address factory) private view returns (bool) {
         (bool success, address lpToken) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || lpToken == address(0)) return address(0);
+        if (!success || lpToken == address(0)) return false;
 
         address reverseGauge;
         (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, lpToken);
-        if (!success) return address(0);
-        if (reverseGauge != address(0)) return reverseGauge == gauge ? factory : address(0);
+        if (!success) return false;
+        if (reverseGauge != address(0)) return reverseGauge == gauge;
 
         address pool;
         (success, pool) = _readAddress(lpToken, ICurve.minter.selector);
-        if (!success || pool == address(0)) return address(0);
+        if (!success || pool == address(0)) return false;
 
         (success, reverseGauge) = _readAddress(factory, ICurve.get_gauge.selector, pool);
-        return success && reverseGauge == gauge ? factory : address(0);
+        return success && reverseGauge == gauge;
     }
 
-    function _vault(address gauge, address factory) private view returns (address) {
+    function _vault(address gauge, address factory) private view returns (bool) {
         (bool success, address vault) = _readAddress(gauge, ICurve.lp_token.selector);
-        if (!success || vault == address(0)) return address(0);
+        if (!success || vault == address(0)) return false;
 
         address reverseGauge;
         (success, reverseGauge) = _readAddress(factory, ICurve.gauge_for_vault.selector, vault);
-        return success && reverseGauge == gauge ? factory : address(0);
+        return success && reverseGauge == gauge;
     }
 
-    function _factoryAttestation(address gauge, address factory) private view returns (address) {
+    function _factoryAttestation(address gauge, address factory) private view returns (bool) {
         (bool success, bool valid) = _readBool(factory, ICurve.is_valid_gauge.selector, gauge);
-        return success && valid ? factory : address(0);
+        return success && valid;
     }
 
     function _readAddress(address target, bytes4 selector) private view returns (bool success, address value) {
