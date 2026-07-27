@@ -336,13 +336,25 @@ different question and deliberately out of scope.
 
 ## Deployment and verification
 
-Deployment is three transactions:
+Deployment is three CREATE2 transactions through the canonical CreateX
+factory. The stateless modules are deployed first because their addresses are
+embedded in the core's constructor arguments:
 
 ```text
-new GaugeValidationModuleV1()
-new ProposalValidationModuleV1(dao, agent, gaugeController)
-new GaugeValidator(governance, proposalModule, factoryPolicies)
+0x999902533033Cc63c8128C501e307477932B742E  GaugeValidationModuleV1
+0x99990385f058c856C18a8FF7D7445ee6398C3E34  ProposalValidationModuleV1
+0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4  GaugeValidator
 ```
+
+Each raw salt is permissioned to the deployment account and protected for
+Ethereum chain ID 1. The proposal-module init code includes its DAO, Agent,
+and GaugeController arguments; the core init code includes governance, the
+proposal module, and all initial factory policies. Exact init-code hashes
+therefore bind the vanity addresses to both the compiled contracts and their
+constructor configuration. The deployment script checks the canonical CreateX
+runtime hash, recomputes every init-code hash and target address, rejects
+unexpected target code, and safely skips an already deployed component only
+when its runtime hash matches.
 
 Both modules are stateless and have no owner or policy configuration. The
 deployment script reads back every immutable proposal dependency, the stable

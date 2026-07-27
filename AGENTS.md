@@ -21,7 +21,8 @@ proof implementations and proposal parsing in separate stateless modules.
   boolean, and ordered gauge results.
 - `src/interfaces/IProposalValidationModule.sol`: stable proposal-module ABI.
 - `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
-- `script/DeployGaugeValidator.s.sol`: three-contract deployment and readback.
+- `script/DeployGaugeValidator.s.sol`: deterministic CreateX deployment and
+  readback.
 - `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
 - `script/AnalyzeProposal.s.sol`: read-only proposal analysis.
 - `test/GaugeValidator.t.sol`: proof, failure, and authorization tests.

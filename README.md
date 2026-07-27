@@ -46,21 +46,46 @@ forge lint
 RPC_URL=http://wavey:8545 forge test -vv
 ```
 
-Simulate the three-transaction deployment:
+Simulate the deterministic three-transaction deployment:
 
 ```bash
 forge script script/DeployGaugeValidator.s.sol:DeployGaugeValidator \
-  --rpc-url <ethereum-rpc> \
-  --fork-block-number 25619622 \
+  --rpc-url http://wavey:8545 \
+  --fork-block-number 25625109 \
   -vvvv
+```
+
+Broadcast from the pinned `wavey3` deployer
+(`0x2C2dc95F8C8060a7e3B354c1B9540881AEa1613C`):
+
+```bash
+forge script script/DeployGaugeValidator.s.sol:DeployGaugeValidator \
+  --rpc-url http://wavey:8545 \
+  --account wavey3 \
+  --broadcast \
+  --slow \
+  -vvvv
+```
+
+The script deploys through the canonical CreateX factory and is safe to rerun
+after a partial deployment. It rejects the wrong chain, a changed CreateX
+runtime, changed init code or constructor arguments, unexpected code at a
+target, and any computed-address mismatch. Its frozen Ethereum addresses are:
+
+```text
+GaugeValidator              0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4
+GaugeValidationModuleV1     0x999902533033Cc63c8128C501e307477932B742E
+ProposalValidationModuleV1  0x99990385f058c856C18a8FF7D7445ee6398C3E34
 ```
 
 Inspect a deployed system:
 
 ```bash
-GAUGE_MODULE=<address> PROPOSAL_MODULE=<address> VALIDATOR=<address> forge script \
+GAUGE_MODULE=0x999902533033Cc63c8128C501e307477932B742E \
+PROPOSAL_MODULE=0x99990385f058c856C18a8FF7D7445ee6398C3E34 \
+VALIDATOR=0x999901A0dC58d5Bd40F41F3846A9d6c495a8dfd4 forge script \
   script/InspectGaugeValidator.s.sol:InspectGaugeValidator \
-  --rpc-url <ethereum-rpc>
+  --rpc-url http://wavey:8545
 ```
 
 Analyze one proposal:
