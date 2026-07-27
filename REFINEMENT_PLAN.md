@@ -10,7 +10,7 @@ Completed:
 
 - one stable `GaugeValidator` core;
 - one boolean `validateGauge(address)` result;
-- one O(1) `factory -> {module, validationId}` mapping;
+- one O(1) packed `factory -> {module, methodId}` mapping;
 - one trusted, stateless policy module with the four current reciprocal proof
   layouts;
 - one `gauge.factory()` read followed by one exact policy lookup;
@@ -27,9 +27,9 @@ Completed:
 
 Removed:
 
-- validation-ID lifecycle;
+- method-ID lifecycle;
 - route scanning and multi-match logic;
-- dormant bindings;
+- noncanonical or dormant policy states;
 - the inert Stableswap deployment proxy binding;
 - policy route scanning and global module replacement;
 - exhaustive historical manifests; and

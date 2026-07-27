@@ -71,9 +71,9 @@ contract MainnetGaugeValidationTest is Test {
 
         for (uint256 i; i < bindings.length; ++i) {
             assertGt(bindings[i].factory.code.length, 0);
-            (address configuredModule, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
+            (address configuredModule, uint8 methodId) = validator.policyForFactory(bindings[i].factory);
             assertEq(configuredModule, address(module));
-            assertEq(validationId, bindings[i].validationId);
+            assertEq(methodId, bindings[i].methodId);
         }
 
         assertEq(_factoryCount(bindings, module.DIRECT_LP()), 2);
@@ -177,12 +177,12 @@ contract MainnetGaugeValidationTest is Test {
         _assertValidationGas(LEND_V2_VAULT_GAUGE, 300_000);
     }
 
-    function _assertGauge(address gauge, address factory, bytes32 validationId) private view {
+    function _assertGauge(address gauge, address factory, uint8 methodId) private view {
         assertTrue(validator.validateGauge(gauge));
         assertEq(IFactoryAttestedGauge(gauge).factory(), factory);
-        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(factory);
+        (address configuredModule, uint8 configuredId) = validator.policyForFactory(factory);
         assertEq(configuredModule, address(module));
-        assertEq(configuredId, validationId);
+        assertEq(configuredId, methodId);
     }
 
     function _assertValidationGas(address gauge, uint256 maximum) private view {
@@ -193,13 +193,13 @@ contract MainnetGaugeValidationTest is Test {
         assertLt(gasUsed, maximum);
     }
 
-    function _factoryCount(GaugeValidator.FactoryBinding[] memory bindings, bytes32 validationId)
+    function _factoryCount(GaugeValidator.FactoryBinding[] memory bindings, uint8 methodId)
         private
         pure
         returns (uint256 count)
     {
         for (uint256 i; i < bindings.length; ++i) {
-            if (bindings[i].validationId == validationId) ++count;
+            if (bindings[i].methodId == methodId) ++count;
         }
     }
 }

@@ -9,10 +9,10 @@ library MainnetGaugeConfiguration {
     address internal constant GAUGE_CONTROLLER = 0x2F50D538606Fa9EDD2B11E2446BEb18C9D5846bB;
     address internal constant LEND_V2_GAUGE_FACTORY = 0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6;
 
-    bytes32 internal constant DIRECT_LP = "DIRECT_LP";
-    bytes32 internal constant DIRECT_OR_POOL_LP = "DIRECT_OR_POOL_LP";
-    bytes32 internal constant VAULT = "VAULT";
-    bytes32 internal constant FACTORY_IS_VALID_GAUGE = "FACTORY_IS_VALID_GAUGE";
+    uint8 internal constant DIRECT_LP = 1;
+    uint8 internal constant DIRECT_OR_POOL_LP = 2;
+    uint8 internal constant VAULT = 3;
+    uint8 internal constant FACTORY_IS_VALID_GAUGE = 4;
 
     function bindings(address module) internal pure returns (GaugeValidator.FactoryBinding[] memory values) {
         values = new GaugeValidator.FactoryBinding[](11);
@@ -30,11 +30,11 @@ library MainnetGaugeConfiguration {
         values[10] = _binding(LEND_V2_GAUGE_FACTORY, module, FACTORY_IS_VALID_GAUGE);
     }
 
-    function _binding(address factory, address module, bytes32 validationId)
+    function _binding(address factory, address module, uint8 methodId)
         private
         pure
         returns (GaugeValidator.FactoryBinding memory)
     {
-        return GaugeValidator.FactoryBinding(factory, module, validationId);
+        return GaugeValidator.FactoryBinding(factory, module, methodId);
     }
 }

@@ -37,8 +37,8 @@ contract InspectGaugeValidator is Script {
         GaugeValidator.FactoryBinding[] memory expectedBindings = MainnetGaugeConfiguration.bindings(gaugeModuleAddress);
         for (uint256 i; i < expectedBindings.length; ++i) {
             GaugeValidator.FactoryBinding memory binding = expectedBindings[i];
-            (address module, bytes32 validationId) = validator.policyForFactory(binding.factory);
-            if (binding.factory.code.length == 0 || module != binding.module || validationId != binding.validationId) {
+            (address module, uint8 methodId) = validator.policyForFactory(binding.factory);
+            if (binding.factory.code.length == 0 || module != binding.module || methodId != binding.methodId) {
                 revert ConfigurationMismatch();
             }
         }
@@ -49,7 +49,7 @@ contract InspectGaugeValidator is Script {
         console2.log("owner", validator.owner());
         for (uint256 i; i < expectedBindings.length; ++i) {
             console2.log("factory", expectedBindings[i].factory);
-            console2.logBytes32(expectedBindings[i].validationId);
+            console2.log("method ID", expectedBindings[i].methodId);
         }
     }
 }

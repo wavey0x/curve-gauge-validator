@@ -6,20 +6,20 @@ import {ICurve} from "./interfaces/ICurve.sol";
 
 /// @notice Stateless implementation of the four current reciprocal factory proofs.
 contract GaugeValidationModuleV1 is IGaugeValidationModule {
-    bytes32 public constant DIRECT_LP = "DIRECT_LP";
-    bytes32 public constant DIRECT_OR_POOL_LP = "DIRECT_OR_POOL_LP";
-    bytes32 public constant VAULT = "VAULT";
-    bytes32 public constant FACTORY_IS_VALID_GAUGE = "FACTORY_IS_VALID_GAUGE";
+    uint8 public constant DIRECT_LP = 1;
+    uint8 public constant DIRECT_OR_POOL_LP = 2;
+    uint8 public constant VAULT = 3;
+    uint8 public constant FACTORY_IS_VALID_GAUGE = 4;
 
     uint256 public constant DEPENDENCY_CALL_GAS = 30_000;
 
-    function validateGauge(address gauge, address factory, bytes32 validationId) external view returns (bool) {
+    function validateGauge(address gauge, address factory, uint8 methodId) external view returns (bool) {
         if (gauge == address(0) || gauge.code.length == 0 || factory == address(0)) return false;
 
-        if (validationId == DIRECT_LP) return _directLp(gauge, factory);
-        if (validationId == DIRECT_OR_POOL_LP) return _directOrPoolLp(gauge, factory);
-        if (validationId == VAULT) return _vault(gauge, factory);
-        if (validationId == FACTORY_IS_VALID_GAUGE) return _factoryAttestation(gauge, factory);
+        if (methodId == DIRECT_LP) return _directLp(gauge, factory);
+        if (methodId == DIRECT_OR_POOL_LP) return _directOrPoolLp(gauge, factory);
+        if (methodId == VAULT) return _vault(gauge, factory);
+        if (methodId == FACTORY_IS_VALID_GAUGE) return _factoryAttestation(gauge, factory);
 
         return false;
     }
@@ -88,17 +88,8 @@ contract GaugeValidationModuleV1 is IGaugeValidationModule {
         returns (bool success, address value)
     {
         uint256 word;
-        uint256 returnSize;
-
-        assembly ("memory-safe") {
-            mstore(0x00, selector)
-            mstore(0x04, and(argument, 0xffffffffffffffffffffffffffffffffffffffff))
-            success := staticcall(DEPENDENCY_CALL_GAS, target, 0x00, 0x24, 0x00, 0x20)
-            returnSize := returndatasize()
-            word := mload(0x00)
-        }
-
-        if (!success || returnSize != 32 || word >> 160 != 0) return (false, address(0));
+        (success, word) = _readWord(target, selector, argument);
+        if (!success || word >> 160 != 0) return (false, address(0));
 
         // The canonical-address check above proves the narrowing is lossless.
         // forge-lint: disable-next-line(unsafe-typecast)
@@ -111,6 +102,16 @@ contract GaugeValidationModuleV1 is IGaugeValidationModule {
         returns (bool success, bool value)
     {
         uint256 word;
+        (success, word) = _readWord(target, selector, argument);
+        if (!success || word > 1) return (false, false);
+        value = word == 1;
+    }
+
+    function _readWord(address target, bytes4 selector, address argument)
+        private
+        view
+        returns (bool success, uint256 word)
+    {
         uint256 returnSize;
 
         assembly ("memory-safe") {
@@ -121,7 +122,6 @@ contract GaugeValidationModuleV1 is IGaugeValidationModule {
             word := mload(0x00)
         }
 
-        if (!success || returnSize != 32 || word > 1) return (false, false);
-        value = word == 1;
+        if (!success || returnSize != 32) return (false, 0);
     }
 }

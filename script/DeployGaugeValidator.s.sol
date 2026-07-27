@@ -58,8 +58,8 @@ contract DeployGaugeValidator is Script {
 
         GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(gaugeModule));
         for (uint256 i; i < bindings.length; ++i) {
-            (address module, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
-            if (module != bindings[i].module || validationId != bindings[i].validationId) {
+            (address module, uint8 methodId) = validator.policyForFactory(bindings[i].factory);
+            if (module != bindings[i].module || methodId != bindings[i].methodId) {
                 revert DeploymentInvariantFailed();
             }
         }

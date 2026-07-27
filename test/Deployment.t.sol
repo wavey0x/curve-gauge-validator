@@ -30,9 +30,9 @@ contract DeploymentTest is Test {
 
         GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(gaugeModule));
         for (uint256 i; i < bindings.length; ++i) {
-            (address configuredModule, bytes32 validationId) = validator.policyForFactory(bindings[i].factory);
+            (address configuredModule, uint8 methodId) = validator.policyForFactory(bindings[i].factory);
             assertEq(configuredModule, address(gaugeModule));
-            assertEq(validationId, bindings[i].validationId);
+            assertEq(methodId, bindings[i].methodId);
         }
 
         // Test-local environment used only by the read-only inspection script.

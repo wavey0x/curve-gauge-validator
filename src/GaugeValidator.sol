@@ -12,13 +12,13 @@ contract GaugeValidator {
 
     struct FactoryPolicy {
         address module;
-        bytes32 validationId;
+        uint8 methodId;
     }
 
     struct FactoryBinding {
         address factory;
         address module;
-        bytes32 validationId;
+        uint8 methodId;
     }
 
     address public owner;
@@ -26,17 +26,12 @@ contract GaugeValidator {
     /// @notice Exact policy for each trusted factory. A zero module means untrusted.
     mapping(address factory => FactoryPolicy policy) public policyForFactory;
 
-    event FactoryPolicySet(
-        address indexed factory,
-        address indexed previousModule,
-        bytes32 previousValidationId,
-        address indexed newModule,
-        bytes32 newValidationId
-    );
+    event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     error NotOwner(address caller);
     error ZeroAddress();
+    error InvalidPolicy();
     error MissingCode(address target);
 
     modifier onlyOwner() {
@@ -56,13 +51,13 @@ contract GaugeValidator {
 
         for (uint256 i; i < initialBindings.length; ++i) {
             FactoryBinding memory binding = initialBindings[i];
-            _setFactoryPolicy(binding.factory, binding.module, binding.validationId);
+            _setFactoryPolicy(binding.factory, binding.module, binding.methodId);
         }
     }
 
     /// @notice Sets one factory's policy. A zero module removes trust.
-    function setFactoryPolicy(address factory, address module, bytes32 validationId) external onlyOwner {
-        _setFactoryPolicy(factory, module, validationId);
+    function setFactoryPolicy(address factory, address module, uint8 methodId) external onlyOwner {
+        _setFactoryPolicy(factory, module, methodId);
     }
 
     function transferOwnership(address newOwner) external onlyOwner {
@@ -84,20 +79,23 @@ contract GaugeValidator {
         FactoryPolicy memory policy = policyForFactory[factory];
         if (policy.module == address(0)) return false;
 
-        (bool moduleCall, bool valid) = _callModule(policy.module, gauge, factory, policy.validationId);
+        (bool moduleCall, bool valid) = _callModule(policy.module, gauge, factory, policy.methodId);
         return moduleCall && valid;
     }
 
-    function _setFactoryPolicy(address factory, address module, bytes32 validationId) private {
+    function _setFactoryPolicy(address factory, address module, uint8 methodId) private {
         if (factory == address(0)) revert ZeroAddress();
-        if (module != address(0)) {
+        if (module == address(0)) {
+            if (methodId != 0) revert InvalidPolicy();
+            delete policyForFactory[factory];
+        } else {
+            if (methodId == 0) revert InvalidPolicy();
             _requireCode(factory);
             _requireCode(module);
+            policyForFactory[factory] = FactoryPolicy({module: module, methodId: methodId});
         }
 
-        FactoryPolicy memory previousPolicy = policyForFactory[factory];
-        policyForFactory[factory] = FactoryPolicy({module: module, validationId: validationId});
-        emit FactoryPolicySet(factory, previousPolicy.module, previousPolicy.validationId, module, validationId);
+        emit FactoryPolicySet(factory, module, methodId);
     }
 
     function _readAddress(address target, bytes4 selector) private view returns (bool success, address value) {
@@ -118,7 +116,7 @@ contract GaugeValidator {
         value = address(uint160(word));
     }
 
-    function _callModule(address module, address gauge, address factory, bytes32 validationId)
+    function _callModule(address module, address gauge, address factory, uint8 methodId)
         private
         view
         returns (bool success, bool valid)
@@ -132,7 +130,7 @@ contract GaugeValidator {
             mstore(pointer, selector)
             mstore(add(pointer, 0x04), and(gauge, 0xffffffffffffffffffffffffffffffffffffffff))
             mstore(add(pointer, 0x24), and(factory, 0xffffffffffffffffffffffffffffffffffffffff))
-            mstore(add(pointer, 0x44), validationId)
+            mstore(add(pointer, 0x44), methodId)
             success := staticcall(MODULE_CALL_GAS, module, pointer, 0x64, pointer, 0x20)
             returnSize := returndatasize()
             word := mload(pointer)

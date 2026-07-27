@@ -9,7 +9,7 @@ validator.validateGauge(gauge); // true or false
 ```
 
 The core reads `gauge.factory()`, performs one exact
-`factory -> {module, validationId}` lookup, and asks that trusted policy module
+`factory -> {module, methodId}` lookup, and asks that trusted policy module
 to validate the gauge against the exact reported factory. Any missing,
 malformed, reverting, or contradictory dependency returns `false`.
 

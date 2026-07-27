@@ -65,7 +65,7 @@ contract ProposalGaugeValidatorTest is Test {
     function test_ProposalAllowsNearTwoMillionGasModule() public {
         GasFloorValidationModule expensiveModule = new GasFloorValidationModule(address(factory), 1_900_000);
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(expensiveModule), "GAS_FLOOR");
+        bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(expensiveModule), 1);
         GaugeValidator expensiveValidator = new GaugeValidator(address(this), bindings);
         ProposalGaugeValidator expensiveProposalValidator = new ProposalGaugeValidator(
             ICurveDAO(address(dao)), address(agent), address(gaugeController), expensiveValidator

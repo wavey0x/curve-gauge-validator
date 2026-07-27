@@ -31,7 +31,9 @@ parsing in its separate immutable consumer.
 
 - A self-reported factory address is never enough.
 - A factory is trusted only when `policyForFactory[factory].module != address(0)`.
-- One factory maps to exactly one `{module, validationId}` policy.
+- One factory maps to exactly one packed `{module, methodId}` policy.
+- Method ID zero is reserved. Policies are either active
+  `{nonzero module, nonzero methodId}` or disabled `{address(0), 0}`.
 - The core reads `gauge.factory()` once and passes that exact factory to the
   configured module.
 - Modules are trusted, governance-selected policy components that return a

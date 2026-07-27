@@ -19,7 +19,7 @@ factory-policy mapping. Proposal validation is a separate immutable consumer.
 
 1. `gauge` is a contract;
 2. `gauge.factory()` returns a canonical nonzero address;
-3. that address has an exact `{module, validationId}` policy; and
+3. that address has an exact packed `{module, methodId}` policy; and
 4. the configured module validates the gauge against that exact factory and
    validation method.
 
@@ -59,13 +59,16 @@ The binding is:
 ```solidity
 struct FactoryPolicy {
     address module;
-    bytes32 validationId;
+    uint8 methodId;
 }
 ```
 
-A zero module means the factory is untrusted. There is no route scan, module
-registry, active-ID lifecycle, ambiguity state, or caller-supplied factory
-hint.
+The structure occupies one storage slot. Method IDs are module-local; the core
+stores and forwards them without interpreting a global enum. Zero is reserved.
+An active policy is exactly `{nonzero module, nonzero methodId}`, and a disabled
+factory is exactly `{address(0), 0}`. Noncanonical pairs revert, so dormant
+policy state cannot exist. There is no route scan, module registry, active-ID
+lifecycle, ambiguity state, or caller-supplied factory hint.
 
 The core reads `gauge.factory()` once, selects the exact factory policy, and
 passes the reported factory to the module. Because modules are
@@ -75,8 +78,11 @@ boolean. The core accepts only an exact ABI-encoded zero or one.
 Governance may bind, rebind, or revoke one factory:
 
 ```solidity
-setFactoryPolicy(address factory, address module, bytes32 validationId);
+setFactoryPolicy(address factory, address module, uint8 methodId);
 ```
+
+Each update emits only the resulting `FactoryPolicySet(factory, module,
+methodId)` policy. A zero module and zero method ID record removal.
 
 This lets a future validation method live in a new module without replacing
 the core or its immutable proposal consumer.
@@ -84,16 +90,16 @@ the core or its immutable proposal consumer.
 ## Current policy module
 
 `GaugeValidationModuleV1` is immutable, stateless, and implements the four
-current reciprocal proof IDs:
+current reciprocal method IDs:
 
 ```text
-DIRECT_LP
-DIRECT_OR_POOL_LP
-VAULT
-FACTORY_IS_VALID_GAUGE
+1  DIRECT_LP
+2  DIRECT_OR_POOL_LP
+3  VAULT
+4  FACTORY_IS_VALID_GAUGE
 ```
 
-Unknown IDs and every failed dependency return `false`.
+Unknown or zero IDs and every failed dependency return `false`.
 
 ### Direct LP
 
@@ -227,7 +233,7 @@ unbounded dependency calls.
 
 All initial bindings use `GaugeValidationModuleV1`.
 
-| Factory family | Factory | Validation ID |
+| Factory family | Factory | Method |
 | --- | --- | --- |
 | Regular gauge factory | `0x6A8cbed756804B16E05E741eDaBd5cB544AE21bf` | `DIRECT_LP` |
 | crvUSD StableSwap factory | `0x4F8846Ae9380B90d2E71D5e3D042dff3E7ebb40d` | `DIRECT_LP` |
@@ -264,7 +270,7 @@ new ProposalGaugeValidator(dao, agent, gaugeController, gaugeValidator)
 
 The proposal contract is immutable and has no owner or policy configuration.
 The deployment script reads back every immutable dependency, the gauge owner,
-and each factory's exact module and validation ID.
+and each factory's exact module and method ID.
 
 Tests cover:
 

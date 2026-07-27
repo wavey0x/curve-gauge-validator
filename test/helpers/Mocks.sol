@@ -26,14 +26,14 @@ contract MockDAO {
 }
 
 contract MockValidationModule {
-    mapping(bytes32 validationId => mapping(address gauge => address factory)) public factories;
+    mapping(uint8 methodId => mapping(address gauge => address factory)) public factories;
 
-    function setFactory(address gauge, bytes32 validationId, address factory) external {
-        factories[validationId][gauge] = factory;
+    function setFactory(address gauge, uint8 methodId, address factory) external {
+        factories[methodId][gauge] = factory;
     }
 
-    function validateGauge(address gauge, address factory, bytes32 validationId) external view returns (bool) {
-        return factories[validationId][gauge] == factory;
+    function validateGauge(address gauge, address factory, uint8 methodId) external view returns (bool) {
+        return factories[methodId][gauge] == factory;
     }
 }
 
@@ -46,7 +46,7 @@ contract GasFloorValidationModule {
         MINIMUM_GAS = minimumGas_;
     }
 
-    function validateGauge(address, address factory, bytes32) external view returns (bool) {
+    function validateGauge(address, address factory, uint8) external view returns (bool) {
         return factory == FACTORY && gasleft() >= MINIMUM_GAS;
     }
 }

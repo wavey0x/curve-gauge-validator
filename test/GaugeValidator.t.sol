@@ -17,7 +17,9 @@ import {
 
 contract GaugeValidatorTest is Test {
     address private constant USER = address(0xB0B);
-    bytes32 private constant FUTURE_METHOD = "FUTURE_METHOD";
+    uint8 private constant FUTURE_METHOD = type(uint8).max;
+
+    event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
 
     GaugeValidationModuleV1 private module;
 
@@ -111,7 +113,7 @@ contract GaugeValidatorTest is Test {
         futureModule.setFactory(address(gauge), FUTURE_METHOD, address(factory));
         assertTrue(validator.validateGauge(address(gauge)));
 
-        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(address(factory));
+        (address configuredModule, uint8 configuredId) = validator.policyForFactory(address(factory));
         assertEq(configuredModule, address(futureModule));
         assertEq(configuredId, FUTURE_METHOD);
     }
@@ -212,15 +214,20 @@ contract GaugeValidatorTest is Test {
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
         GaugeValidator validator = new GaugeValidator(address(this), bindings);
 
+        vm.expectEmit(true, true, false, true, address(validator));
+        emit FactoryPolicySet(address(factory), address(module), module.DIRECT_LP());
         validator.setFactoryPolicy(address(factory), address(module), module.DIRECT_LP());
-        (address configuredModule, bytes32 configuredId) = validator.policyForFactory(address(factory));
+
+        (address configuredModule, uint8 configuredId) = validator.policyForFactory(address(factory));
         assertEq(configuredModule, address(module));
         assertEq(configuredId, module.DIRECT_LP());
 
-        validator.setFactoryPolicy(address(factory), address(0), bytes32(0));
+        vm.expectEmit(true, true, false, true, address(validator));
+        emit FactoryPolicySet(address(factory), address(0), 0);
+        validator.setFactoryPolicy(address(factory), address(0), 0);
         (configuredModule, configuredId) = validator.policyForFactory(address(factory));
         assertEq(configuredModule, address(0));
-        assertEq(configuredId, bytes32(0));
+        assertEq(configuredId, 0);
 
         validator.transferOwnership(USER);
         assertEq(validator.owner(), USER);
@@ -232,12 +239,18 @@ contract GaugeValidatorTest is Test {
 
     function test_InvalidOrUnauthorizedConfigurationReverts() public {
         MockCurveFactory factory = new MockCurveFactory();
-        bytes32 directLp = module.DIRECT_LP();
+        uint8 directLp = module.DIRECT_LP();
         GaugeValidator validator = _deploy(address(factory), directLp);
 
         vm.prank(USER);
         vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
-        validator.setFactoryPolicy(address(factory), address(0), bytes32(0));
+        validator.setFactoryPolicy(address(factory), address(0), 0);
+
+        vm.expectRevert(GaugeValidator.InvalidPolicy.selector);
+        validator.setFactoryPolicy(address(factory), address(module), 0);
+
+        vm.expectRevert(GaugeValidator.InvalidPolicy.selector);
+        validator.setFactoryPolicy(address(factory), address(0), directLp);
 
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
         validator.setFactoryPolicy(address(0), address(module), directLp);
@@ -253,18 +266,18 @@ contract GaugeValidatorTest is Test {
         new GaugeValidator(address(0), bindings);
     }
 
-    function _assertFalseWithMethod(address gauge, address factory, bytes32 validationId) private {
-        GaugeValidator validator = _deploy(factory, validationId);
+    function _assertFalseWithMethod(address gauge, address factory, uint8 methodId) private {
+        GaugeValidator validator = _deploy(factory, methodId);
         assertFalse(validator.validateGauge(gauge));
     }
 
-    function _deploy(address factory, bytes32 validationId) private returns (GaugeValidator) {
-        return _deploy(factory, address(module), validationId);
+    function _deploy(address factory, uint8 methodId) private returns (GaugeValidator) {
+        return _deploy(factory, address(module), methodId);
     }
 
-    function _deploy(address factory, address policyModule, bytes32 validationId) private returns (GaugeValidator) {
+    function _deploy(address factory, address policyModule, uint8 methodId) private returns (GaugeValidator) {
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
-        bindings[0] = GaugeValidator.FactoryBinding(factory, policyModule, validationId);
+        bindings[0] = GaugeValidator.FactoryBinding(factory, policyModule, methodId);
         return new GaugeValidator(address(this), bindings);
     }
 }
