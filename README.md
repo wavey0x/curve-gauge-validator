@@ -31,7 +31,9 @@ executable `add_gauge` encodings are recognized: omitted or explicit zero
 initial weight is accepted, while nonzero initial weight returns `false`.
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for the proof layouts and mainnet
-trust set.
+trust set. See [UPGRADE_RUNBOOK.md](./UPGRADE_RUNBOOK.md) for policy upgrades,
+rollback, emergency disablement, and the boundary between upgrades and
+migrations.
 
 ## Commands
 
