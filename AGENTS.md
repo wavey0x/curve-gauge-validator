@@ -1,82 +1,25 @@
-# Repository Guide
+# Repository guidance
 
-## Scope
+- Maintain one `GaugeValidator` implementation and deployment workflow. Keep
+  factory dispatch O(1), with one packed `{module, methodId}` policy per factory;
+  proof logic and proposal parsing stay in separate stateless modules.
+- Managers are fully trusted to manage any factory/module immediately. Manager
+  administration, ownership transfer, and proposal-module changes remain owner-only.
+  Keep ownership transfer single-step and preserve appointments across transfer.
+- Preserve code checks, canonical active/disabled policies, gas bounds, strict ABI
+  decoding, and the single `gauge.factory()` read. Gauge dependency failures return
+  `false`; proposal-module/DAO read failures and configuration failures revert.
+- Parse authenticated proposal calls strictly, accept only zero initial weight,
+  preserve ordered gauge results, and discover all open votes regardless of script.
+- Verify core deployment artifacts after bytecode/configuration changes. Identify
+  reused modules by their deployed hashes, including original compiler metadata.
+- README is the user documentation. Keep disposable plans and logs in `.tmp/`;
+  do not commit documentation bundles or raw verification output unless requested.
+- Use pinned Ethereum state through `http://wavey:8545`; expose failed/stale reads.
+  Never commit credentials or signing material. Automation may prepare and simulate;
+  authorized operators deploy, and Curve governance executes transactions.
 
-This repository separates two questions:
-
-> Was this gauge deployed by a trusted factory?
-
-> Do all authenticated gauge additions in this proposal use a standard zero
-> initial weight and currently pass that predicate?
-
-Keep `GaugeValidator` as the stable public entry point with O(1)
-factory-to-module dispatch and one replaceable proposal-module pointer. Keep
-proof implementations and proposal parsing in separate stateless modules.
-
-## Layout
-
-- `src/GaugeValidator.sol`: stable entry point and exact module bindings.
-- `src/GaugeValidationModuleV1.sol`: four current reciprocal proofs.
-- `src/ProposalValidationModuleV1.sol`: active-proposal discovery, strict
-  proposal parsing, aggregate boolean, and ordered gauge results.
-- `src/interfaces/IProposalValidationModule.sol`: stable proposal-module ABI.
-- `src/MainnetGaugeConfiguration.sol`: mainnet owner and trusted factories.
-- `script/DeployGaugeValidator.s.sol`: deterministic CreateX deployment and
-  readback.
-- `script/InspectGaugeValidator.s.sol`: read-only configuration inspection.
-- `script/AnalyzeProposal.s.sol`: read-only proposal analysis.
-- `test/GaugeValidator.t.sol`: proof, failure, and authorization tests.
-- `test/ProposalValidationModule.t.sol`: parser, aggregate, and detailed-result
-  tests.
-- `test/MainnetGaugeValidation.t.sol`: pinned-fork representative gauges.
-- `test/Deployment.t.sol`: deployment/readback test.
-
-## Mainnet deployed addresses
-
-| Component | Address |
-| --- | --- |
-| `GaugeValidator` | `0x999901076BB47Ae96d135C567610270d006B8684` |
-| `GaugeValidationModuleV1` | `0x999902533033Cc63c8128C501e307477932B742E` |
-| `ProposalValidationModuleV1` | `0x999903ff5AC376e8CEc3F9055Ed3a1A7E71f3ab7` |
-
-These are the frozen Ethereum CreateX deployment addresses. A different core
-address is a migration, not an in-place upgrade.
-
-## Invariants
-
-- A self-reported factory address is never enough.
-- A factory is trusted only when `policyForFactory[factory].module != address(0)`.
-- One factory maps to exactly one packed `{module, methodId}` policy.
-- Method ID zero is reserved. Policies are either active
-  `{nonzero module, nonzero methodId}` or disabled `{address(0), 0}`.
-- The core reads `gauge.factory()` once and passes that exact factory to the
-  configured module.
-- Modules are trusted, governance-selected policy components that return a
-  strict boolean.
-- The entry point exposes gauge validation, active-proposal discovery,
-  aggregate proposal validation, and ordered per-addition proposal results at
-  one address. External integrations do not call modules directly.
-- Governance can replace or disable the proposal module without changing the
-  entry point. Disabled proposal validation reverts.
-- Gauge and policy dependency failures return `false`; DAO proposal-read
-  failures revert.
-- Configuration failures revert.
-- Untrusted dependency and gauge-policy calls remain gas bounded and ABI
-  strict. Proposal-module failures revert.
-- The proposal module has immutable DAO, Agent, and GaugeController
-  dependencies and uses the calling entry point for gauge validation.
-- Active-proposal discovery returns every open ownership vote and never
-  filters by callscript contents.
-- Authenticated proposal targets and calldata must be parsed strictly.
-- Both executable `add_gauge` encodings are recognized. Omitted or explicit
-  zero initial weight is accepted; nonzero initial weight returns `false`.
-- Do not add proof implementations, proposal parsing, route scanning, module
-  registries, status enums, historical exhaustiveness, or caller-supplied
-  factory hints to `GaugeValidator`.
-
-## Verification
-
-Run:
+Required checks:
 
 ```bash
 forge fmt --check

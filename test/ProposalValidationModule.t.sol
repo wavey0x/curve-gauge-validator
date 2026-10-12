@@ -43,7 +43,7 @@ contract ProposalValidationModuleTest is Test {
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(module), module.FACTORY_IS_VALID_GAUGE());
-        gaugeValidator = new GaugeValidator(address(this), address(proposalModule), bindings);
+        gaugeValidator = new GaugeValidator(address(this), address(0xA11CE), address(proposalModule), bindings);
         factory.setValidGauge(address(gauge), true);
     }
 
@@ -119,7 +119,8 @@ contract ProposalValidationModuleTest is Test {
         GasFloorValidationModule expensiveModule = new GasFloorValidationModule(address(factory), 1_900_000);
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(expensiveModule), 1);
-        GaugeValidator expensiveValidator = new GaugeValidator(address(this), address(proposalModule), bindings);
+        GaugeValidator expensiveValidator =
+            new GaugeValidator(address(this), address(0xA11CE), address(proposalModule), bindings);
         uint256 proposalId = _push(_callscript(_scriptCall(address(gaugeController), _addGauge(address(gauge), -1, 0))));
 
         assertTrue(expensiveValidator.validateProposalGauges(proposalId));
@@ -434,7 +435,8 @@ contract ProposalValidationModuleTest is Test {
             ConfigurableDependency dependency = new ConfigurableDependency(ConfigurableDependency.Mode(mode));
             GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
             bindings[0] = GaugeValidator.FactoryBinding(address(factory), address(dependency), 1);
-            GaugeValidator candidate = new GaugeValidator(address(this), address(proposalModule), bindings);
+            GaugeValidator candidate =
+                new GaugeValidator(address(this), address(0xA11CE), address(proposalModule), bindings);
 
             assertFalse(candidate.validateProposalGauges(proposalId));
         }

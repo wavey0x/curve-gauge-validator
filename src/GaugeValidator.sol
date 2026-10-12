@@ -28,11 +28,16 @@ contract GaugeValidator {
     /// @notice Exact policy for each trusted factory. A zero module means untrusted.
     mapping(address factory => FactoryPolicy policy) public policyForFactory;
 
+    /// @notice Fully trusted accounts that may manage any factory policy.
+    mapping(address manager => bool enabled) public managers;
+
     event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
     event ProposalModuleSet(address indexed module);
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event ManagerSet(address indexed manager, bool enabled);
 
     error NotOwner(address caller);
+    error NotOwnerOrManager(address caller);
     error ZeroAddress();
     error InvalidPolicy();
     error MissingCode(address target);
@@ -43,15 +48,27 @@ contract GaugeValidator {
         _;
     }
 
+    modifier onlyOwnerOrManager() {
+        if (msg.sender != owner && !managers[msg.sender]) revert NotOwnerOrManager(msg.sender);
+        _;
+    }
+
     function _checkOwner() private view {
         if (msg.sender != owner) revert NotOwner(msg.sender);
     }
 
-    constructor(address owner_, address proposalModule_, FactoryBinding[] memory initialBindings) {
-        if (owner_ == address(0)) revert ZeroAddress();
+    constructor(
+        address owner_,
+        address initialManager_,
+        address proposalModule_,
+        FactoryBinding[] memory initialBindings
+    ) {
+        if (owner_ == address(0) || initialManager_ == address(0)) revert ZeroAddress();
 
         owner = owner_;
         emit OwnershipTransferred(address(0), owner_);
+        managers[initialManager_] = true;
+        emit ManagerSet(initialManager_, true);
         _setProposalModule(proposalModule_);
 
         for (uint256 i; i < initialBindings.length; ++i) {
@@ -61,8 +78,15 @@ contract GaugeValidator {
     }
 
     /// @notice Sets one factory's policy. A zero module removes trust.
-    function setFactoryPolicy(address factory, address module, uint8 methodId) external onlyOwner {
+    function setFactoryPolicy(address factory, address module, uint8 methodId) external onlyOwnerOrManager {
         _setFactoryPolicy(factory, module, methodId);
+    }
+
+    /// @notice Appoints or revokes a manager immediately. Existing policies remain intact.
+    function setManager(address manager, bool enabled) external onlyOwner {
+        if (manager == address(0)) revert ZeroAddress();
+        managers[manager] = enabled;
+        emit ManagerSet(manager, enabled);
     }
 
     /// @notice Replaces the proposal parser used by this stable entry point.

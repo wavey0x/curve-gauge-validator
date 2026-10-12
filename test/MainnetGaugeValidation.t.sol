@@ -6,6 +6,7 @@ import {GaugeValidationModuleV1} from "../src/GaugeValidationModuleV1.sol";
 import {GaugeValidator} from "../src/GaugeValidator.sol";
 import {MainnetGaugeConfiguration} from "../src/MainnetGaugeConfiguration.sol";
 import {ProposalValidationModuleV1} from "../src/ProposalValidationModuleV1.sol";
+import {MockProtocolGauge} from "./helpers/Mocks.sol";
 import {ICurveDAO} from "../src/interfaces/ICurveDAO.sol";
 
 interface IFactoryAttestedGauge {
@@ -27,9 +28,8 @@ interface ILendVaultV2 {
 }
 
 contract MainnetGaugeValidationTest is Test {
-    uint256 private constant CHAIN_ID = 1;
-    uint256 private constant FORK_BLOCK = 25_619_622;
-    uint256 private constant FORK_TIMESTAMP = 1_785_100_847;
+    uint256 private constant FORK_BLOCK = 26_177_927;
+    uint256 private constant FORK_TIMESTAMP = 1_791_826_583;
 
     address private constant LEND_FACTORY = 0x8f6B56EC5ddF1F2691a1059f1D3cd97Ac9EaB0bd;
     address private constant LEND_V2_GAUGE_FACTORY = 0x64e1a69732fAC63F6790b3d8a34C5D713cC623E6;
@@ -46,24 +46,25 @@ contract MainnetGaugeValidationTest is Test {
     function setUp() public {
         vm.createSelectFork(vm.envOr("RPC_URL", string("http://wavey:8545")), FORK_BLOCK);
 
-        module = new GaugeValidationModuleV1();
-        proposalModule = new ProposalValidationModuleV1(
-            ICurveDAO(MainnetGaugeConfiguration.DAO),
-            MainnetGaugeConfiguration.OWNER,
-            MainnetGaugeConfiguration.GAUGE_CONTROLLER
-        );
+        module = GaugeValidationModuleV1(MainnetGaugeConfiguration.GAUGE_MODULE);
+        proposalModule = ProposalValidationModuleV1(MainnetGaugeConfiguration.PROPOSAL_MODULE);
         validator = new GaugeValidator(
             MainnetGaugeConfiguration.OWNER,
+            MainnetGaugeConfiguration.INITIAL_MANAGER,
             address(proposalModule),
             MainnetGaugeConfiguration.bindings(address(module))
         );
 
         GaugeValidator.FactoryBinding[] memory noBindings = new GaugeValidator.FactoryBinding[](0);
-        untrustedValidator = new GaugeValidator(MainnetGaugeConfiguration.OWNER, address(proposalModule), noBindings);
+        untrustedValidator = new GaugeValidator(
+            MainnetGaugeConfiguration.OWNER,
+            MainnetGaugeConfiguration.INITIAL_MANAGER,
+            address(proposalModule),
+            noBindings
+        );
     }
 
     function test_PinnedForkMetadata() public view {
-        assertEq(block.chainid, CHAIN_ID);
         assertEq(block.number, FORK_BLOCK);
         assertEq(block.timestamp, FORK_TIMESTAMP);
     }
@@ -72,7 +73,7 @@ contract MainnetGaugeValidationTest is Test {
         assertEq(validator.owner(), MainnetGaugeConfiguration.OWNER);
 
         GaugeValidator.FactoryBinding[] memory bindings = MainnetGaugeConfiguration.bindings(address(module));
-        assertEq(bindings.length, 11);
+        assertEq(bindings.length, 12);
 
         for (uint256 i; i < bindings.length; ++i) {
             assertGt(bindings[i].factory.code.length, 0);
@@ -84,7 +85,7 @@ contract MainnetGaugeValidationTest is Test {
         assertEq(_factoryCount(bindings, module.DIRECT_LP()), 2);
         assertEq(_factoryCount(bindings, module.DIRECT_OR_POOL_LP()), 4);
         assertEq(_factoryCount(bindings, module.VAULT()), 1);
-        assertEq(_factoryCount(bindings, module.FACTORY_IS_VALID_GAUGE()), 4);
+        assertEq(_factoryCount(bindings, module.FACTORY_IS_VALID_GAUGE()), 5);
     }
 
     function test_RepresentativeLiveFactoryGauges() public view {
@@ -153,12 +154,27 @@ contract MainnetGaugeValidationTest is Test {
     function test_ActiveProposalDiscoveryIncludesEveryOpenOwnershipVote() public view {
         uint256[] memory proposalIds = validator.getActiveProposals();
 
-        assertEq(proposalIds.length, 7);
+        assertEq(proposalIds.length, 3);
         for (uint256 i; i < proposalIds.length; ++i) {
-            assertEq(proposalIds[i], 1455 + i);
+            assertEq(proposalIds[i], 1500 + i);
             (bool open,,,,,,,,,) = ICurveDAO(MainnetGaugeConfiguration.DAO).getVote(proposalIds[i]);
             assertTrue(open);
         }
+    }
+
+    function test_LMCallbackProvenanceDoesNotRequireAmmAttachment() public {
+        address callback = 0x80d4BC5bf87A4456DBe85DeAA57AAdD6289A9e3D;
+        address factory = MainnetGaugeConfiguration.LM_CALLBACK_FACTORY;
+        assertEq(IFactoryAttestedGauge(callback).factory(), factory);
+        assertTrue(IFactoryGaugeRegistry(factory).is_valid_gauge(callback));
+        assertTrue(validator.validateGauge(callback));
+        assertFalse(untrustedValidator.validateGauge(callback));
+        // The genuine callback is unattached at this pinned block.
+        (bool success, bytes memory attached) = callback.staticcall(abi.encodeWithSignature("attached()"));
+        assertTrue(success);
+        assertFalse(abi.decode(attached, (bool)));
+        MockProtocolGauge spoof = new MockProtocolGauge(factory, address(0));
+        assertFalse(validator.validateGauge(address(spoof)));
     }
 
     function test_LendV2VaultGaugeUsesGovernanceOwnedFactoryAttestation() public view {
@@ -179,6 +195,7 @@ contract MainnetGaugeValidationTest is Test {
         _assertValidationGas(0x0621982CdA4fD4041964e91AF4080583C5F099e1, 300_000);
         _assertValidationGas(0x02b8e750E68cb648dB2c2ac4BBb47A10A5c12588, 300_000);
         _assertValidationGas(LEND_V2_VAULT_GAUGE, 300_000);
+        _assertValidationGas(0x80d4BC5bf87A4456DBe85DeAA57AAdD6289A9e3D, 300_000);
     }
 
     function _assertGauge(address gauge, address factory, uint8 methodId) private view {

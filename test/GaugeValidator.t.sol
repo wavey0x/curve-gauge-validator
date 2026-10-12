@@ -17,10 +17,12 @@ import {
 
 contract GaugeValidatorTest is Test {
     address private constant USER = address(0xB0B);
+    address private constant INITIAL_MANAGER = address(0xA11CE);
     uint8 private constant FUTURE_METHOD = type(uint8).max;
 
     event FactoryPolicySet(address indexed factory, address indexed module, uint8 methodId);
     event ProposalModuleSet(address indexed module);
+    event ManagerSet(address indexed manager, bool enabled);
 
     GaugeValidationModuleV1 private module;
 
@@ -213,7 +215,7 @@ contract GaugeValidatorTest is Test {
     function test_OwnerCanSetRemovePolicyAndTransferOwnership() public {
         MockCurveFactory factory = new MockCurveFactory();
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
-        GaugeValidator validator = new GaugeValidator(address(this), address(0), bindings);
+        GaugeValidator validator = new GaugeValidator(address(this), INITIAL_MANAGER, address(0), bindings);
 
         vm.expectEmit(true, true, false, true, address(validator));
         emit FactoryPolicySet(address(factory), address(module), module.DIRECT_LP());
@@ -261,7 +263,7 @@ contract GaugeValidatorTest is Test {
         GaugeValidator validator = _deploy(address(factory), directLp);
 
         vm.prank(USER);
-        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwnerOrManager.selector, USER));
         validator.setFactoryPolicy(address(factory), address(0), 0);
 
         vm.expectRevert(GaugeValidator.InvalidPolicy.selector);
@@ -288,10 +290,126 @@ contract GaugeValidatorTest is Test {
 
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](0);
         vm.expectRevert(GaugeValidator.ZeroAddress.selector);
-        new GaugeValidator(address(0), address(0), bindings);
+        new GaugeValidator(address(0), INITIAL_MANAGER, address(0), bindings);
+
+        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
+        new GaugeValidator(address(this), address(0), address(0), bindings);
 
         vm.expectRevert(abi.encodeWithSelector(GaugeValidator.MissingCode.selector, address(0x1234)));
-        new GaugeValidator(address(this), address(0x1234), bindings);
+        new GaugeValidator(address(this), INITIAL_MANAGER, address(0x1234), bindings);
+    }
+
+    function test_ConstructorAppointsInitialManagerWhoCanManageFactoriesUntilRevoked() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        uint8 directLp = module.DIRECT_LP();
+        vm.expectEmit(true, false, false, true);
+        emit ManagerSet(INITIAL_MANAGER, true);
+        GaugeValidator validator = _deploy(address(factory), directLp);
+        assertEq(validator.owner(), address(this));
+        assertTrue(validator.managers(INITIAL_MANAGER));
+
+        vm.prank(INITIAL_MANAGER);
+        validator.setFactoryPolicy(address(factory), address(0), 0);
+        (address policy, uint8 method) = validator.policyForFactory(address(factory));
+        assertEq(policy, address(0));
+        assertEq(method, 0);
+
+        validator.setManager(INITIAL_MANAGER, false);
+        vm.prank(INITIAL_MANAGER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwnerOrManager.selector, INITIAL_MANAGER));
+        validator.setFactoryPolicy(address(factory), address(module), directLp);
+    }
+
+    function test_MultipleManagersCanImmediatelyManageAnyFactoryAndModule() public {
+        MockCurveFactory firstFactory = new MockCurveFactory();
+        MockCurveFactory secondFactory = new MockCurveFactory();
+        MockProtocolGauge gauge = new MockProtocolGauge(address(secondFactory), address(0));
+        MockValidationModule replacement = new MockValidationModule();
+        replacement.setFactory(address(gauge), FUTURE_METHOD, address(secondFactory));
+        GaugeValidator validator = _deploy(address(firstFactory), module.DIRECT_LP());
+        address secondManager = address(0xCAFE);
+        validator.setManager(USER, true);
+        validator.setManager(secondManager, true);
+
+        vm.prank(USER);
+        validator.setFactoryPolicy(address(secondFactory), address(replacement), FUTURE_METHOD);
+        assertTrue(validator.validateGauge(address(gauge)));
+
+        vm.prank(secondManager);
+        validator.setFactoryPolicy(address(secondFactory), address(0), 0);
+        assertFalse(validator.validateGauge(address(gauge)));
+
+        vm.prank(USER);
+        validator.setFactoryPolicy(address(secondFactory), address(replacement), FUTURE_METHOD);
+        vm.prank(secondManager);
+        validator.setFactoryPolicy(address(firstFactory), address(replacement), FUTURE_METHOD);
+        assertTrue(validator.validateGauge(address(gauge)));
+        (address policy, uint8 method) = validator.policyForFactory(address(firstFactory));
+        assertEq(policy, address(replacement));
+        assertEq(method, FUTURE_METHOD);
+
+        validator.setManager(USER, false);
+        assertFalse(validator.managers(USER));
+        assertTrue(validator.managers(secondManager));
+        assertTrue(validator.validateGauge(address(gauge)));
+        vm.prank(USER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwnerOrManager.selector, USER));
+        validator.setFactoryPolicy(address(secondFactory), address(0), 0);
+        vm.prank(secondManager);
+        validator.setFactoryPolicy(address(secondFactory), address(0), 0);
+        assertFalse(validator.validateGauge(address(gauge)));
+    }
+
+    function test_ManagersCannotUseOwnerPowers() public {
+        GaugeValidator validator = _deploy(address(new MockCurveFactory()), module.DIRECT_LP());
+        assertFalse(validator.managers(USER));
+        vm.prank(USER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setManager(USER, true);
+        validator.setManager(USER, true);
+
+        vm.startPrank(USER);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setManager(address(0xCAFE), true);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setManager(USER, false);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.setProposalModule(address(module));
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, USER));
+        validator.transferOwnership(USER);
+        vm.stopPrank();
+    }
+
+    function test_ManagerEventsAndSingleStepOwnershipTransferPreserveAppointments() public {
+        MockCurveFactory factory = new MockCurveFactory();
+        GaugeValidator validator = _deploy(address(factory), module.DIRECT_LP());
+        vm.expectEmit(true, false, false, true, address(validator));
+        emit ManagerSet(USER, true);
+        validator.setManager(USER, true);
+        address nextOwner = address(0xCAFE);
+        validator.transferOwnership(nextOwner);
+        assertEq(validator.owner(), nextOwner);
+        assertTrue(validator.managers(USER));
+        assertTrue(validator.managers(INITIAL_MANAGER));
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwner.selector, address(this)));
+        validator.setManager(USER, false);
+        vm.expectRevert(abi.encodeWithSelector(GaugeValidator.NotOwnerOrManager.selector, address(this)));
+        validator.setFactoryPolicy(address(factory), address(0), 0);
+        vm.prank(USER);
+        validator.setFactoryPolicy(address(factory), address(0), 0);
+        vm.prank(nextOwner);
+        vm.expectEmit(true, false, false, true, address(validator));
+        emit ManagerSet(USER, false);
+        validator.setManager(USER, false);
+        assertFalse(validator.managers(USER));
+    }
+
+    function test_ManagerUpdatesRejectZeroAddress() public {
+        GaugeValidator validator = _deploy(address(new MockCurveFactory()), module.DIRECT_LP());
+        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
+        validator.setManager(address(0), true);
+        vm.expectRevert(GaugeValidator.ZeroAddress.selector);
+        validator.setManager(address(0), false);
     }
 
     function _assertFalseWithMethod(address gauge, address factory, uint8 methodId) private {
@@ -306,6 +424,6 @@ contract GaugeValidatorTest is Test {
     function _deploy(address factory, address policyModule, uint8 methodId) private returns (GaugeValidator) {
         GaugeValidator.FactoryBinding[] memory bindings = new GaugeValidator.FactoryBinding[](1);
         bindings[0] = GaugeValidator.FactoryBinding(factory, policyModule, methodId);
-        return new GaugeValidator(address(this), address(0), bindings);
+        return new GaugeValidator(address(this), INITIAL_MANAGER, address(0), bindings);
     }
 }
